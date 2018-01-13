@@ -1,9 +1,11 @@
 # What's next?
 
-* Run your application:
-  1. Change to the project directory
-  2. Execute the php -S 127.0.0.1:8000 -t public command;
-  3. Browse to the http://localhost:8000/ URL.
-     Quit the server with CTRL-C.
-     Run composer require server for a better web server.
-* Read the documentation at https://symfony.com/doc
+## Usefull commands:
+
+* `php bin/console server:run [boundIp[:port]]`: Open a server. Same as `php -S 127.0.0.1:8000 -t public`
+* `php bin/console server:start [boundIp[:port]]`: Start as a service
+* `php bin/console server:stop`: Stop as a service
+
+## Links:
+
+Read the documentation at https://symfony.com/doc
