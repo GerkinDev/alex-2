@@ -23,3 +23,8 @@ contact:
     controller:   Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
     defaults:
         template: contact.html.twig
+company-intro:
+    path: /company-intro
+    controller:   Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
+    defaults:
+        template: company-intro.html.twig
