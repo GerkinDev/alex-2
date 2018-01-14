@@ -2,13 +2,18 @@
 security:
     # ...
     providers:
-        webservice:
-            id: App\Security\User\WebUserProvider
+        fromMySQL:
+            entity:
+                class: App\Entity\User
+                property: email
     encoders:
-        App\Security\User\WebUser: bcrypt
+        App\Entity\User: bcrypt
     firewalls:
         # ...
         main:
+            pattern:    ^/
+            http_basic: ~
+            provider: fromMySQL
             anonymous: ~
             form_login:
                 login_path: login
