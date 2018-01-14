@@ -20,3 +20,9 @@
 For MySQL connection: https://symfony.com/doc/current/doctrine.html
 Read the documentation at https://symfony.com/doc
 
+## For posterity
+
+### Enable debugger:
+
+1. Run `composer require symfony/web-profiler-bundle`
+1. In `config/bundles.php`, ensure `Symfony\Bundle\WebProfilerBundle\WebProfilerBundle::class => ['dev' => true, 'test' => true],`
