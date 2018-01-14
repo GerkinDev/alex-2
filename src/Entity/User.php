@@ -6,35 +6,40 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- */
+* @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+*/
 class User implements UserInterface, \Serializable
 {
 	/**
-     * @ORM\Column(type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
+	* @ORM\Column(type="integer")
+	* @ORM\Id
+	* @ORM\GeneratedValue(strategy="AUTO")
+	*/
 	private $id;
 
 	/**
-     * @ORM\Column(type="string", length=25, unique=true)
-     */
-	private $username;
+	* @ORM\Column(type="string")
+	*/
+	private $fname;
 
 	/**
-     * @ORM\Column(type="string", length=64)
-     */
+	* @ORM\Column(type="string")
+	*/
+	private $lname;
+
+	/**
+	* @ORM\Column(type="string", length=64)
+	*/
 	private $password;
 
 	/**
-     * @ORM\Column(type="string", length=60, unique=true)
-     */
+	* @ORM\Column(type="string", length=60, unique=true)
+	*/
 	private $email;
 
 	/**
-     * @ORM\Column(name="is_active", type="boolean")
-     */
+	* @ORM\Column(name="is_active", type="boolean")
+	*/
 	private $isActive;
 
 	public function __construct()
@@ -44,26 +49,52 @@ class User implements UserInterface, \Serializable
 		// $this->salt = md5(uniqid('', true));
 	}
 
-	public function getUsername()
-	{
-		return $this->username;
+	public function getEmail() {
+		return $this->email;
+	}
+	public function setEmail($email) {
+		$this->email = $email;
+		return $this;
 	}
 
-	public function getSalt()
-	{
+
+	public function getFirstName() {
+		return $this->fname;
+	}
+	public function setFirstName($fname) {
+		$this->fname = $fname;
+		return $this;
+	}
+
+	public function getLastName() {
+		return $this->lname;
+	}
+	public function setLastName($lname) {
+		$this->lname = $lname;
+		return $this;
+	}
+
+	public function getSalt() {
 		// you *may* need a real salt depending on your encoder
 		// see section on salt below
 		return null;
 	}
 
-	public function getPassword()
-	{
+	public function getPassword() {
 		return $this->password;
+	}
+	public function setPassword($password) {
+		$this->password = $password;
+		return $this;
 	}
 
 	public function getRoles()
 	{
 		return array('ROLE_USER');
+	}
+
+	public function getUsername(){
+		return $this->getEmail();
 	}
 
 	public function eraseCredentials()
@@ -75,7 +106,7 @@ class User implements UserInterface, \Serializable
 	{
 		return serialize(array(
 			$this->id,
-			$this->username,
+			$this->email,
 			$this->password,
 			// see section on salt below
 			// $this->salt,
@@ -87,10 +118,10 @@ class User implements UserInterface, \Serializable
 	{
 		list (
 			$this->id,
-			$this->username,
+			$this->email,
 			$this->password,
 			// see section on salt below
 			// $this->salt
-		) = unserialize($serialized);
+			) = unserialize($serialized);
+		}
 	}
-}
