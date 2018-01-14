@@ -3,15 +3,17 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="stylesheet" href="{{ asset('build/app.scss') }}">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" integrity="sha256-HxaKz5E/eBbvhGMNwhWRPrAR9i/lG1JeT4mD6hCQ7s4=" crossorigin="anonymous" />
+		<link rel="stylesheet" href="{{ asset('build/app.css') }}">
 		{% block stylesheets %}{% endblock %}
 	</head>
 	<body>
 		<header></header>
-		<section>
+		<section id="body">
 			{% block body %}{% endblock %}
 		</section>
 		<footer>FooBar</footer>
+		<script src="{{ asset('build/app.js') }}"></script>
 		{% block javascripts %}{% endblock %}
 	</body>
 </html>

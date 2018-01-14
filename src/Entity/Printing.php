@@ -30,4 +30,24 @@ class Printing
      * @ORM\Column(type="smallint")
      */
 	private $status;
+	
+	public function getId(){
+		return $this->id;
+	}
+	
+	public function getModel(){
+		return $this->model;
+	}
+	public function setModel(Model $model){
+		$this->model = $model;
+		return $this;
+	}
+	
+	public function getStatus(){
+		return $this->status;
+	}
+	public function setStatus($status){
+		$this->status = $status;
+		return $this;
+	}
 }
