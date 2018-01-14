@@ -7,6 +7,14 @@
 * `php bin/console server:stop`: Stop as a service
 * `npm run webpack:run`: Start the assets server
 
+### Models related
+
+* `php bin/console make:entity Something`: create model named *Something*
+* `php bin/console doctrine:migrations:diff`: Generate SQL diff for models
+* `php bin/console doctrine:migrations:migrate`: Apply diff
+
 ## Links:
 
+For MySQL connection: https://symfony.com/doc/current/doctrine.html
 Read the documentation at https://symfony.com/doc
+
