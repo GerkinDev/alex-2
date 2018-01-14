@@ -1,19 +1,47 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="UTF-8">
-		<title>{% block title %}Welcome!{% endblock %}</title>
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" integrity="sha256-HxaKz5E/eBbvhGMNwhWRPrAR9i/lG1JeT4mD6hCQ7s4=" crossorigin="anonymous" />
-		<link rel="stylesheet" href="{{ asset('build/app.css') }}">
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+			<meta charset="UTF-8">
+			<meta name="description" content="">
+			<meta name="viewport" content="width=device-width">
+			<title>{% block title %}Welcome!{% endblock %}</title>
+			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" integrity="sha256-HxaKz5E/eBbvhGMNwhWRPrAR9i/lG1JeT4mD6hCQ7s4=" crossorigin="anonymous" />
+			<!-- Google Web Font Embed -->
+			<link href='http://fonts.googleapis.com/css?family=Raleway:400,600,500,300,700' rel='stylesheet' type='text/css'>
+			<link rel="stylesheet" href="build/css/bootstrap.min.css">
+			<link rel="stylesheet" href="build/css/font-awesome.min.css">
+			<link rel="stylesheet" href="build/css/templatemo_main.css">
+			<link rel="stylesheet" href="{{ asset('build/app.css') }}">
 		{% block stylesheets %}{% endblock %}
-	</head>
-	<body>
-		<header></header>
-		<section id="body">
+		</head>
+		<body>
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center templatemo-logo margin-top-20">
+					<h1 class="templatemo-site-title">
+							<a href="#">Zoom Template</a>
+					</h1>
+					<h3 class="templatemo-site-title">
+						by <a href="#"><span class="blue">template</span><span class="green">mo</span></a>
+					</h3>
+			</div>		<section id="body" class="container">
 			{% block body %}{% endblock %}
 		</section>
-		<footer>FooBar</footer>
-		<script src="{{ asset('build/app.js') }}"></script>
+		<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 footer">
+						<p class="footer-text">Copyright &copy; 2084 Your Company Name</p>
+				</div><!-- /.footer -->
+		</div>
+		<div id="preloader">
+				<div id="status">&nbsp;</div>
+		</div><!-- /#preloader -->
+			<div class="backstretch" style="left: 0px; top: 0px; overflow: hidden; margin: 0px; padding: 0px; height: 895px; width: 1305px; z-index: -999999; position: fixed;"><img style="position: absolute; margin: 0px; padding: 0px; border: none; width: 1491.67px; height: 895px; max-height: none; max-width: none; z-index: -999999; left: -93.3333px; top: 0px;" src="/build/images/{% block background_image %}{% endblock %}"></div>
+			<script src="js/jquery.min.js"></script>
+			<script src="js/jquery-ui.min.js"></script>
+			<script src="js/jquery.backstretch.min.js"></script>
+			<script src="js/templatemo_script.js"></script>
+			<script src="{{ asset('build/app.js') }}"></script>
 		{% block javascripts %}{% endblock %}
 	</body>
 </html>
