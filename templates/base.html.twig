@@ -17,7 +17,7 @@
 			<link rel="stylesheet" href="{{ asset('build/app.css') }}">
 		{% block stylesheets %}{% endblock %}
 		</head>
-		<body>
+		<body style="background-image : url(/build/images/{% block background_image %}{% endblock %})">
 			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center templatemo-logo margin-top-20">
 					<h1 class="templatemo-site-title">
 							<a href="#">Zoom Template</a>
@@ -36,7 +36,6 @@
 		<div id="preloader">
 				<div id="status">&nbsp;</div>
 		</div><!-- /#preloader -->
-			<div class="backstretch" style="left: 0px; top: 0px; overflow: hidden; margin: 0px; padding: 0px; height: 895px; width: 1305px; z-index: -999999; position: fixed;"><img style="position: absolute; margin: 0px; padding: 0px; border: none; width: 1491.67px; height: 895px; max-height: none; max-width: none; z-index: -999999; left: -93.3333px; top: 0px;" src="/build/images/{% block background_image %}{% endblock %}"></div>
 			<script src="js/jquery.min.js"></script>
 			<script src="js/jquery-ui.min.js"></script>
 			<script src="js/jquery.backstretch.min.js"></script>
