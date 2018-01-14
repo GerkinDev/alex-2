@@ -1,0 +1,18 @@
+# config/packages/security.yaml
+security:
+    # ...
+    providers:
+        webservice:
+            id: App\Security\User\WebUserProvider
+    encoders:
+        App\Security\User\WebUser: bcrypt
+    firewalls:
+        # ...
+        main:
+            anonymous: ~
+            form_login:
+                login_path: login
+                check_path: login
+    access_control:
+        # require ROLE_ADMIN for /admin*
+        - { path: ^/admin, roles: ROLE_ADMIN }
