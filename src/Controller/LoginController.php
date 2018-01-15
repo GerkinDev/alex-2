@@ -10,15 +10,9 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-
-// Authentication process related
-use Symfony\Component\Security\Core\Authentication\Provider\DaoAuthenticationProvider;
-use Symfony\Component\Security\Core\User\UserChecker;
-use Symfony\Component\Security\Core\User\InMemoryUserProvider;
-use Symfony\Component\Security\Core\Encoder\EncoderFactory;
-use Symfony\Component\Security\Core\Encoder\BasePasswordEncoder;
 
 use App\Entity\User;
 use App\Exception\AuthException;
@@ -30,9 +24,15 @@ class LoginController extends Controller
 	/**
 	* @Route("/login", name="login")
 	*/
-	public function login(Request $request, AuthenticationUtils $authUtils):Response {
-		// get the login error if there is one
-		$error = $authUtils->getLastAuthenticationError();
+	public function login(
+		Request $request,
+		AuthenticationUtils $authUtils,
+		AuthorizationCheckerInterface $authChecker
+	):Response {
+		// If user is already logged in, redirect him to homepage
+		if( $authChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
+			return $this->redirectToRoute('index');
+		}
 
 		// last username entered by the user
 		$lastUsername = $authUtils->getLastUsername();
@@ -42,71 +42,58 @@ class LoginController extends Controller
 			'error'         => $error,
 		));
 	}
-	
+
 	/**
 	* @Route("/dologin", name="login_check")
 	*/
-	public function loginCheck(Request $request, AuthenticationUtils $authUtils):Response {
-		$query = $request->request;
-		$password = $query->get('password');
-		$email = $query->get('email');
-		$session = new Session();
-		$session->set('tried_email', $email);
-		// replace this line with your own code!
-		try {
-			if ($password === '' || $email === '') {
-				throw new AuthException('Missing Values !');
-			}
-
-			var_dump($authUtils);
-
-			/*$unauthenticatedToken = new UsernamePasswordToken(
-				$email,
-				$password,
-				$this->providerKey
-			);
-			$provider = new DaoAuthenticationProvider(
-				new \App\Security\User\MainUserProvider(),
-				new UserChecker(),
-				'main',
-				new EncoderFactory([new BasePasswordEncoder()])
-			);
-
-			$token = $provider->authenticate($unauthenticatedToken);
-
-			var_dump($unauthenticatedToken);
-
-			var_dump($token);*/
-			
-			return $this->render('error.html.twig');
-		} catch (AuthException $exception) {
-			// add flash messages
-			$session->getFlashBag()->add('login', $exception->getMessage());
-			return $this->redirectToRoute('login');
+	public function loginCheck(
+		Request $request,
+		AuthenticationUtils $authUtils,
+		AuthorizationCheckerInterface $authChecker
+	):Response {
+		// If user is already logged in, redirect him to homepage
+		if( $authChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
+			return $this->redirectToRoute('index');
 		}
-		return $this->redirectToRoute('index');
+
+		// User is still not logged in... Check for errors
+		$error = $authUtils->getLastAuthenticationError();
+		if($error){
+			$session = new Session();
+			$session->getFlashBag()->add('login', $error->getMessage());
+		}
+		return $this->redirectToRoute('login');
 	}
 
 	/**
 	* @Route("/signup", name="signup")
 	*/
-	public function signup(Request $request, AuthenticationUtils $authUtils):Response {
-		// get the login error if there is one
-		$error = $authUtils->getLastAuthenticationError();
+	public function signup(
+		Request $request,
+		AuthorizationCheckerInterface $authChecker
+	):Response {
+		// If user is already logged in, redirect him to homepage
+		if( $authChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
+			return $this->redirectToRoute('index');
+		}
 
-		// last username entered by the user
-		$lastUsername = $authUtils->getLastUsername();
-
-		return $this->render('signup.html.twig', array(
-			'last_username' => $lastUsername,
-			'error'         => $error,
-		));
+		return $this->render('signup.html.twig');
 	}
 
 	/**
 	* @Route("/dosignup", name="signup_check")
 	*/
-	public function signupCheck(Request $request, UserPasswordEncoderInterface $encoder, ValidatorInterface $validator):Response {
+	public function signupCheck(
+		Request $request,
+		UserPasswordEncoderInterface $encoder,
+		ValidatorInterface $validator,
+		AuthorizationCheckerInterface $authChecker
+	):Response {
+		// If user is already logged in, redirect him to homepage
+		if( $authChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
+			return $this->redirectToRoute('index');
+		}
+
 		$query = $request->request;
 		$fname = $query->get('fname');
 		$lname = $query->get('lname');
@@ -169,7 +156,7 @@ class LoginController extends Controller
 		}
 		return $this->redirectToRoute('index');
 	}
-	
+
 	private function doLoginUser(User $user, Request $request) {
 		//Handle getting or creating the user entity likely with a posted form
 		// The third parameter "main" can change according to the name of your firewall in security.yml
