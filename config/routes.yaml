@@ -28,5 +28,10 @@ company-intro:
     controller:   Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
     defaults:
         template: company-intro.html.twig
+lost-password:
+  path: /lost-password
+  controller:     Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
+  defaults:
+        template: lost-password.html.twig
 logout:
     path: /logout
