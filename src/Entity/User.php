@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -29,13 +30,26 @@ class User implements UserInterface, \Serializable
 
 	/**
 	* @ORM\Column(type="string", length=64)
+	* @Assert\Length(
+	*      min = 8,
+	*      minMessage = "Password expected to be at least {{ limit }} characters long",
+	* )
 	*/
 	private $password;
 
 	/**
 	* @ORM\Column(type="string", length=60, unique=true)
+	* @Assert\Email(
+	*     message = "The email '{{ value }}' is not a valid email.",
+	*     checkMX = true
+	* )
 	*/
 	private $email;
+
+	/**
+	* @ORM\Column(type="array")
+	*/
+	private $roles;
 
 	/**
 	* @ORM\Column(name="is_active", type="boolean")
@@ -45,6 +59,7 @@ class User implements UserInterface, \Serializable
 	public function __construct()
 	{
 		$this->isActive = true;
+		$this->roles = [ 'ROLE_USER' ];
 		// may not be needed, see section on salt below
 		// $this->salt = md5(uniqid('', true));
 	}
@@ -90,7 +105,7 @@ class User implements UserInterface, \Serializable
 
 	public function getRoles()
 	{
-		return array('ROLE_USER');
+		return $this->roles;
 	}
 
 	public function getUsername(){
@@ -122,6 +137,6 @@ class User implements UserInterface, \Serializable
 			$this->password,
 			// see section on salt below
 			// $this->salt
-			) = unserialize($serialized);
-		}
+		) = unserialize($serialized);
 	}
+}

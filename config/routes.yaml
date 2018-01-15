@@ -28,3 +28,5 @@ company-intro:
     controller:   Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
     defaults:
         template: company-intro.html.twig
+logout:
+    path: /logout

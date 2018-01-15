@@ -19,13 +19,17 @@
 		{% block stylesheets %}{% endblock %}
 	</head>
 	<body style="background-image : url(/build/images/{% block background_image %}{% endblock %})">
-		<header class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center templatemo-logo" id="header">
+		<header class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center templatemo-logo black-bg" id="header">
 			<h1 class="templatemo-site-title">
 				<a href="/">Wello Horld</a>
 			</h1>
 			<nav>
 				<a href="/cart" title="Cart"><i class="fa fa-shopping-cart"></i></a>
+				{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+				<a class="link" href="{{ path('logout') }}">Logout</a>
+				{% else %}
 				<a href="/login">Log in</a>
+				{% endif %}
 			</nav>
 		</header>
 

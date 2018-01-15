@@ -1,37 +1,42 @@
 {% extends 'base.html.twig' %}
+
 {% block body %}
 <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-md-offset-2 col-lg-offset-2 templatemo-content-wrapper">
-                   <div class="templatemo-content"><section id="login-form" class="inactive active" style="display: block;">
-    <div class="row">
-        <div class="black-bg col-sm-12 col-md-12 col-lg-12">
-            <h2 class="text-center">Sign In</h2>
-            <div class="col-sm-6 col-md-6 margin-bottom-20">
-            {% if error %}<div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>{% endif %}
-                <form action="{{ path("login_check")}}" method="post">
-                        <div class="form-group">
-                            <!--<label for="login_mail">Email Address</label>-->
-                            <input name="mail" type="text" id="login_mail" class="form-control" placeholder="Email Address" />
-                        </div>
-                        <div class="form-group">
-                            <!--<label for="login_password">Password</label>-->
-                            <input name="password" type="password" id="login_password" class="form-control" placeholder="Password" />
-                        </div>
-                        <button type="submit" class="btn btn-primary">LogIn</button>
-                </form>
-                <a href="{{path("signup")}}">Sign Up</a>
-            </div>
-            <div class="clearfix"></div>
-        </div>
-    </div>
-    <div class="row margin-top-20">
-        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6  pull-right">
-            <a href="/" class="change-section">
-                <div class="black-bg btn-menu">
-                    <h2>Back to menu</h2>
-                </div>
-            </a>
-        </div>
-    </div>
-</section><!-- /.contact-section -->
+	<div class="templatemo-content">
+		<section id="login-form" class="inactive active" style="display: block;">
+			<div class="row">
+				<div class="black-bg col-sm-12 col-md-12 col-lg-12">
+					<h2 class="text-center">Sign In</h2>
+					<div class="col-sm-6 col-md-6 margin-bottom-20">
+						{% if error %}<div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>{% endif %}
+						<form action="{{ path("login_check")}}" method="post">
+							<div class="form-group">
+								<!--<label for="login_mail">Email Address</label>-->
+								<input name="mail" type="text" id="login_mail" class="form-control" placeholder="Email Address" />
+							</div>
+							<div class="form-group">
+								<!--<label for="login_password">Password</label>-->
+								<input name="password" type="password" id="login_password" class="form-control" placeholder="Password" />
+							</div>
+							<button type="submit" class="btn btn-primary">LogIn</button>
+						</form>
+						<a href="{{path("signup")}}">Sign Up</a>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+			</div>
+			<div class="row margin-top-20">
+				<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6  pull-right">
+					<a href="/" class="change-section">
+						<div class="black-bg btn-menu">
+							<h2>Back to menu</h2>
+						</div>
+					</a>
+				</div>
+			</div>
+		</section><!-- /.contact-section -->
+	</div>
+</div>
 {% endblock %}
+
 {% block background_image %}zoom-bg-7.jpg{% endblock %}
