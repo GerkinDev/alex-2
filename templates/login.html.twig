@@ -7,7 +7,7 @@
 			<div class="row">
 				<div class="black-bg col-sm-12 col-md-12 col-lg-12">
 					<h2 class="text-center">Sign In</h2>
-					<div class="col-sm-6 col-md-6 margin-bottom-20">
+					<div class="col-sm-12 col-md-12 margin-bottom-20 text-center">
 						{% if error %}<div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>{% endif %}
 						{% set tried_email = app.session.has('tried_email') ? app.session.get('tried_email') : '' %}
 						<form action="{{ path("login_check")}}" method="post">
@@ -21,7 +21,7 @@
 							</div>
 							<button type="submit" class="btn btn-primary">LogIn</button>
 						</form>
-						<a href="{{path("signup")}}">Sign Up</a>
+						<p class="text-center">You don't already have an account ? : <a href="{{path("signup")}}">Sign Up</a>
 					</div>
 					{% for flashMessage in app.session.flashbag.get('login') %}{{ flashMessage }}{% endfor %}
 					<div class="clearfix"></div>

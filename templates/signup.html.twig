@@ -5,7 +5,7 @@
     <div class="row">
         <div class="black-bg col-sm-12 col-md-12 col-lg-12">
             <h2 class="text-center">Sign Up</h2>
-            <div class="col-sm-6 col-md-6 margin-bottom-20">
+            <div class="col-sm-12 col-md-12 margin-bottom-20 text-center">
             {% if error %}<div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>{% endif %}
                 <form action="{{ path("signup_check")}}" method="post">
                   {% set datas = app.session.has('signup_data') ? app.session.get('signup_data') : {
