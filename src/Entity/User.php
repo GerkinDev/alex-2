@@ -5,11 +5,12 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\EquatableInterface;
 
 /**
 * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
 */
-class User implements UserInterface, \Serializable
+class User implements UserInterface, EquatableInterface, \Serializable
 {
 	/**
 	* @ORM\Column(type="integer")
@@ -52,10 +53,13 @@ class User implements UserInterface, \Serializable
 	*/
 	private $isActive;
 
-	public function __construct()
+	public function __construct($username = NULL, $password = NULL, $salt = NULL, $roles = [ 'ROLE_USER' ])
 	{
 		$this->isActive = true;
-		$this->roles = [ 'ROLE_USER' ];
+		$this->username = $username;
+		$this->password = $password;
+		$this->salt = $salt;
+		$this->roles = $roles;
 		// may not be needed, see section on salt below
 		// $this->salt = md5(uniqid('', true));
 	}

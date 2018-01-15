@@ -26,3 +26,7 @@ Read the documentation at https://symfony.com/doc
 
 1. Run `composer require symfony/web-profiler-bundle`
 1. In `config/bundles.php`, ensure `Symfony\Bundle\WebProfilerBundle\WebProfilerBundle::class => ['dev' => true, 'test' => true],`
+
+### Sample repo with Symfony4
+
+https://github.com/liweiyi88/julianli

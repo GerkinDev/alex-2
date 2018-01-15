@@ -12,6 +12,14 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+
+// Authentication process related
+use Symfony\Component\Security\Core\Authentication\Provider\DaoAuthenticationProvider;
+use Symfony\Component\Security\Core\User\UserChecker;
+use Symfony\Component\Security\Core\User\InMemoryUserProvider;
+use Symfony\Component\Security\Core\Encoder\EncoderFactory;
+use Symfony\Component\Security\Core\Encoder\BasePasswordEncoder;
+
 use App\Entity\User;
 use App\Exception\AuthException;
 
@@ -37,15 +45,46 @@ class LoginController extends Controller {
 	/**
 	* @Route("/dologin", name="login_check")
 	*/
-	public function loginCheck()
+	public function loginCheck(Request $request)
 	{
-		$session = new Session();
-		$session->set('tried_email', $email);
 		$query = $request->request;
 		$password = $query->get('password');
 		$email = $query->get('email');
+		$session = new Session();
+		$session->set('tried_email', $email);
 		// replace this line with your own code!
-		return $this->render('@Maker/demoPage.html.twig', [ 'path' => str_replace($this->getParameter('kernel.project_dir').'/', '', __FILE__) ]);
+		try {
+			if( $password === '' || $email === ''){
+				throw new AuthException('Missing Values !');
+			}
+
+			        $unauthenticatedToken = new UsernamePasswordToken(
+			            $email,
+			            $password,
+			            $this->providerKey
+			        );
+
+										var_dump($unauthenticatedToken);
+
+	$provider = new DaoAuthenticationProvider(
+	    new \App\Security\User\MainUserProvider(),
+	    new UserChecker(),
+	    'main',
+	    new EncoderFactory([new BasePasswordEncoder()])
+	);
+
+	$token = $provider->authenticate($unauthenticatedToken);
+
+				var_dump($unauthenticatedToken);
+
+				var_dump($token);
+				return $this->render('error.html.twig');
+		}	catch (AuthException $exception) {
+			// add flash messages
+			$session->getFlashBag()->add( 'login', $exception->getMessage());
+			return $this->redirectToRoute('login');
+			}
+			return $this->redirectToRoute('index');
 	}
 
 	/**
