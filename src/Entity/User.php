@@ -5,12 +5,11 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\User\EquatableInterface;
 
 /**
 * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
 */
-class User implements UserInterface, EquatableInterface, \Serializable
+class User implements UserInterface, \Serializable
 {
 	/**
 	* @ORM\Column(type="integer")
@@ -53,8 +52,7 @@ class User implements UserInterface, EquatableInterface, \Serializable
 	*/
 	private $isActive;
 
-	public function __construct($username = NULL, $password = NULL, $salt = NULL, $roles = [ 'ROLE_USER' ])
-	{
+	public function __construct($username = null, $password = null, $salt = null, $roles = [ 'ROLE_USER' ]) {
 		$this->isActive = true;
 		$this->username = $username;
 		$this->password = $password;
@@ -102,27 +100,24 @@ class User implements UserInterface, EquatableInterface, \Serializable
 		$this->password = $password;
 		return $this;
 	}
-	public function setRawPassword($rawPassword, $encoder){
+	public function setRawPassword($rawPassword, $encoder) {
 		$this->setPassword($encoder->encodePassword($this, $rawPassword));
 		return $this;
 	}
 
-	public function getRoles()
-	{
+	public function getRoles() {
 		return $this->roles;
 	}
 
-	public function getUsername(){
+	public function getUsername() {
 		return $this->getEmail();
 	}
 
-	public function eraseCredentials()
-	{
+	public function eraseCredentials() {
 	}
 
 	/** @see \Serializable::serialize() */
-	public function serialize()
-	{
+	public function serialize() {
 		return serialize(array(
 			$this->id,
 			$this->email,
@@ -133,8 +128,7 @@ class User implements UserInterface, EquatableInterface, \Serializable
 	}
 
 	/** @see \Serializable::unserialize() */
-	public function unserialize($serialized)
-	{
+	public function unserialize($serialized) {
 		list (
 			$this->id,
 			$this->email,

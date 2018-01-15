@@ -9,34 +9,33 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Model
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+	/**
+	 * @ORM\Id
+	 * @ORM\GeneratedValue
+	 * @ORM\Column(type="integer")
+	 */
+	private $id;
 
-    // add your own fields
-    /**
-     * @ORM\Column(type="string", nullable=false)
-     */
+	// add your own fields
+	/**
+	 * @ORM\Column(type="string", nullable=false)
+	 */
 	private $file;
-    /**
-     * @ORM\Column(type="string")
-     */
+	/**
+	 * @ORM\Column(type="string")
+	 */
 	private $title;
-    /**
-     * @ORM\Column(type="boolean")
-     */
+	/**
+	 * @ORM\Column(type="boolean")
+	 */
 	private $public;
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="models")
-     * @ORM\JoinColumn(nullable=false)
-     */
+	/**
+	 * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="models")
+	 * @ORM\JoinColumn(nullable=false)
+	 */
 	private $creator;
-    /**
-     * @ORM\Column(type="float")
-     */
+	/**
+	 * @ORM\Column(type="float")
+	 */
 	private $price;
-	
 }

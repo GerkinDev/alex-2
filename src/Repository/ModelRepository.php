@@ -8,12 +8,11 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class ModelRepository extends ServiceEntityRepository
 {
-    public function __construct(RegistryInterface $registry)
-    {
-        parent::__construct($registry, Model::class);
-    }
+	public function __construct(RegistryInterface $registry) {
+		parent::__construct($registry, Model::class);
+	}
 
-    /*
+	/*
     public function findBySomething($value)
     {
         return $this->createQueryBuilder('m')

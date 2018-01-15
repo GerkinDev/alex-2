@@ -8,12 +8,11 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class PrintingRepository extends ServiceEntityRepository
 {
-    public function __construct(RegistryInterface $registry)
-    {
-        parent::__construct($registry, Printing::class);
-    }
+	public function __construct(RegistryInterface $registry) {
+		parent::__construct($registry, Printing::class);
+	}
 
-    /*
+	/*
     public function findBySomething($value)
     {
         return $this->createQueryBuilder('p')
