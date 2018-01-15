@@ -33,5 +33,10 @@ lost-password:
   controller:     Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
   defaults:
         template: lost-password.html.twig
+cart:
+  path: /cart
+  controller:     Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
+  defaults:
+        template: cart.html.twig
 logout:
     path: /logout
