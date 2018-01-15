@@ -6,19 +6,21 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use App\Entity\User;
+use App\Exception\AuthException;
 
 const USER_FIREWALL = 'main';
 
-class LoginController extends Controller
-{
+class LoginController extends Controller {
 	/**
-     * @Route("/login", name="login")
-     */
+	* @Route("/login", name="login")
+	*/
 	public function login(Request $request, AuthenticationUtils $authUtils)
 	{
 		// get the login error if there is one
@@ -33,18 +35,22 @@ class LoginController extends Controller
 		));
 	}
 	/**
-     * @Route("/dologin", name="login_check")
-     */
+	* @Route("/dologin", name="login_check")
+	*/
 	public function loginCheck()
 	{
+		$session = new Session();
+		$session->set('tried_email', $email);
+		$query = $request->request;
+		$password = $query->get('password');
+		$email = $query->get('email');
 		// replace this line with your own code!
 		return $this->render('@Maker/demoPage.html.twig', [ 'path' => str_replace($this->getParameter('kernel.project_dir').'/', '', __FILE__) ]);
 	}
 
 	/**
-
-		 * @Route("/signup", name="signup")
-		 */
+	* @Route("/signup", name="signup")
+	*/
 	public function signup(Request $request, AuthenticationUtils $authUtils)
 	{
 		// get the login error if there is one
@@ -62,42 +68,71 @@ class LoginController extends Controller
 	/**
 	* @Route("/dosignup", name="signup_check")
 	*/
-	public function signupCheck(Request $request, UserPasswordEncoderInterface $encoder)
+	public function signupCheck(Request $request, UserPasswordEncoderInterface $encoder, ValidatorInterface $validator)
 	{
 		$query = $request->request;
+		$fname = $query->get('fname');
+		$lname = $query->get('lname');
+		$password = $query->get('password');
+		$repeat_password = $query->get('repeat_password');
+		$email = $query->get('email');
+		try {
+			if($fname === '' || $lname === '' || $password === '' || $repeat_password === '' || $email === ''){
+				throw new AuthException('Missing Values !');
+			}
+			if($password !== $repeat_password){
+				throw new AuthException('Passwords mismatched !');
+			}
+			if(strlen($password) < 8){
+				throw new AuthException('Password is too short');
+			}
 
-		if(!($query->has('fname') && $query->has('lname') && $query->has('password') && $query->has('repeat_password') && $query->has('email'))){
-			throw new \Exception();
+			$em = $this->getDoctrine()->getManager();
+
+			$user = new User();
+			$user
+			->setFirstName($fname)
+			->setLastName($lname)
+			->setRawPassword($password, $encoder)
+			->setEmail($email);
+
+			$errors = $validator->validate($user);
+			if(count($errors) > 0){
+				foreach ($errors as $error) {
+					throw new AuthException($error->getMessage());
+				}
+			}
+
+			// tell Doctrine you want to (eventually) save the Product (no queries yet)
+			$em->persist($user);
+
+			// actually executes the queries (i.e. the INSERT query)
+			try{
+				$em->flush();
+			} catch (\Doctrine\DBAL\Exception\UniqueConstraintViolationException $exception){
+				throw new AuthException('This email is already taken');
+			}
+
+			$this->doLoginUser($user, $request);
+
+		} catch (AuthException $exception){
+			$session = new Session();
+			$session->set('signup_data', array(
+				'fname' => $fname,
+				'lname' => $lname,
+				'password' => $password,
+				'repeat_password' => $repeat_password,
+				'email' => $email,
+			));
+
+			// add flash messages
+			$session->getFlashBag()->add( 'login', $exception->getMessage());
+			return $this->redirectToRoute('signup');
+		} catch( \Exception $exception){
+			return $this->render('error.html.twig');
 		}
-		if($query->get('password') !== $query->get('repeat_password')){
-			throw new \Exception();
-		}
-
-		$em = $this->getDoctrine()->getManager();
-
-		$user = new User();
-		$user
-			->setFirstName($query->get('fname'))
-			->setLastName($query->get('lname'))
-			->setPassword($encoder->encodePassword($user, $query->get('password')))
-			->setEmail($query->get('email'));
-
-		// tell Doctrine you want to (eventually) save the Product (no queries yet)
-		$em->persist($user);
-
-		// actually executes the queries (i.e. the INSERT query)
-		try{
-			$em->flush();
-		} catch (\Doctrine\DBAL\Exception\UniqueConstraintViolationException $exception){
-			throw new \Exception('This email is already taken');
-		}
-
-		$this->doLoginUser($user, $request);
-
-		// replace this line with your own code!
-		return $this->render('@Maker/demoPage.html.twig', [ 'path' => str_replace($this->getParameter('kernel.project_dir').'/', '', __FILE__) ]);
+		return $this->redirectToRoute('index');
 	}
-
 	private function doLoginUser(User $user, Request $request){
 		//Handle getting or creating the user entity likely with a posted form
 		// The third parameter "main" can change according to the name of your firewall in security.yml

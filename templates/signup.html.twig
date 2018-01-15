@@ -8,29 +8,37 @@
             <div class="col-sm-6 col-md-6 margin-bottom-20">
             {% if error %}<div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>{% endif %}
                 <form action="{{ path("signup_check")}}" method="post">
+                  {% set datas = app.session.has('signup_data') ? app.session.get('signup_data') : {
+                    'fname': '',
+                    'lname': '',
+                    'email': '',
+                    'password': '',
+                    'repeat_password': '',
+                  } %}
                       <div class="form-group">
                             <!--<label for="signup_fname">Firstname</label>-->
-                            <input required name="fname" type="text" id="signup_fname" class="form-control" placeholder="Firstname" />
+                            <input value="{{ datas.fname }}" required name="fname" type="text" id="signup_fname" class="form-control" placeholder="Firstname" />
                       </div>
                       <div class="form-group">
                             <!--<label for="signup_lname">Lastname</label>-->
-                            <input required name="lname" type="text" id="signup_lname" class="form-control" placeholder="Lastname" />
+                            <input value="{{ datas.lname }}" required name="lname" type="text" id="signup_lname" class="form-control" placeholder="Lastname" />
                       </div>
                         <div class="form-group">
                             <!--<label for="signup_email">Email Address</label>-->
-                            <input required name="email" type="text" id="signup_email" class="form-control" placeholder="Email Address" />
+                            <input value="{{ datas.email }}" required name="email" type="text" id="signup_email" class="form-control" placeholder="Email Address" />
                         </div>
                         <div class="form-group">
                             <!--<label for="signup_password">Password</label>-->
-                            <input required name="password" type="password" id="signup_password" class="form-control" placeholder="Password" />
+                            <input value="{{ datas.password }}" required name="password" type="password" id="signup_password" class="form-control" placeholder="Password" />
                         </div>
                         <div class="form-group">
                             <!--<label for="signup_confirm_password">Repeat Password</label>-->
-                            <input required name="repeat_password" type="password" id="signup_confirm_password" class="form-control" placeholder="Repeat Password" />
+                            <input value="{{ datas.repeat_password }}" required name="repeat_password" type="password" id="signup_confirm_password" class="form-control" placeholder="Repeat Password" />
                         </div>
                         <button type="submit" class="btn btn-primary">LogIn</button>
                 </form>
             </div>
+            {% for flashMessage in app.session.flashbag.get('login') %}{{ flashMessage }}{% endfor %}
             <div class="clearfix"></div>
         </div>
     </div>

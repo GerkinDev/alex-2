@@ -30,10 +30,6 @@ class User implements UserInterface, \Serializable
 
 	/**
 	* @ORM\Column(type="string", length=64)
-	* @Assert\Length(
-	*      min = 8,
-	*      minMessage = "Password expected to be at least {{ limit }} characters long",
-	* )
 	*/
 	private $password;
 
@@ -100,6 +96,10 @@ class User implements UserInterface, \Serializable
 	}
 	public function setPassword($password) {
 		$this->password = $password;
+		return $this;
+	}
+	public function setRawPassword($rawPassword, $encoder){
+		$this->setPassword($encoder->encodePassword($this, $rawPassword));
 		return $this;
 	}
 
