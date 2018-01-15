@@ -32,3 +32,5 @@ Read the documentation at https://symfony.com/doc
 https://github.com/liweiyi88/julianli
 
 https://github.com/JulieAlary/symfony4Start
+
+https://github.com/matthieuleorat/documentManager
