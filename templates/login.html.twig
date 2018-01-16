@@ -4,37 +4,37 @@
 <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-md-offset-2 col-lg-offset-2 templatemo-content-wrapper">
 	<div class="templatemo-content">
 		<section id="login-form" class="inactive active" style="display: block;">
-				<div class="col-md-12 black-bg">
-					<div class="row">
-						<h2 class="text-center col-md-12">Sign In</h2>
-						<div class="col-sm-6 col-md-6 text-center">
-							<form id="form-login" action="{{ path("login_check")}}" method="post">
-								<div class="form-group">
-									<!--<label for="login_mail">Email Address</label>-->
-									<input value="{{last_username}}" required name="_username" type="text" id="login_email" class="form-control" placeholder="Email Address" />
-								</div>
-								<div class="form-group">
-									<!--<label for="login_password">Password</label>-->
-									<input required name="_password" type="password" id="login_password" class="form-control" placeholder="Password" />
-								</div>
-							</form>
-						</div>
-						<div class="col-sm-6 col-md-6 text-center">
-							<a class="btn btn-primary btn-block" href="{{path("signup")}}">Sign Up</a>
-							<a class="btn btn-info btn-block" href="{{path("lost-password")}}">Lost your password ?</a>
-						</div>
-						<button form="form-login" type="submit" class="m-3 btn btn-outline-primary btn-block btn-lg">LogIn</button>
-						{% for flashMessage in app.session.flashbag.get('login') %}{{ flashMessage }}{% endfor %}
+			<div class="col-md-12 black-bg">
+				<div class="row">
+					<h2 class="text-center col-md-12">Sign In</h2>
+					<div class="col-sm-6 col-md-6 text-center">
+						<form id="form-login" action="{{ path("login_check")}}" method="post">
+							<div class="form-group">
+								<!--<label for="login_mail">Email Address</label>-->
+								<input value="{{last_username}}" required name="_username" type="text" id="login_email" class="form-control" placeholder="Email Address" />
+							</div>
+							<div class="form-group">
+								<!--<label for="login_password">Password</label>-->
+								<input required name="_password" type="password" id="login_password" class="form-control" placeholder="Password" />
+							</div>
+						</form>
 					</div>
+					<div class="col-sm-6 col-md-6 text-center">
+						<a class="btn btn-primary btn-block" href="{{path("signup")}}">Sign Up</a>
+						<a class="btn btn-info btn-block" href="{{path("lost-password")}}">Lost your password ?</a>
+					</div>
+					<button form="form-login" type="submit" class="m-3 btn btn-outline-primary btn-block btn-lg">LogIn</button>
+					{% for flashMessage in app.session.flashbag.get('login') %}{{ flashMessage }}{% endfor %}
 				</div>
+			</div>
 			<div class="row margin-top-20">
-					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-							<a href="/" class="change-section">
-									<div class="black-bg btn-menu">
-											<h2>Back to menu</h2>
-									</div>
-							</a>
-					</div>
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+					<a href="/" class="change-section">
+						<div class="black-bg btn-menu">
+							<h2>Back to menu</h2>
+						</div>
+					</a>
+				</div>
 			</div>
 		</section><!-- /.contact-section -->
 	</div>

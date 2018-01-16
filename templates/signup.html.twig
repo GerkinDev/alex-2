@@ -14,11 +14,11 @@
 					{% endif %}
 					<form action="{{ path("signup_check")}}" method="post">
 						{% set datas = app.session.has('signup_data') ? app.session.get('signup_data') : {
-						'fname': '',
-						'lname': '',
-						'email': '',
-						'password': '',
-						'repeat_password': '',
+							'fname': '',
+							'lname': '',
+							'email': '',
+							'password': '',
+							'repeat_password': '',
 						} %}
 						<div class="form-group">
 							<!--<label for="signup_fname">Firstname</label>-->
@@ -62,6 +62,6 @@
 				</a>
 			</div>
 		</div>
-		</section><!-- /.contact-section -->
-		{% endblock %}
-		{% block background_image %}zoom-bg-7.jpg{% endblock %}
+	</section><!-- /.contact-section -->
+{% endblock %}
+{% block background_image %}zoom-bg-7.jpg{% endblock %}
