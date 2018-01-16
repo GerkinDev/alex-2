@@ -58,14 +58,14 @@ class User implements UserInterface, \Serializable
 	private $isActive;
 
 	public function __construct($username = null, $password = null, $salt = null, $role = 'ROLE_USER' ) {
-		$this->isActive = true;
+		$this->isActive = false;
 		$this->username = $username;
 		$this->password = $password;
 		$this->salt = $salt;
 		$this->role = $role;
 		$this->salt = md5(uniqid('', true));
 	}
-	
+
 	// Id
 	public function getId(){
 		return $this->id;
@@ -101,7 +101,7 @@ class User implements UserInterface, \Serializable
 		$this->setPassword($encoder->encodePassword($this, $rawPassword));
 		return $this;
 	}
-	
+
 	// Salt
 	public function getSalt() {
 		return $this->salt;
@@ -129,6 +129,15 @@ class User implements UserInterface, \Serializable
 
 	public function getUsername() {
 		return $this->getEmail();
+	}
+
+	// IsActive
+	public function getActive() {
+		return $this->isActive;
+	}
+	public function setActive($active) {
+		$this->isActive = $active;
+		return $this;
 	}
 
 	public function eraseCredentials() {

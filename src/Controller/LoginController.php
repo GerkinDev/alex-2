@@ -100,8 +100,8 @@ class LoginController extends Controller
 		$password = $query->get('password');
 		$repeat_password = $query->get('repeat_password');
 		$email = $query->get('email');
-		
-			$session = new Session();
+
+		$session = new Session();
 		try {
 			if ($fname === '' || $lname === '' || $password === '' || $repeat_password === '' || $email === '') {
 				throw new AuthException('Missing Values !');
@@ -138,7 +138,7 @@ class LoginController extends Controller
 			} catch (\Doctrine\DBAL\Exception\UniqueConstraintViolationException $exception) {
 				throw new AuthException('This email is already taken');
 			}
-			
+
 			$mailer->sendMailNewUser($user);
 			$session->getFlashBag()->add('info', 'Registration done! You\'ll be able to log in once your email is verified. Watch your mailbox!');
 		} catch (AuthException $exception) {
@@ -153,8 +153,6 @@ class LoginController extends Controller
 			// add flash messages
 			$session->getFlashBag()->add('login', $exception->getMessage());
 			return $this->redirectToRoute('signup');
-		} catch (\Exception $exception) {
-			return $this->render('error.html.twig');
 		}
 		return $this->redirectToRoute('index');
 	}
@@ -166,10 +164,36 @@ class LoginController extends Controller
 		Request $request,
 		UriTokenHandler $tokenHandler
 	):Response {
-		$token = $request->get('token');
+		$token = rawurldecode($request->get('token'));
+		if(strlen($token) !== 24){
+			throw $this->createNotFoundException('Invalid token provided');
+		}
 		$id = $tokenHandler->decryptRouteToken($token, 'validateAccount');
-		var_dump($id);
-		return $this->render('error.html.twig');
+		if(!is_numeric($id)){
+			throw $this->createNotFoundException('Invalid token provided');
+		}
+		$id = intval($id);
+		$user = $this->getDoctrine()
+			->getRepository(User::class)
+			->find($id);
+		if(!$user instanceof User){
+			throw $this->createNotFoundException('Invalid token provided');
+		}
+		if($user->getActive() === true){
+			throw $this->createNotFoundException('Token already used');
+		}
+		// Enable the user
+		$user->setActive(true);
+
+		// Save in DB
+		$em = $this->getDoctrine()->getManager();
+		$em->persist($user);
+		$em->flush();
+
+		$session = new Session();
+		$session->getFlashBag()->add('info', 'Validation done');
+		$this->doLoginUser($user, $request);
+		return $this->redirectToRoute('index');
 	}
 
 	private function doLoginUser(User $user, Request $request) {

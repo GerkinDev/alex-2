@@ -27,7 +27,7 @@ class Mailer {
 		$args = [
 			'user' => $user,
 			'validate_url' => $this->router->generate('validate_account', [
-				'token' => $this->tokenHandler->encryptRouteToken($user->getId(), 'validateAccount')
+				'token' => rawurlencode($this->tokenHandler->encryptRouteToken($user->getId(), 'validateAccount'))
 			], UrlGeneratorInterface::ABSOLUTE_URL),
 		];
 		$message = (new \Swift_Message('Welcome onboard, '.$user->getFirstName().'! - '))
