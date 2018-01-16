@@ -34,6 +34,11 @@ class User implements UserInterface, \Serializable
 	private $password;
 
 	/**
+	* @ORM\Column(type="string")
+	*/
+	private $salt;
+
+	/**
 	* @ORM\Column(type="string", length=60, unique=true)
 	* @Assert\Email(
 	*     message = "The email '{{ value }}' is not a valid email.",
@@ -43,34 +48,30 @@ class User implements UserInterface, \Serializable
 	private $email;
 
 	/**
-	* @ORM\Column(type="array")
+	* @ORM\Column(type="string")
 	*/
-	private $roles;
+	private $role;
 
 	/**
 	* @ORM\Column(name="is_active", type="boolean")
 	*/
 	private $isActive;
 
-	public function __construct($username = null, $password = null, $salt = null, $roles = [ 'ROLE_USER' ]) {
+	public function __construct($username = null, $password = null, $salt = null, $role = 'ROLE_USER' ) {
 		$this->isActive = true;
 		$this->username = $username;
 		$this->password = $password;
 		$this->salt = $salt;
-		$this->roles = $roles;
-		// may not be needed, see section on salt below
-		// $this->salt = md5(uniqid('', true));
+		$this->role = $role;
+		$this->salt = md5(uniqid('', true));
+	}
+	
+	// Id
+	public function getId(){
+		return $this->id;
 	}
 
-	public function getEmail() {
-		return $this->email;
-	}
-	public function setEmail($email) {
-		$this->email = $email;
-		return $this;
-	}
-
-
+	// FirstName
 	public function getFirstName() {
 		return $this->fname;
 	}
@@ -79,6 +80,7 @@ class User implements UserInterface, \Serializable
 		return $this;
 	}
 
+	// LastName
 	public function getLastName() {
 		return $this->lname;
 	}
@@ -87,12 +89,7 @@ class User implements UserInterface, \Serializable
 		return $this;
 	}
 
-	public function getSalt() {
-		// you *may* need a real salt depending on your encoder
-		// see section on salt below
-		return null;
-	}
-
+	// Password
 	public function getPassword() {
 		return $this->password;
 	}
@@ -104,9 +101,30 @@ class User implements UserInterface, \Serializable
 		$this->setPassword($encoder->encodePassword($this, $rawPassword));
 		return $this;
 	}
+	
+	// Salt
+	public function getSalt() {
+		return $this->salt;
+	}
+	public function setSalt($salt) {
+		$this->salt = $salt;
+		return $this;
+	}
 
+	// Email
+	public function getEmail() {
+		return $this->email;
+	}
+	public function setEmail($email) {
+		$this->email = $email;
+		return $this;
+	}
+
+	public function getRole() {
+		return $this->role;
+	}
 	public function getRoles() {
-		return $this->roles;
+		return [$this->role];
 	}
 
 	public function getUsername() {
@@ -122,8 +140,7 @@ class User implements UserInterface, \Serializable
 			$this->id,
 			$this->email,
 			$this->password,
-			// see section on salt below
-			// $this->salt,
+			$this->salt,
 		));
 	}
 
@@ -133,8 +150,7 @@ class User implements UserInterface, \Serializable
 			$this->id,
 			$this->email,
 			$this->password,
-			// see section on salt below
-			// $this->salt
+			$this->salt
 		) = unserialize($serialized);
 	}
 }

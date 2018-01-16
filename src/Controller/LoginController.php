@@ -16,6 +16,8 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 use App\Entity\User;
 use App\Exception\AuthException;
+use App\Service\Mailer;
+use App\Service\UriTokenHandler;
 
 const USER_FIREWALL = 'main';
 
@@ -29,6 +31,7 @@ class LoginController extends Controller
 		AuthenticationUtils $authUtils,
 		AuthorizationCheckerInterface $authChecker
 	):Response {
+		//$mailer->sendMailNewUser($this->getUser());
 		// If user is already logged in, redirect him to homepage
 		if( $authChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
 			return $this->redirectToRoute('index');
@@ -83,7 +86,8 @@ class LoginController extends Controller
 		Request $request,
 		UserPasswordEncoderInterface $encoder,
 		ValidatorInterface $validator,
-		AuthorizationCheckerInterface $authChecker
+		AuthorizationCheckerInterface $authChecker,
+		Mailer $mailer
 	):Response {
 		// If user is already logged in, redirect him to homepage
 		if( $authChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
@@ -96,6 +100,8 @@ class LoginController extends Controller
 		$password = $query->get('password');
 		$repeat_password = $query->get('repeat_password');
 		$email = $query->get('email');
+		
+			$session = new Session();
 		try {
 			if ($fname === '' || $lname === '' || $password === '' || $repeat_password === '' || $email === '') {
 				throw new AuthException('Missing Values !');
@@ -132,10 +138,10 @@ class LoginController extends Controller
 			} catch (\Doctrine\DBAL\Exception\UniqueConstraintViolationException $exception) {
 				throw new AuthException('This email is already taken');
 			}
-
-			$this->doLoginUser($user, $request);
+			
+			$mailer->sendMailNewUser($user);
+			$session->getFlashBag()->add('info', 'Registration done! You\'ll be able to log in once your email is verified. Watch your mailbox!');
 		} catch (AuthException $exception) {
-			$session = new Session();
 			$session->set('signup_data', array(
 				'fname' => $fname,
 				'lname' => $lname,
@@ -151,6 +157,19 @@ class LoginController extends Controller
 			return $this->render('error.html.twig');
 		}
 		return $this->redirectToRoute('index');
+	}
+
+	/**
+	 * @Route("/validate_account/{token}", name="validate_account")
+	 */
+	public function validateAccount(
+		Request $request,
+		UriTokenHandler $tokenHandler
+	):Response {
+		$token = $request->get('token');
+		$id = $tokenHandler->decryptRouteToken($token, 'validateAccount');
+		var_dump($id);
+		return $this->render('error.html.twig');
 	}
 
 	private function doLoginUser(User $user, Request $request) {
