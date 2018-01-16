@@ -9,6 +9,8 @@ body {
 	background-attachment: fixed;
 	min-height: 100%;
 	font-size: 14px;
+	display: flex;
+	flex-direction: column;
 }
 #preloader {
 	display: none;
@@ -28,7 +30,16 @@ body {
 	}
 }
 .templatemo-content {
-		flex-direction: column;
-		display: flex;
-		align-items: center;
+	flex-direction: column;
+	display: flex;
+	align-items: center;
+	padding: 15px 0;
+	margin-top: 0;
+}
+#body{
+	flex: 1 1 auto;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
 }
