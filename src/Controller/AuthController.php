@@ -21,7 +21,7 @@ use App\Service\UriTokenHandler;
 
 const USER_FIREWALL = 'main';
 
-class LoginController extends Controller
+class AuthController extends Controller
 {
 	/**
 	* @Route("/login", name="login")
@@ -194,6 +194,36 @@ class LoginController extends Controller
 		$session->getFlashBag()->add('info', 'Validation done');
 		$this->doLoginUser($user, $request);
 		return $this->redirectToRoute('index');
+	}
+
+	/**
+	 * @Route("/password_lost", name="password_lost")
+	 */
+	public function passwordLost(
+		Request $request,
+		UriTokenHandler $tokenHandler
+	):Response {
+		// If user is already logged in, redirect him to homepage
+		if( $authChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
+			return $this->redirectToRoute('index');
+		}
+		$session = new Session();
+		$username = $request->request->get('_username');
+
+		if($username === ''){
+			$session->getFlashBag()->add('login', 'You must provide an email.');
+			return $this->redirectToRoute('login');
+		}
+
+		/** @var User $user */
+		$user = $userManager->findUserByUsername($username);
+		if(!$user instanceof User){
+			$session->getFlashBag()->add('login', 'Unknown user');
+			return $this->redirectToRoute('login');
+		}
+
+		$session->getFlashBag()->add('info', 'A mail have been sent. Check your mails to change your password.');
+		return $this->redirectToRoute('login');
 	}
 
 	private function doLoginUser(User $user, Request $request) {
