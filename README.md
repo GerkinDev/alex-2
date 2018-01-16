@@ -36,3 +36,7 @@ https://github.com/JulieAlary/symfony4Start
 ### Most Complete Repo AFAIK
 
 https://github.com/matthieuleorat/documentManager
+
+### Carousel JS with provided CDN
+
+http://kenwheeler.github.io/slick/
