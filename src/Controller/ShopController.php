@@ -4,27 +4,34 @@ namespace App\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 
-use App\Entity\Admin;
+use App\Entity\Model;
 
 class ShopController extends Controller
 {
 	/**
-	 * @Route("/catalogue/{page}", name="catalogue")
+	 * @Route(
+   *     "/products/{page}",
+   *     defaults={"page": 1},
+   *     requirements={"page": "\d+"},
+   *      name="products")
 	 */
-	public function index($id) {
+	public function index(Request $request) {
 		// replace this line with your own code!
-    $page= $this->getDoctrine()
-            ->getRepository(Model::class)
-            ->findAll($id);
+    $query = $request->request;
+    $pageIndex = $query->getInt('page');
+    var_dump($pageIndex);
 
-        if (!$page) {
-            throw $this->createNotFoundException(
-                'No product found for id '.$id
-            );
+    $models = $this->getDoctrine()
+            ->getRepository(Model::class)
+            ->findAll();
+            var_dump($models);
+        if (is_empty($models)) {
+            throw $this->createNotFoundException( 'No product found ' );
         }
 
-        return new Response('Check out this great product: '.$page->getName());
+        return $this->render('products.html.twig', ['models' => $models]);
 
         // or render a template
         // in the template, print things with {{ product.name }}
