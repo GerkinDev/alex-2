@@ -6,6 +6,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+use App\Service\UriTokenHandler;
+
 /**
 * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
 */
@@ -32,6 +34,12 @@ class User implements UserInterface, \Serializable
 	* @ORM\Column(type="string", length=64)
 	*/
 	private $password;
+
+	/**
+	* @ORM\Column(type="string", length=64, nullable=true)
+	*/
+	private $passwordResetToken;
+
 
 	/**
 	* @ORM\Column(type="string")
@@ -93,12 +101,24 @@ class User implements UserInterface, \Serializable
 	public function getPassword() {
 		return $this->password;
 	}
-	public function setPassword($password) {
+	public function setPassword($password, $cleanResetToken = true) {
 		$this->password = $password;
+		if($cleanResetToken === true){
+			$this->passwordResetToken = null;
+		}
 		return $this;
 	}
-	public function setRawPassword($rawPassword, $encoder) {
+	public function setRawPassword($rawPassword, $encoder, $cleanResetToken = true) {
 		$this->setPassword($encoder->encodePassword($this, $rawPassword));
+		return $this;
+	}
+
+	// PasswordResetToken
+	public function getPasswordResetToken() {
+		return $this->passwordResetToken;
+	}
+	public function resetPasswordGenerateToken(UriTokenHandler $tokenHandler){
+		$this->passwordResetToken = $tokenHandler->encryptRouteToken($this->id.'.'.strval(time()), 'resetPassword');
 		return $this;
 	}
 

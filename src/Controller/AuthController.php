@@ -191,7 +191,7 @@ class AuthController extends Controller
 		$em->flush();
 
 		$session = new Session();
-		$session->getFlashBag()->add('info', 'Validation done');
+		$session->getFlashBag()->add('info', 'Validation done. You are now logged in.');
 		$this->doLoginUser($user, $request);
 		return $this->redirectToRoute('index');
 	}
@@ -201,7 +201,9 @@ class AuthController extends Controller
 	 */
 	public function passwordLost(
 		Request $request,
-		UriTokenHandler $tokenHandler
+		AuthorizationCheckerInterface $authChecker,
+		UriTokenHandler $tokenHandler,
+		Mailer $mailer
 	):Response {
 		// If user is already logged in, redirect him to homepage
 		if( $authChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
@@ -216,14 +218,83 @@ class AuthController extends Controller
 		}
 
 		/** @var User $user */
-		$user = $userManager->findUserByUsername($username);
+		$user = $this
+			->getDoctrine()
+			->getRepository(User::class)
+			->findOneByEmail($username);
 		if(!$user instanceof User){
 			$session->getFlashBag()->add('login', 'Unknown user');
 			return $this->redirectToRoute('login');
 		}
 
+		$user->resetPasswordGenerateToken($tokenHandler);
+
+		// Save in DB
+		$em = $this->getDoctrine()->getManager();
+		$em->persist($user);
+		$em->flush();
+
+		$mailer->sendMailUserResetPassword($user);
 		$session->getFlashBag()->add('info', 'A mail have been sent. Check your mails to change your password.');
 		return $this->redirectToRoute('login');
+	}
+
+	/**
+	 * @Route("/reset_password/{token}", name="reset_password")
+	 */
+	public function resetPassword(
+		Request $request,
+		UserPasswordEncoderInterface $encoder,
+		UriTokenHandler $tokenHandler
+	):Response {
+		$token = rawurldecode($request->get('token'));
+		if(strlen($token) !== 24){
+			throw $this->createNotFoundException('Invalid token provided');
+		}
+		$user = $this->getDoctrine()
+			->getRepository(User::class)
+			->findOneByPasswordResetToken($token);
+		if(!$user instanceof User){
+			throw $this->createNotFoundException('Invalid token provided');
+		}
+
+		// Check if form is posted
+		$reqContent = $request->request;
+		if($request->getMethod() === 'POST'){
+			$newPassword = $reqContent->get('password');
+			$repeatPassword = $reqContent->get('repeat_password');
+			$token = $reqContent->get('token');
+
+			$session = new Session();
+
+			try{
+				if( $newPassword === '' || $repeatPassword === '' || $token === '' ){
+					throw new AuthException('Form is incomplete');
+				}
+				if($newPassword !== $repeatPassword){
+					throw new AuthException('Passwords mismatched');
+				}
+				$user->setRawPassword($newPassword, $encoder);
+
+				// Save in DB
+				$em = $this->getDoctrine()->getManager();
+				$em->persist($user);
+				$em->flush();
+				$session->getFlashBag()->add('info', 'Password reset. You may now log in.');
+				return $this->redirectToRoute('login');
+			} catch(AuthException $exception) {
+				$session->getFlashBag()->add('login', $exception->getMessage());
+				return $this->render('change-password.html.twig', array(
+					'user' => $user,
+					'token' => $token
+				));
+			}
+		} else {
+			return $this->render('change-password.html.twig', array(
+				'user' => $user,
+				'token' => $token
+			));
+		}
 	}
 
 	private function doLoginUser(User $user, Request $request) {

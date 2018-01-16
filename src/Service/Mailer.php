@@ -38,4 +38,20 @@ class Mailer {
 
 		$this->mailer->send($message);
 	}
+	
+	public function sendMailUserResetPassword(User $user){
+		$args = [
+			'user' => $user,
+			'reset_url' => $this->router->generate('reset_password', [
+				'token' => rawurlencode($user->getPasswordResetToken()),
+			], UrlGeneratorInterface::ABSOLUTE_URL),
+		];
+		$message = (new \Swift_Message('Password lost '.$user->getFirstName().'? - '))
+			->setFrom(self::MAILBOT_ADDRESS)
+			->setTo($user->getEmail())
+			->setBody($this->templating->render('emails/password_lost.html.twig', $args ), 'text/html')
+			->addPart($this->templating->render( 'emails/password_lost.txt.twig', $args ), 'text/plain');
+
+		$this->mailer->send($message);
+	}
 }
