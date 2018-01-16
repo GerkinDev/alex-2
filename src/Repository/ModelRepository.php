@@ -12,6 +12,17 @@ class ModelRepository extends ServiceEntityRepository
 		parent::__construct($registry, Model::class);
 	}
 
+	public function getPage($firstResult, $maxResults = 20)
+	{
+		$qb = $this->createQueryBuilder('model');
+		$qb
+			->select('model')
+			->setFirstResult($first_result)
+			->setMaxResults($max_results);
+
+		$pag = new Paginator($qb);
+		return $pag;
+	}
 	/*
     public function findBySomething($value)
     {

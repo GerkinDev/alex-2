@@ -37,7 +37,7 @@ class AuthController extends Controller
 			return $this->redirectToRoute('index');
 		}
 
-		return $this->render('login.html.twig', array(
+		return $this->render('pages/login.html.twig', array(
 			'last_username' => $authUtils->getLastUsername(),
 		));
 	}
@@ -76,7 +76,7 @@ class AuthController extends Controller
 			return $this->redirectToRoute('index');
 		}
 
-		return $this->render('signup.html.twig');
+		return $this->render('pages/signup.html.twig');
 	}
 
 	/**
@@ -284,13 +284,13 @@ class AuthController extends Controller
 				return $this->redirectToRoute('login');
 			} catch(AuthException $exception) {
 				$session->getFlashBag()->add('login', $exception->getMessage());
-				return $this->render('change-password.html.twig', array(
+				return $this->render('pages/change-password.html.twig', array(
 					'user' => $user,
 					'token' => $token
 				));
 			}
 		} else {
-			return $this->render('change-password.html.twig', array(
+			return $this->render('pages/change-password.html.twig', array(
 				'user' => $user,
 				'token' => $token
 			));

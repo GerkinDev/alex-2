@@ -1,0 +1,46 @@
+{% extends 'pages/base.html.twig' %}
+
+{% block body %}
+<div class="templatemo-content-wrapper">
+	<div class="templatemo-content">
+		<section id="about-section" class="inactive active" style="display: block;">
+			<div class="row">
+				<div class="black-bg col-md-12 col-lg-12 col-xl-12">
+					<h2 class="text-center">About Us</h2>
+					<div class="col-md-12 col-lg-12">
+						<p>Our story begins with a friendship of two crazy guy sharing I.T. as a common hobby. Starting with modeling and printing objects at my place we decide that this could be taken further.</p>
+					</div>
+				</div>
+			</div>
+			<div class="row margin-top-20">
+				<div class="black-bg col-md-12 col-lg-12 col-xl-12">
+					<h2 class="text-center">The Team</h2>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6 col-lg-6 col-xl-6 margin-bottom-20">
+					<div class="black-bg col-md-12 col-lg-12 col-xl-12">
+						<h2 class="text-center">Azkali Manad</h2>
+						<img class="us" src="/build/images/azkali.jpg" width="100%" height="100%"/>
+						<p>Azkali Manad is the Writter/3Dprinter/Backup_Dev of the crew. He is passionated about techniques surrounding the I.T. environnement.</p>
+					</div>
+				</div>
+				<div class="col-md-6 col-lg-6 col-xl-6">
+					<div class="black-bg col-md-12 col-lg-12 col-xl-12">
+						<h2 class="text-center">Nihi Hilvin</h2>
+						<img class="us" src="/build/images/nihilvin.jpg" width="100%" height="250%"/>
+						<p>Nihi Hilvin is the main Dev of the team. Actually studying at 42, and having a great background in Dev. he surely is both methodic and studious.</p>
+					</div>
+				</div>
+			</div>
+			<div class="row margin-top-20">
+				<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+					{{ include('components/back-to-menu-btn.html.twig') }}
+				</div>
+			</div>
+		</section><!-- /.about-section -->
+	</div><!-- /.templatemo-content -->
+</div><!-- /.templatemo-content-wrapper -->
+{% endblock %}
+
+{% block background_image %}zoom-bg-4.jpg{% endblock %}

@@ -19,23 +19,14 @@ class ShopController extends Controller
 	 */
 	public function index(Request $request) {
 		// replace this line with your own code!
-    $query = $request->request;
-    $pageIndex = $query->getInt('page');
-    var_dump($pageIndex);
+		$query = $request->request;
+		$pageIndex = $query->getInt('page');
+		var_dump($pageIndex);
 
-    $models = $this->getDoctrine()
-            ->getRepository(Model::class)
-            ->findAll();
-            var_dump($models);
-        if (is_empty($models)) {
-            throw $this->createNotFoundException( 'No product found ' );
-        }
+		$models = $this->getDoctrine()
+			->getRepository(Model::class)
+			->findAll(['price' => 'ASC']);
 
-        return $this->render('products.html.twig', ['models' => $models]);
-
-        // or render a template
-        // in the template, print things with {{ product.name }}
-        // return $this->render('product/show.html.twig', ['product' => $product]);
-    }
-    // retrieve GET and POST variables respectively
+		return $this->render('pages/products.html.twig', ['models' => $models]);
+	}
 }
