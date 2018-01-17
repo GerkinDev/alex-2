@@ -53,6 +53,11 @@ class Model
 	private $title;
 
 	/**
+   * @Gedmo\Slug(fields={"title"})
+	 * @ORM\Column(type="string")
+	 */
+	private $slug;
+	/**
 	 * @ORM\Column(type="boolean")
 	 */
 	private $public;

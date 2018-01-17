@@ -71,6 +71,9 @@
             "ref": "66070ea553247b0cd5275e21d0fe5399a25f40be"
         }
     },
+    "gedmo/doctrine-extensions": {
+        "version": "v2.4.33"
+    },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
     },

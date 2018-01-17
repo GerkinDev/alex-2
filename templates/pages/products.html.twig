@@ -5,18 +5,20 @@
 	<div class="templatemo-content">
 		<section id="products-section" class="inactive active" style="display: block;">
 			<div class="row">
-				<div class="col-md-6 col-lg-6 col-xl-6 margin-bottom-20">
+				{% if models is empty %}
+				<div class="col margin-bottom-20">
 					<div class="black-bg col-md-12 col-lg-12 col-xl-12">
-						<h2>WEB DESIGN</h2>
-						<p>Zoom is free HTML5 website template for everyone. You can use this template for any purpose. Credit goes to <a rel="nofollow" href="http://unsplash.com">Unsplash</a> for photos used in this template. Integer posuere quam a orci tempor, ut eleifend est vulputate. Nullam vitae lectus dui. Donec vulputate ac tortor id convallis. Sed nisi mauris, laoreet vitae lacus at, viverra viverra neque.</p>
+						<h2>NOTHING HERE</h2>
+						<p>Go away. Nothing to see here.</p>
+						<hr />
+						<p>No, seriously, there's just nothing.</p>
 					</div>
 				</div>
-				<div class="col-md-6 col-lg-6 col-xl-6">
-					<div class="black-bg col-md-12 col-lg-12 col-xl-12">
-						<h2>RESPONSIVE</h2>
-						<p><span value="">Zoom template is a mobile-ready layout supporting all kinds of mobile devices or different screen sizes.</span> Integer posuere quam a orci tempor, ut eleifend est vulputate. Nullam vitae lectus dui. Donec vulputate ac tortor id convallis. Sed nisi mauris, laoreet vitae lacus at, viverra viverra neque. Curabitur nec aliquam lacus, nec molestie erat.</p>
-					</div>
-				</div>
+				{% else %}
+				{% for model in models %}
+				<h3>{{ model.title }}</h3>
+				{% endfor %}
+				{% endif %}
 			</div>
 			<div class="row margin-top-20">
 				<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6  pull-right">

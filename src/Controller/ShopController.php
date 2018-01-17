@@ -23,11 +23,10 @@ class ShopController extends Controller
 		// replace this line with your own code!
 		$query = $request->request;
 		$pageIndex = $query->getInt('page');
-		var_dump($pageIndex);
 
 		$models = $this->getDoctrine()
 			->getRepository(Model::class)
-			->findAll(['price' => 'ASC']);
+			->getPaged($pageIndex);
 
 		return $this->render('pages/products.html.twig', ['models' => $models]);
 	}

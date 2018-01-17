@@ -16,7 +16,7 @@ class ModelRepository extends ServiceEntityRepository
 		$qb = $this->createQueryBuilder('model');
 		$qb
 			->select('model')
-			->setFirstResult($first_result)
+			->setFirstResult($first_result * $maxResults)
 			->setMaxResults($max_results);
 
 		$pag = new Paginator($qb);
