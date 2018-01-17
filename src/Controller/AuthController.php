@@ -33,7 +33,7 @@ class AuthController extends Controller
 	):Response {
 		//$mailer->sendMailNewUser($this->getUser());
 		// If user is already logged in, redirect him to homepage
-		if( $authChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
+		if ($authChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
 			return $this->redirectToRoute('index');
 		}
 
@@ -51,13 +51,13 @@ class AuthController extends Controller
 		AuthorizationCheckerInterface $authChecker
 	):Response {
 		// If user is already logged in, redirect him to homepage
-		if( $authChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
+		if ($authChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
 			return $this->redirectToRoute('index');
 		}
 
 		// User is still not logged in... Check for errors
 		$error = $authUtils->getLastAuthenticationError();
-		if($error){
+		if ($error) {
 			$session = new Session();
 			$session->getFlashBag()->add('login', $error->getMessage());
 		}
@@ -72,7 +72,7 @@ class AuthController extends Controller
 		AuthorizationCheckerInterface $authChecker
 	):Response {
 		// If user is already logged in, redirect him to homepage
-		if( $authChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
+		if ($authChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
 			return $this->redirectToRoute('index');
 		}
 
@@ -90,7 +90,7 @@ class AuthController extends Controller
 		Mailer $mailer
 	):Response {
 		// If user is already logged in, redirect him to homepage
-		if( $authChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
+		if ($authChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
 			return $this->redirectToRoute('index');
 		}
 
@@ -165,21 +165,21 @@ class AuthController extends Controller
 		UriTokenHandler $tokenHandler
 	):Response {
 		$token = rawurldecode($request->get('token'));
-		if(strlen($token) !== 24){
+		if (strlen($token) !== 24) {
 			throw $this->createNotFoundException('Invalid token provided');
 		}
 		$id = $tokenHandler->decryptRouteToken($token, 'validateAccount');
-		if(!is_numeric($id)){
+		if (!is_numeric($id)) {
 			throw $this->createNotFoundException('Invalid token provided');
 		}
 		$id = intval($id);
 		$user = $this->getDoctrine()
 			->getRepository(User::class)
 			->find($id);
-		if(!$user instanceof User){
+		if (!$user instanceof User) {
 			throw $this->createNotFoundException('Invalid token provided');
 		}
-		if($user->getActive() === true){
+		if ($user->getActive() === true) {
 			throw $this->createNotFoundException('Token already used');
 		}
 		// Enable the user
@@ -206,13 +206,13 @@ class AuthController extends Controller
 		Mailer $mailer
 	):Response {
 		// If user is already logged in, redirect him to homepage
-		if( $authChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
+		if ($authChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
 			return $this->redirectToRoute('index');
 		}
 		$session = new Session();
 		$username = $request->request->get('_username');
 
-		if($username === ''){
+		if ($username === '') {
 			$session->getFlashBag()->add('login', 'You must provide an email.');
 			return $this->redirectToRoute('login');
 		}
@@ -222,7 +222,7 @@ class AuthController extends Controller
 			->getDoctrine()
 			->getRepository(User::class)
 			->findOneByEmail($username);
-		if(!$user instanceof User){
+		if (!$user instanceof User) {
 			$session->getFlashBag()->add('login', 'Unknown user');
 			return $this->redirectToRoute('login');
 		}
@@ -248,30 +248,30 @@ class AuthController extends Controller
 		UriTokenHandler $tokenHandler
 	):Response {
 		$token = rawurldecode($request->get('token'));
-		if(strlen($token) !== 24){
+		if (strlen($token) !== 24) {
 			throw $this->createNotFoundException('Invalid token provided');
 		}
 		$user = $this->getDoctrine()
 			->getRepository(User::class)
 			->findOneByPasswordResetToken($token);
-		if(!$user instanceof User){
+		if (!$user instanceof User) {
 			throw $this->createNotFoundException('Invalid token provided');
 		}
 
 		// Check if form is posted
 		$reqContent = $request->request;
-		if($request->getMethod() === 'POST'){
+		if ($request->getMethod() === 'POST') {
 			$newPassword = $reqContent->get('password');
 			$repeatPassword = $reqContent->get('repeat_password');
 			$token = $reqContent->get('token');
 
 			$session = new Session();
 
-			try{
-				if( $newPassword === '' || $repeatPassword === '' || $token === '' ){
+			try {
+				if ($newPassword === '' || $repeatPassword === '' || $token === '') {
 					throw new AuthException('Form is incomplete');
 				}
-				if($newPassword !== $repeatPassword){
+				if ($newPassword !== $repeatPassword) {
 					throw new AuthException('Passwords mismatched');
 				}
 				$user->setRawPassword($newPassword, $encoder);
@@ -282,7 +282,7 @@ class AuthController extends Controller
 				$em->flush();
 				$session->getFlashBag()->add('info', 'Password reset. You may now log in.');
 				return $this->redirectToRoute('login');
-			} catch(AuthException $exception) {
+			} catch (AuthException $exception) {
 				$session->getFlashBag()->add('login', $exception->getMessage());
 				return $this->render('pages/change-password.html.twig', array(
 					'user' => $user,

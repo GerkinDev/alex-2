@@ -10,19 +10,17 @@ use Doctrine\DBAL\Schema\Schema;
  */
 class Version20180116155602 extends AbstractMigration
 {
-    public function up(Schema $schema)
-    {
-        // this up() migration is auto-generated, please modify it to your needs
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
+	public function up(Schema $schema) {
+		// this up() migration is auto-generated, please modify it to your needs
+		$this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE user ADD password_reset_token VARCHAR(64) NOT NULL');
-    }
+		$this->addSql('ALTER TABLE user ADD password_reset_token VARCHAR(64) NOT NULL');
+	}
 
-    public function down(Schema $schema)
-    {
-        // this down() migration is auto-generated, please modify it to your needs
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
+	public function down(Schema $schema) {
+		// this down() migration is auto-generated, please modify it to your needs
+		$this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE user DROP password_reset_token');
-    }
+		$this->addSql('ALTER TABLE user DROP password_reset_token');
+	}
 }

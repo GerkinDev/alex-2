@@ -65,7 +65,7 @@ class User implements UserInterface, \Serializable
 	*/
 	private $isActive;
 
-	public function __construct($username = null, $password = null, $salt = null, $role = 'ROLE_USER' ) {
+	public function __construct($username = null, $password = null, $salt = null, $role = 'ROLE_USER') {
 		$this->isActive = false;
 		$this->username = $username;
 		$this->password = $password;
@@ -75,7 +75,7 @@ class User implements UserInterface, \Serializable
 	}
 
 	// Id
-	public function getId(){
+	public function getId() {
 		return $this->id;
 	}
 
@@ -103,7 +103,7 @@ class User implements UserInterface, \Serializable
 	}
 	public function setPassword($password, $cleanResetToken = true) {
 		$this->password = $password;
-		if($cleanResetToken === true){
+		if ($cleanResetToken === true) {
 			$this->passwordResetToken = null;
 		}
 		return $this;
@@ -117,7 +117,7 @@ class User implements UserInterface, \Serializable
 	public function getPasswordResetToken() {
 		return $this->passwordResetToken;
 	}
-	public function resetPasswordGenerateToken(UriTokenHandler $tokenHandler){
+	public function resetPasswordGenerateToken(UriTokenHandler $tokenHandler) {
 		$this->passwordResetToken = $tokenHandler->encryptRouteToken($this->id.'.'.strval(time()), 'resetPassword');
 		return $this;
 	}
@@ -185,5 +185,9 @@ class User implements UserInterface, \Serializable
 			$this->password,
 			$this->salt
 		) = unserialize($serialized);
+	}
+	
+	public function __toString() {
+		return $this->email;
 	}
 }

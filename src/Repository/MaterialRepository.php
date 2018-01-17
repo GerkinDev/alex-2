@@ -2,26 +2,16 @@
 
 namespace App\Repository;
 
-use App\Entity\Model;
+use App\Entity\Material;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
-class ModelRepository extends ServiceEntityRepository
+class MaterialRepository extends ServiceEntityRepository
 {
 	public function __construct(RegistryInterface $registry) {
-		parent::__construct($registry, Model::class);
+		parent::__construct($registry, Material::class);
 	}
 
-	public function getPage($firstResult, $maxResults = 20) {
-		$qb = $this->createQueryBuilder('model');
-		$qb
-			->select('model')
-			->setFirstResult($first_result)
-			->setMaxResults($max_results);
-
-		$pag = new Paginator($qb);
-		return $pag;
-	}
 	/*
     public function findBySomething($value)
     {

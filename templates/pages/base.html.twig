@@ -26,7 +26,10 @@
 			<nav>
 				<a href="/cart" title="Cart"><i class="fa fa-shopping-cart"></i></a>
 				{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-				<a class="link" href="{{ path('logout') }}">Logout</a>
+				{% if is_granted('ROLE_ADMIN') %}
+				<a href="{{ path('easyadmin') }}">Admin</a>
+				{% endif %}
+				<a href="{{ path('logout') }}">Logout</a>
 				{% else %}
 				<a href="/login">Log in</a>
 				{% endif %}

@@ -7,10 +7,37 @@ easy_admin:
     site_name: 'Wello Horld'
     entities:
         # List the entity class name you want to manage
+        Material:
+            class: App\Entity\Material
+            list:
+#                fields:
+#                    - { property: 'available', type: 'toggle'}
+# , trans: true, domain: 'materials'
         Model:
             class: App\Entity\Model
+            form:
+                fields:
+                    - { property: 'modelFile', type: 'vich_file' }
+                    - { property: 'imageFile', type: 'vich_image' }
+                    - title
+                    - public
+                    - creator
+                    - { property: 'price', help: 'A json with quantity factor for each part'}
+            list:
+                fields:
+                    - { property: 'model', type: 'file', base_path: '%app.path.models_files%' }
+                    - { property: 'image', type: 'image', base_path: '%app.path.models_images%' }
+                    - title
+                    - public
+                    - creator
+                    - { property: 'price', help: 'A json with quantity factor for each part'}
+            show:
+                fields:
+                    - { property: 'model', type: 'file', base_path: '%app.path.models_files%' }
+                    - { property: 'image', type: 'image', base_path: '%app.path.models_images%' }
         User:
             class: App\Entity\User
+            password_encoding: { algorithm: 'bcrypt', cost: 12 }
             form:
                 fields:
                     - id
