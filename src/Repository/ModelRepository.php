@@ -12,12 +12,12 @@ class ModelRepository extends ServiceEntityRepository
 		parent::__construct($registry, Model::class);
 	}
 
-	public function getPage($firstResult, $maxResults = 20)
+	public function getPaged($firstResult, $maxResults = 20)
 	{
 		$qb = $this->createQueryBuilder('model');
 		$qb
 			->select('model')
-			->setFirstResult($first_result)
+			->setFirstResult($first_result * $maxResults)
 			->setMaxResults($max_results);
 
 		$pag = new Paginator($qb);

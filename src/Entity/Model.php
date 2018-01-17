@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ModelRepository")
@@ -26,6 +27,11 @@ class Model
 	 */
 	private $title;
 	/**
+   * @Gedmo\Slug(fields={"title"})
+	 * @ORM\Column(type="string")
+	 */
+	private $slug;
+	/**
 	 * @ORM\Column(type="boolean")
 	 */
 	private $public;
@@ -38,4 +44,8 @@ class Model
 	 * @ORM\Column(type="float")
 	 */
 	private $price;
+
+	public function getTitle(){
+		return $this->title;
+	}
 }
