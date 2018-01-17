@@ -1,0 +1,35 @@
+easy_admin:
+    design:
+        brand_color: '#1ABC9C'
+        assets:
+            css:
+            js:
+    site_name: 'Wello Horld'
+    entities:
+        # List the entity class name you want to manage
+        Model:
+            class: App\Entity\Model
+        User:
+            class: App\Entity\User
+            form:
+                fields:
+                    - id
+                    - { property: 'firstName', label: 'First name'}
+                    - { property: 'lastName', label: 'Last name'}
+                    - email
+                    - { property: 'role', type: 'choice', type_options: {choices:{ User: 'ROLE_USER', Admin: 'ROLE_ADMIN'}}}
+            new:
+                fields:
+                    - '-id'
+            edit:
+                fields:
+                    - { property: 'passwordResetToken', type: 'text', type_options: { disabled: true }}
+            list:
+                fields:
+                    - id
+                    - { property: 'firstName', label: 'First name'}
+                    - { property: 'lastName', label: 'Last name'}
+                    - email
+                    - { property: 'passwordResetToken', type: 'boolean'}
+                    - { property: 'role', type: 'string'}
+#        - App\Entity\Print

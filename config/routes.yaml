@@ -30,3 +30,7 @@ cart:
         template: pages/cart.html.twig
 logout:
     path: /logout
+easy_admin_bundle:
+    resource: "Controller/AdminController.php"
+    type:     annotation
+    prefix:   /admin

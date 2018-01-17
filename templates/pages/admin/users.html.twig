@@ -1,0 +1,11 @@
+{% extends 'pages/base.html.twig' %}
+
+{% block body %}
+{% for userId, userForm in userForms %}
+{{ form_start(userForm) }}
+{{ form_widget(userForm) }}
+{{ form_end(userForm) }}
+{% endfor %}
+{% endblock %}
+
+{% block background_image %}zoom-bg-5.jpg{% endblock %}
