@@ -20,6 +20,7 @@ easy_admin:
                     - { property: 'modelFile', type: 'vich_file' }
                     - { property: 'imageFile', type: 'vich_image' }
                     - title
+                    - slug
                     - public
                     - creator
                     - { property: 'price', help: 'A json with quantity factor for each part'}
@@ -28,6 +29,7 @@ easy_admin:
                     - { property: 'model', type: 'file', base_path: '%app.path.models_files%' }
                     - { property: 'image', type: 'image', base_path: '%app.path.models_images%' }
                     - title
+                    - slug
                     - public
                     - creator
                     - { property: 'price', help: 'A json with quantity factor for each part'}

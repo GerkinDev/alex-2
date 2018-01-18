@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
 
@@ -49,14 +50,16 @@ class Model
 
 	/**
 	 * @ORM\Column(type="string")
+	 * @Gedmo\Translatable
 	 */
 	private $title;
 
 	/**
-   * @Gedmo\Slug(fields={"title"})
+	 * @Gedmo\Slug(fields={"title"})
 	 * @ORM\Column(type="string")
 	 */
 	private $slug;
+	
 	/**
 	 * @ORM\Column(type="boolean")
 	 */
@@ -127,6 +130,14 @@ class Model
 	}
 	public function setTitle($title) {
 		$this->title = $title;
+		return $this;
+	}
+	
+	public function getSlug() {
+		return $this->slug;
+	}
+	public function setSlug($slug) {
+		$this->slug = $slug;
 		return $this;
 	}
 
