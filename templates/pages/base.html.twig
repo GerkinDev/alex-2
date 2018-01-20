@@ -7,21 +7,21 @@
 		<meta charset="UTF-8">
 		<meta name="description" content="">
 		<meta name="viewport" content="width=device-width">
-		<title>{% block title %}Welcome!{% endblock %}</title>
+		<title>{% block title %}Welcome!{% endblock %} - {{ app_name }}</title>
 
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css" integrity="sha256-HxaKz5E/eBbvhGMNwhWRPrAR9i/lG1JeT4mD6hCQ7s4=" crossorigin="anonymous" />
 		<!-- Google Web Font Embed -->
 		<link href='http://fonts.googleapis.com/css?family=Raleway:400,600,500,300,700' rel='stylesheet' type='text/css'>
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha256-PCsx7lOyGhyGmzsO5MGXhzwV6UpNTlNf1p6V6w2CppQ=" crossorigin="anonymous" />
-		<link rel="stylesheet" href="/build/css/font-awesome.min.css">
-		<link rel="stylesheet" href="/build/css/templatemo_main.css">
+		<link rel="stylesheet" href="/assets/css/font-awesome.min.css">
+		<link rel="stylesheet" href="/assets/css/templatemo_main.css">
 		<link rel="stylesheet" href="{{ asset('build/app.css') }}">
 		{% block stylesheets %}{% endblock %}
 	</head>
-	<body style="background-image : url(/build/images/{% block background_image %}{% endblock %})">
+	<body style="background-image : url(/assets/images/{% block background_image %}{% endblock %})">
 		<header class="templatemo-logo black-bg" id="header">
 			<h1 class="templatemo-site-title">
-				<a href="/">Wello Horld</a>
+				<a href="/">{{ app_name }}</a>
 			</h1>
 			<nav>
 				<a href="/cart" title="Cart"><i class="fa fa-shopping-cart"></i></a>

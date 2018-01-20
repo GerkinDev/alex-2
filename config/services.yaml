@@ -4,7 +4,7 @@ parameters:
     locale: 'en'
     app.path.models_images: /uploads/models/images
     app.path.models_files: /uploads/models/models
-    app.name: 'Wello Horld'
+    app.name: 'Alex^2'
 
 services:
     # default configuration for services in *this* file
