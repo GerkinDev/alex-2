@@ -1,7 +1,9 @@
-FROM phpmentors/symfony-app:latest
+FROM php:7-apache
 
-COPY *.json /var/app/web
-WORKDIR /var/app/web
-RUN composer install; \
-	npm install;
-COPY . /var/app/web
+RUN apt-get update -y; apt-get install -y git zip unzip; \
+	curl -sS https://getcomposer.org/installer | php; mv composer.phar /usr/local/bin/composer
+
+COPY *.json /var/www/html/
+WORKDIR /var/www/html/
+RUN composer install
+COPY . /var/www/html
