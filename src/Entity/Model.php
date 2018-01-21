@@ -163,7 +163,7 @@ class Model
 
 	public function getMasses($decoded = false) {
 		if($decoded){
-			return json_decode($this->masses);
+			return json_decode($this->masses, true);
 		} else {
 			return $this->masses;
 		}

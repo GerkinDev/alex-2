@@ -16,15 +16,21 @@ class ModelRepository extends ServiceEntityRepository
 		parent::__construct($registry, Model::class);
 	}
 
-	public function getPaged($page = 0, $maxResults = 20) {
+	public function getPaged($pageIndex = 1, $maxResults = 20, $onlyPublic = true) {
 		$qb = $this->createQueryBuilder(ENTITY_NAME);
+		if($onlyPublic === true){
+			$qb
+				->select(ENTITY_NAME)
+				->where(ENTITY_NAME.'.public = :public')
+				->setParameter('public', true);
+		} else {
+			$qb->select(ENTITY_NAME);
+		}
 		$qb
-			->select(ENTITY_NAME)
-			->setFirstResult($page * $maxResults)
+			->setFirstResult(($pageIndex - 1) * $maxResults)
 			->setMaxResults($maxResults);
 
 		$page = new Paginator($qb, false);
-		//var_dump($page->getQuery());
 		return $page;
 	}
 	/*

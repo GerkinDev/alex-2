@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
 use App\Entity\Model;
+use App\Entity\Material;
 
 class ShopController extends Controller
 {
@@ -19,14 +20,10 @@ class ShopController extends Controller
 	 *     requirements={"page": "\d+"},
 	 *      name="products")
 	 */
-	public function index(Request $request) {
-		// replace this line with your own code!
-		$query = $request->request;
-		$pageIndex = $query->getInt('page');
-
+	public function index(Request $request, $page) {
 		$modelsRaw = $this->getDoctrine()
 			->getRepository(Model::class)
-			->getPaged($pageIndex);
+			->getPaged($page);
 
 		$helper = $this->container->get('vich_uploader.templating.helper.uploader_helper');
 		$models = [];
@@ -42,15 +39,20 @@ class ShopController extends Controller
 	 *      name="product")
 	 */
 	public function product($slug) {
-
-		$model = $this->getDoctrine()
-		->getRepository(Model::class)
-		->findOneBySlug($slug);
+		$modelRaw = $this->getDoctrine()
+			->getRepository(Model::class)
+			->findOneBySlug($slug);
+		$materials = $this->getDoctrine()
+			->getRepository(Material::class)
+			->findAll();
 
 		$helper = $this->container->get('vich_uploader.templating.helper.uploader_helper');
-		$model = $model->computeModelInfos($helper);
+		$model = $modelRaw->computeModelInfos($helper);
 
-		return $this->render('pages/shop/products.html.twig', ['model' => $model]);
+		return $this->render('pages/shop/product_page.html.twig', [
+			'model' => $model,
+			'materials' => $materials,
+		]);
 	}
 }
 

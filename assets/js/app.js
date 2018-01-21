@@ -21,4 +21,22 @@ $(document).ready(() => {
 			return true;
 		}
 	});
-}); 
+	const $productSection = $('#product-section');
+	if($productSection.length > 0){
+		const $output = $productSection.find('output');
+		const $selects = $productSection.find('.materials-choices select');
+		$selects.change(() => {
+			const $selectsArr = $selects.toArray();
+			const res = $selectsArr.reduce((acc, select) => {
+				if(typeof acc !== 'number'){
+					return null;
+				}
+				const $select = $(select);
+				const price = $select.find(`option[value="${$select.val()}"]`).data('price');
+				const quantity = $select.closest('[data-part-mass]').data('part-mass');
+				return price * quantity + acc;
+			}, 0);
+			$output.val((res || '--.--') + ' €');
+		}).change();
+	}
+});

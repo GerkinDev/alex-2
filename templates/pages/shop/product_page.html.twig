@@ -3,16 +3,41 @@
 {% block body %}
 <div class="templatemo-content-wrapper">
 	<div class="templatemo-content">
-		<section id="products-section" class="inactive active" style="display: block;">
-			<div class="products">
-				<div data-product-id="{{ model.entity.id }}" class="product my-2 mx-3">
-					<div class="black-bg btn-menu">
-						<img src="{{model.image}}" alt="{{ model.entity.title }}"/>
-						<h3>{{ model.entity.title }}</h3>
-						<p class="description">{{'' | default('No description provided')}}</p>
-						<p class="meta">Starting at <span>{{ model.price }}€</span></p>
-					</div>
+		<section id="product-section" class="inactive active" style="display: block;">
+			<div data-product-id="{{ model.entity.id }}" class="product my-2 mx-3">
+				<div class="black-bg btn-menu">
+					<img src="{{model.image}}" alt="{{ model.entity.title }}"/>
+					<h3>{{ model.entity.title }}</h3>
+					<p class="description">{{'' | default('No description provided')}}</p>
+					<p class="meta">Starting at <span>{{ model.price }}€</span></p>
 				</div>
+				<form method="post" action="{{path('addToCart', {slug: model.entity.slug})}}">
+					<div class="materials-choices">
+						{% for piece, mass in model.entity.masses(true) %}
+						<div class="mx-0 form-row align-items-stretch" data-part-mass="{{ mass }}">
+							<label  class="sr-only" for="material-{{ piece }}">{{piece}}</label>
+							<div class="input-group">
+								<div class="input-group-prepend">
+									<div class="input-group-text">{{ piece }}</div>
+								</div>
+								<select class="form-control custom-select" id="material-{{ piece }}" name="materials[{{ piece }}]" required>
+									<option value="" disabled selected>Please select one</option>
+									{% for material in materials %}
+									<option value="{{ material.id }}" data-price="{{ material.price }}">{{ material.name }} ( {{ material.price }}€/kg )</option>
+									{% endfor %}
+								</select>
+								<div class="input-group-append">
+									<div class="input-group-text">{{mass*1000}}g</div>
+								</div>
+							</div>
+						</div>
+						{% endfor %}
+					</div>
+					<div class="d-flex flex-row mx-0 flex-nowrap ">
+						<button type="submit" class="col btn btn-primary">Add to cart</button>
+						<output  class="col alert alert-info"></output>
+					</div>
+				</form>
 			</div>
 			<div class="row margin-top-20">
 				<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6  pull-right">

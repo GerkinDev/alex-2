@@ -4,6 +4,11 @@ easy_admin:
         assets:
             css:
             js:
+        menu:
+            - { label: 'Go to site', url: '/' }
+            - Model
+            - Material
+            - User
     site_name: 'Wello Horld'
     entities:
         Model:
