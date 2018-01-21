@@ -34,7 +34,7 @@ class ShopController extends Controller
 			$models[$modelRaw->getId()] = $modelRaw->computeModelInfos($helper);
 		}
 
-		return $this->render('pages/products.html.twig', ['models' => $models]);
+		return $this->render('pages/shop/products.html.twig', ['models' => $models]);
 	}
 	/**
 	 * @Route(
@@ -49,7 +49,7 @@ class ShopController extends Controller
 		->getRepository(Model::class)
 		->findOneBySlug($slug);
 
-		return $this->render('pages/products.html.twig', ['model' => $model]);
+		return $this->render('pages/shop/products.html.twig', ['model' => $model]);
 	}
 }
 
