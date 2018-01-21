@@ -2,6 +2,9 @@
 
 CONTAINER_NAME=self-3dprint
 
+if [ "$1" == "-a" ]; then
+	./node_modules/.bin/encore production
+fi
 docker build -t $CONTAINER_NAME .
 
 echo "You may run 'docker tag $CONTAINER_NAME gerkin/$CONTAINER_NAME:latest && docker push gerkin/$CONTAINER_NAME:latest'"
