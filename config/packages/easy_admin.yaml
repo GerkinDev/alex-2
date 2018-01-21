@@ -16,7 +16,7 @@ easy_admin:
                     - slug
                     - public
                     - creator
-                    - { property: 'price', type: 'text', help: 'A json with quantity factor for each part'}
+                    - { property: 'masses', type: 'text', help: 'A json with format <code>"partname": mass_in_kg</code>'}
             new:
                 fields:
                     - { property: 'modelFile', type: 'vich_file', type_options: { required: false } }
@@ -31,7 +31,7 @@ easy_admin:
                     - slug
                     - public
                     - creator
-                    - { property: 'price', type: 'text', help: 'A json with quantity factor for each part'}
+                    - { property: 'masses', type: 'text', help: 'A json with format <code>"partname": mass_in_kg</code>'}
             show:
                 fields:
                     - { property: 'model', type: 'file', base_path: '%app.path.models_files%' }

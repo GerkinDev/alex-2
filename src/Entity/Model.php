@@ -75,7 +75,7 @@ class Model
 	/**
 	 * @ORM\Column(type="string")
 	 */
-	private $price;
+	private $masses;
 
 
 	public function __construct(){
@@ -161,28 +161,39 @@ class Model
 		return $this;
 	}
 
-	public function getPrice() {
-		return $this->price;
+	public function getMasses($decoded = false) {
+		if($decoded){
+			return json_decode($this->masses);
+		} else {
+			return $this->masses;
+		}
 	}
-	public function getPriceHash() {
-		return json_decode($this->price);
-	}
-	public function setPrice($price) {
-		$this->price = $price;
+	public function setMasses($masses) {
+		$this->masses = $masses;
 		return $this;
 	}
 
 	public function computeModelInfos(UploaderHelper $helper, array $materials = null){
 		$sum = 0;
-		foreach($this->getPriceHash() as $price){
-			$sum += $price;
-		}
-		return [
+		$modelInfos = [
 			'entity' => $this,
-			'price' => $sum,
+			'price' => false,
 			'image' => $helper->asset($this, 'imageFile'),
 			'file' => $helper->asset($this, 'modelFile'),
 		];
+		foreach($this->getMasses(true) as $piece => $mass){
+			if($materials === null){
+				$sum += $mass;
+			} else {
+				if(!isset($materials[$piece])){
+					return $modelInfos;
+				}
+				$material = $materials[$piece];
+				$sum += $mass * $material->getPrice();
+			}
+		}
+		$modelInfos['price'] = $sum;
+		return $modelInfos;
 	}
 
 
@@ -199,7 +210,7 @@ class Model
 			$this->slug,
 			$this->public,
 			$this->creator,
-			$this->price,
+			$this->mass,
 		));
 	}*/
 
@@ -214,7 +225,7 @@ class Model
 			$this->slug,
 			$this->public,
 			$this->creator,
-			$this->price,
+			$this->masses,
 		) = unserialize($serialized);
 	}
 }

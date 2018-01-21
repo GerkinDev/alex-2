@@ -47,9 +47,19 @@ body {
 .btn-menu{
 	padding: 20px 20px;
 }
+.products{
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	align-items: flex-end;
+	justify-content: center;
+}
 .product{
-	width: 300px;
-	display: inline-block;
+	display: block;
+	flex: 0 0 100%;
+	@media (min-width: 768px){
+		flex: 0 0 300px;
+	}
 
 	img {
 		max-width: 100%;
