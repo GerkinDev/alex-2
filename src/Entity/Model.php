@@ -59,7 +59,7 @@ class Model
 	 * @ORM\Column(type="string")
 	 */
 	private $slug;
-	
+
 	/**
 	 * @ORM\Column(type="boolean")
 	 */
@@ -132,7 +132,7 @@ class Model
 		$this->title = $title;
 		return $this;
 	}
-	
+
 	public function getSlug() {
 		return $this->slug;
 	}
@@ -158,10 +158,43 @@ class Model
 	}
 
 	public function getPrice() {
-		return $this->price;
+		return json_decode($this->price);
 	}
 	public function setPrice($price) {
 		$this->price = $price;
 		return $this;
+	}
+
+
+
+
+	/** @see \Serializable::serialize() */
+	/*public function serialize() {
+		return serialize(array(
+			$this->id,
+			$this->model,
+			$this->image,
+			$this->updatedAt,
+			$this->title,
+			$this->slug,
+			$this->public,
+			$this->creator,
+			$this->price,
+		));
+	}*/
+
+	/** @see \Serializable::unserialize() */
+	public function unserialize($serialized) {
+		list (
+			$this->id,
+			$this->model,
+			$this->image,
+			$this->updatedAt,
+			$this->title,
+			$this->slug,
+			$this->public,
+			$this->creator,
+			$this->price,
+		) = unserialize($serialized);
 	}
 }

@@ -16,7 +16,13 @@
 				</div>
 				{% else %}
 				{% for model in models %}
-				<h3>{{ model.title }}</h3>
+				<a href="{{ path("product", {slug: model.slug}) }}">
+					<div class="black-bg btn-menu">
+						<h3>{{ model.title }}</h3>
+						<p class="description"></p>
+						<p class="meta">Starting at <span>{{ prices[model.id] }}€</span></p>
+					</div>
+				</a>
 				{% endfor %}
 				{% endif %}
 			</div>

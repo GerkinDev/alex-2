@@ -15,8 +15,7 @@ class Kernel extends BaseKernel
 	const CONFIG_EXTS = '.{php,xml,yaml,yml}';
 
 	public function getProjectDir() {
-		$path = getenv('SYMFONY_PROJECT_DIR');
-		$path = $path ?: __DIR__;
+		$path = getenv('SYMFONY_PROJECT_DIR') ?: __DIR__.'/..';
 		return $path;
 	}
 

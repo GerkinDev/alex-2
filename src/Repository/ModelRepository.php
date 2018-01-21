@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Model;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class ModelRepository extends ServiceEntityRepository
@@ -12,15 +13,16 @@ class ModelRepository extends ServiceEntityRepository
 		parent::__construct($registry, Model::class);
 	}
 
-	public function getPage($firstResult, $maxResults = 20) {
+	public function getPaged($page = 0, $maxResults = 20) {
 		$qb = $this->createQueryBuilder('model');
 		$qb
 			->select('model')
-			->setFirstResult($first_result * $maxResults)
-			->setMaxResults($max_results);
+			->setFirstResult($page * $maxResults)
+			->setMaxResults($maxResults);
 
-		$pag = new Paginator($qb);
-		return $pag;
+		$page = new Paginator($qb, false);
+		//var_dump($page->getQuery());
+		return $page;
 	}
 	/*
     public function findBySomething($value)
