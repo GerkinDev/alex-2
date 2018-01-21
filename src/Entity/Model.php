@@ -72,7 +72,7 @@ class Model
 	private $creator;
 
 	/**
-	 * @ORM\Column(type="json")
+	 * @ORM\Column(type="string")
 	 */
 	private $price;
 
