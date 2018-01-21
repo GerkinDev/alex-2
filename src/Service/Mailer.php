@@ -8,7 +8,7 @@ use App\Entity\User;
 use App\Service\UriTokenHandler;
 
 class Mailer {
-	const MAILBOT_ADDRESS = 'mailbot@example.com';
+	const MAILBOT_ADDRESS = 'a.ffcc7@gmail.com';
 
 	private $mailer;
 	private $templating;
@@ -38,7 +38,7 @@ class Mailer {
 
 		$this->mailer->send($message);
 	}
-	
+
 	public function sendMailUserResetPassword(User $user){
 		$args = [
 			'user' => $user,

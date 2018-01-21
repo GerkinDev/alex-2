@@ -26,7 +26,7 @@ class ShopController extends Controller
 
 		$models = $this->getDoctrine()
 			->getRepository(Model::class)
-			->getPaged($pageIndex);
+			->getPage($pageIndex);
 
 		$prices = [];
 		foreach($models as $model){
