@@ -48,7 +48,7 @@ easy_admin:
             form:
                 fields:
                     - { property: 'price', type: 'number', type_options: { scale: 2 }}
-                    - { property: 'available', type: 'boolean'}
+                    - available
                     - { property: 'name', trans: true, domain: 'materials'}
         User:
             class: App\Entity\User
