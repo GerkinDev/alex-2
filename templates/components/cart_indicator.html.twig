@@ -1,3 +1,3 @@
 <a href="{{ path('cart') }}" title="Cart">
-	<i class="fa fa-shopping-cart"></i> {{ count }} ( {{amount}}€ )
+	<i class="fa fa-shopping-cart"></i> {{ count == 0 ? "Empty" : count }} ( {{amount}}€ )
 </a>
