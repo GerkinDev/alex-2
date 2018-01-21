@@ -24,7 +24,7 @@
 				<a href="/">{{ app_name }}</a>
 			</h1>
 			<nav>
-				<a href="/cart" title="Cart"><i class="fa fa-shopping-cart"></i></a>
+				{{ render(controller( 'App\\Controller\\CartController::cartSum' )) }}
 				{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
 				{% if is_granted('ROLE_ADMIN') %}
 				<a href="{{ path('easyadmin') }}">Admin</a>

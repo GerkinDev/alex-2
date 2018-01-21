@@ -7,6 +7,9 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
+const ENTITY_NAME = 'model';
+const ENTITY_INIT = 'm';
+
 class ModelRepository extends ServiceEntityRepository
 {
 	public function __construct(RegistryInterface $registry) {
@@ -14,9 +17,9 @@ class ModelRepository extends ServiceEntityRepository
 	}
 
 	public function getPaged($page = 0, $maxResults = 20) {
-		$qb = $this->createQueryBuilder('model');
+		$qb = $this->createQueryBuilder(ENTITY_NAME);
 		$qb
-			->select('model')
+			->select(ENTITY_NAME)
 			->setFirstResult($page * $maxResults)
 			->setMaxResults($maxResults);
 

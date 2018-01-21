@@ -1,4 +1,11 @@
 {% extends 'pages/base.html.twig' %}
+
 {% block body %}
+{% for cartItem in cartList %}
+<div class="row">
+	<div>{{ cartItem.model.title }}</div>
+</div>
+{% endfor %}
 {% endblock %}
+
 {% block background_image %}zoom-bg-1.jpg{% endblock %}
