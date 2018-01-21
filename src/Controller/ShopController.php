@@ -42,7 +42,14 @@ class ShopController extends Controller
 	 *      name="product")
 	 */
 	public function product(Request $request) {
-		return $this->render('pages/products.html.twig', ['models' => $models]);
+		$query = $request->request;
+		$slug = $query->get('slug');
+
+		$model = $this->getDoctrine()
+		->getRepository(Model::class)
+		->findOneBySlug($slug);
+
+		return $this->render('pages/products.html.twig', ['model' => $model]);
 	}
 }
 
