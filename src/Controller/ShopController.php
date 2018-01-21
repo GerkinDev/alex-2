@@ -24,22 +24,17 @@ class ShopController extends Controller
 		$query = $request->request;
 		$pageIndex = $query->getInt('page');
 
-		$models = $this->getDoctrine()
+		$modelsRaw = $this->getDoctrine()
 			->getRepository(Model::class)
-			->getPage($pageIndex);
+			->getPaged($pageIndex);
 
-		$prices = [];
-		foreach($models as $model){
-			echo $this->get('jms_serializer')->serialize($model, 'json');
-			//var_dump($model->getPrice());
-			$sum = 0;
-			foreach($model->getPrice() as $price){
-				$sum += $price;
-			}
-			$prices[$model->getId()] = $sum;
+		$helper = $this->container->get('vich_uploader.templating.helper.uploader_helper');
+		$models = [];
+		foreach($modelsRaw as $modelRaw){
+			$models[$modelRaw->getId()] = $modelRaw->computeModelInfos($helper);
 		}
 
-		return $this->render('pages/products.html.twig', ['models' => $models, 'prices' => $prices]);
+		return $this->render('pages/products.html.twig', ['models' => $models]);
 	}
 	/**
 	 * @Route(

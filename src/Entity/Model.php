@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ModelRepository")
@@ -158,11 +159,27 @@ class Model
 	}
 
 	public function getPrice() {
+		return $this->price;
+	}
+	public function getPriceHash() {
 		return json_decode($this->price);
 	}
 	public function setPrice($price) {
 		$this->price = $price;
 		return $this;
+	}
+
+	public function computeModelInfos(UploaderHelper $helper, array $materials = null){
+		$sum = 0;
+		foreach($this->getPriceHash() as $price){
+			$sum += $price;
+		}
+		return [
+			'entity' => $this,
+			'price' => $sum,
+			'image' => $helper->asset($this, 'imageFile'),
+			'file' => $helper->asset($this, 'modelFile'),
+		];
 	}
 
 

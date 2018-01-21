@@ -47,3 +47,11 @@ body {
 .btn-menu{
 	padding: 20px 20px;
 }
+.product{
+	width: 300px;
+	display: inline-block;
+
+	img {
+		max-width: 100%;
+	}
+}

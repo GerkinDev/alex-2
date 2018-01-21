@@ -4,7 +4,7 @@
 <div class="templatemo-content-wrapper">
 	<div class="templatemo-content">
 		<section id="products-section" class="inactive active" style="display: block;">
-			<div class="row">
+			<div>
 				{% if models is empty %}
 				<div class="col margin-bottom-20">
 					<div class="black-bg col-md-12 col-lg-12 col-xl-12">
@@ -15,12 +15,13 @@
 					</div>
 				</div>
 				{% else %}
-				{% for model in models %}
-				<a href="{{ path("product", {slug: model.slug}) }}">
+				{% for id, model in models %}
+				<a href="{{ path("product", {slug: model.entity.slug}) }}" data-product-id="{{ id }}" class="product">
 					<div class="black-bg btn-menu">
-						<h3>{{ model.title }}</h3>
-						<p class="description"></p>
-						<p class="meta">Starting at <span>{{ prices[model.id] }}€</span></p>
+						<img src="{{model.image}}" alt="{{ model.entity.title }}"/>
+						<h3>{{ model.entity.title }}</h3>
+						<p class="description">{{'' | default('No description provided')}}</p>
+						<p class="meta">Starting at <span>{{ model.price }}€</span></p>
 					</div>
 				</a>
 				{% endfor %}

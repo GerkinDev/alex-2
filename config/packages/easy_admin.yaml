@@ -16,7 +16,7 @@ easy_admin:
                     - slug
                     - public
                     - creator
-                    - { property: 'price', help: 'A json with quantity factor for each part'}
+                    - { property: 'price', type: 'string', help: 'A json with quantity factor for each part'}
             list:
                 fields:
                     - id
@@ -26,7 +26,7 @@ easy_admin:
                     - slug
                     - public
                     - creator
-                    - { property: 'price', help: 'A json with quantity factor for each part'}
+                    - { property: 'price', type: 'string', help: 'A json with quantity factor for each part'}
             show:
                 fields:
                     - { property: 'model', type: 'file', base_path: '%app.path.models_files%' }
