@@ -23,16 +23,34 @@ class CartController extends Controller
 		$session = new Session();
 		$cart = $session->get('cart', []);
 
-		$cartList = [];
+		// Get ids on whole cart
 		$ids = array_map(function($cartItem) {
 			return $cartItem['id'];
 		}, $cart);
+		// Fetch all models
 		$modelsRaw = $this->getDoctrine()
 			->getRepository(Model::class)
 			->findById($ids);
-		foreach($modelsRaw as $model){
-			echo $this->get('jms_serializer')->serialize($model, 'json');
-			$cartList[] = [ 'model' => $model ];
+		// Associate them with key
+		$modelsById = array_reduce($modelsRaw, function($acc, $model) {
+			$acc[$model->getId()] = $model;
+			return $acc;
+		}, []);
+		// Replace ids by entities
+		$helper = $this->container->get('vich_uploader.templating.helper.uploader_helper');
+		$materialsCache = [];
+		$cartList = array_map(function($cartItem) use ($modelsById, $helper, $materialsCache) {
+			$materialsWanted = $cartItem['materials'];
+
+			$matsOnParts = $this->getMaterialsForParts($materialsWanted, $materialsCache);
+			$infos = $modelsById[$cartItem['id']]->computeModelInfos($helper, $matsOnParts);
+			$infos['parts'] = $matsOnParts;
+			return $infos;
+		}, $cart);
+
+		$materialsCache = [];
+		foreach($cartList as $key => $cart){
+			echo $this->get('jms_serializer')->serialize($cart, 'json');
 		}
 
 		return $this->render('pages/cart/cart.html.twig', ['cartList' => $cartList]);
@@ -46,24 +64,9 @@ class CartController extends Controller
 			->getRepository(Model::class)
 			->findOneBySlug($slug);
 
-		$materials = [];
-		$materialsWanted = $request->request->get('materials');
+		$materialsWanted = array_map('intval', $request->request->get('materials'));
 
-		// Retrieve mats from DB
-		foreach($materialsWanted as $matSlot => $matId){
-			$materialsWanter[$matSlot] = intval($matId);
-			if(!isset($materials[$matId])){
-				$materials[$matId] = $this->getDoctrine()
-					->getRepository(Material::class)
-					->findOneById($matId);
-			}
-		}
-
-		// Inject them in wanted
-		$matsOnParts = [];
-		foreach($materialsWanted as $matSlot => $matId){
-			$matsOnParts[$matSlot] = $materials[$matId];
-		}
+		$matsOnParts = $this->getMaterialsForParts($materialsWanted);
 		$helper = $this->container->get('vich_uploader.templating.helper.uploader_helper');
 		$modelInfos = $modelRaw->computeModelInfos($helper, $matsOnParts);
 
@@ -83,6 +86,24 @@ class CartController extends Controller
 		$session->set('cartSum', $cartSum);
 
 		return $this->redirectToRoute('cart');
+	}
+
+	private function getMaterialsForParts($partsAssociation, &$materialsCache = []){
+		// Retrieve mats from DB
+		foreach($partsAssociation as $matSlot => $matId){
+			if(!isset($materialsCache[$matId])){
+				$materialsCache[$matId] = $this->getDoctrine()
+					->getRepository(Material::class)
+					->findOneById($matId);
+			}
+		}
+
+		// Inject them in wanted
+		$matsOnParts = array_map(function($matId) use ($materialsCache) {
+			return $materialsCache[$matId];
+		}, $partsAssociation);
+
+		return $matsOnParts;
 	}
 
 	public function cartSum(){
