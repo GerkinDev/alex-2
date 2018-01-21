@@ -16,7 +16,12 @@ easy_admin:
                     - slug
                     - public
                     - creator
-                    - { property: 'price', type: 'string', help: 'A json with quantity factor for each part'}
+                    - { property: 'price', type: 'text', help: 'A json with quantity factor for each part'}
+            new:
+                fields:
+                    - { property: 'modelFile', type: 'vich_file', type_options: { required: false } }
+                    - { property: 'imageFile', type: 'vich_image', type_options: { required: false } }
+                    - { property: 'slug', type_options: { required: false } }
             list:
                 fields:
                     - id
@@ -26,7 +31,7 @@ easy_admin:
                     - slug
                     - public
                     - creator
-                    - { property: 'price', type: 'string', help: 'A json with quantity factor for each part'}
+                    - { property: 'price', type: 'text', help: 'A json with quantity factor for each part'}
             show:
                 fields:
                     - { property: 'model', type: 'file', base_path: '%app.path.models_files%' }
@@ -43,7 +48,7 @@ easy_admin:
             form:
                 fields:
                     - { property: 'price', type: 'number', type_options: { scale: 2 }}
-                    - { property: 'available', type: 'toggle'}
+                    - { property: 'available', type: 'boolean'}
                     - { property: 'name', trans: true, domain: 'materials'}
         User:
             class: App\Entity\User

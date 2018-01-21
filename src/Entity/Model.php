@@ -22,7 +22,7 @@ class Model
 	private $id;
 
 	/**
-	 * @ORM\Column(type="string", length=255)
+	 * @ORM\Column(type="string", length=255, nullable=true)
 	 * @var string
 	 */
 	private $model;
@@ -33,7 +33,7 @@ class Model
 	private $modelFile;
 
 	/**
-	 * @ORM\Column(type="string", length=255)
+	 * @ORM\Column(type="string", length=255, nullable=true)
 	 * @var string
 	 */
 	private $image;
@@ -78,6 +78,9 @@ class Model
 	private $price;
 
 
+	public function __construct(){
+		$this->updatedAt = new \DateTime();
+	}
 
 
 	public function getId() {
