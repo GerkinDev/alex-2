@@ -16,12 +16,12 @@ easy_admin:
                     - slug
                     - public
                     - creator
-                    - { property: 'masses', type: 'text', help: 'A json with format <code>"partname": mass_in_kg</code>'}
+                    - { property: 'masses', type: 'text', help: 'A json with format <code>"partname": mass_in_kg</code>', type_options: { attr: { placeholder: 'eg: { "main": 1, "handle": 0.2 }'} }}
             new:
                 fields:
                     - { property: 'modelFile', type: 'vich_file', type_options: { required: false } }
                     - { property: 'imageFile', type: 'vich_image', type_options: { required: false } }
-                    - { property: 'slug', type_options: { required: false } }
+                    - { property: 'slug', type_options: { required: false, attr: { placeholder: 'Leave empty for auto'} } }
             list:
                 fields:
                     - id
