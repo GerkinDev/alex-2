@@ -41,15 +41,16 @@ class ShopController extends Controller
 	 *     "/product/{slug}",
 	 *      name="product")
 	 */
-	public function product(Request $request) {
-		$query = $request->request;
-		$slug = $query->get('slug');
+	public function product($slug) {
 
 		$model = $this->getDoctrine()
 		->getRepository(Model::class)
 		->findOneBySlug($slug);
 
-		return $this->render('pages/products.html.twig', ['model' => $model]);
+		$helper = $this->container->get('vich_uploader.templating.helper.uploader_helper');
+		$model = $model->computeModelInfos($helper);
+
+		return $this->render('pages/product_page.html.twig', ['model' => $model]);
 	}
 }
 
