@@ -65,9 +65,6 @@ if [ ! -d "/var/www/html/.git" ]; then
 			fi
 		fi
 		${GIT_COMMAND} /var/www/html || exit 1
-		if [ -z "$SKIP_CHOWN" ]; then
-			chown -Rf nginx.nginx /var/www/html
-		fi
 	fi
 fi
 
@@ -151,74 +148,71 @@ fi
 # Enable xdebug
 XdebugFile='/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini'
 if [[ "$ENABLE_XDEBUG" == "1" ]] ; then
-if [ -f $XdebugFile ]; then
-echo "Xdebug enabled"
-else
-echo "Enabling xdebug"
-echo "If you get this error, you can safely ignore it: /usr/local/bin/docker-php-ext-enable: line 83: nm: not found"
-# see https://github.com/docker-library/php/pull/420
-docker-php-ext-enable xdebug
-# see if file exists
-if [ -f $XdebugFile ]; then
-# See if file contains xdebug text.
-if grep -q xdebug.remote_enable "$XdebugFile"; then
-echo "Xdebug already enabled... skipping"
-else
-echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > $XdebugFile # Note, single arrow to overwrite file.
-echo "xdebug.remote_enable=1 "  >> $XdebugFile
-echo "xdebug.remote_log=/tmp/xdebug.log"  >> $XdebugFile
-echo "xdebug.remote_autostart=false "  >> $XdebugFile # I use the xdebug chrome extension instead of using autostart
-# NOTE: xdebug.remote_host is not needed here if you set an environment variable in docker-compose like so `- XDEBUG_CONFIG=remote_host=192.168.111.27`.
-#       you also need to set an env var `- PHP_IDE_CONFIG=serverName=docker`
-fi
-fi
-fi
-else
-if [ -f $XdebugFile ]; then
-echo "Disabling Xdebug"
-rm $XdebugFile
-fi
+	if [ -f $XdebugFile ]; then
+		echo "Xdebug enabled"
+	else
+		echo "Enabling xdebug"
+		echo "If you get this error, you can safely ignore it: /usr/local/bin/docker-php-ext-enable: line 83: nm: not found"
+		# see https://github.com/docker-library/php/pull/420
+		docker-php-ext-enable xdebug
+		# see if file exists
+		if [ -f $XdebugFile ]; then
+			# See if file contains xdebug text.
+			if grep -q xdebug.remote_enable "$XdebugFile"; then
+				echo "Xdebug already enabled... skipping"
+			else
+				echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > $XdebugFile # Note, single arrow to overwrite file.
+				echo "xdebug.remote_enable=1 "  >> $XdebugFile
+				echo "xdebug.remote_log=/tmp/xdebug.log"  >> $XdebugFile
+				echo "xdebug.remote_autostart=false "  >> $XdebugFile # I use the xdebug chrome extension instead of using autostart
+				# NOTE: xdebug.remote_host is not needed here if you set an environment variable in docker-compose like so `- XDEBUG_CONFIG=remote_host=192.168.111.27`.
+				#       you also need to set an env var `- PHP_IDE_CONFIG=serverName=docker`
+			fi
+		fi
+	fi
+elif [ -f $XdebugFile ]; then
+	echo "Disabling Xdebug"
+	rm $XdebugFile
 fi
 
 if [ ! -z "$PUID" ]; then
-echo "Creating nginx user"
-if [ -z "$PGID" ]; then
-PGID=${PUID}
+	echo "Creating nginx user"
+	if [ -z "$PGID" ]; then
+		PGID=${PUID}
+	fi
+	deluser nginx
+	addgroup -g ${PGID} nginx
+	adduser -D -S -h /var/cache/nginx -s /sbin/nologin -G nginx -u ${PUID} nginx
 fi
-deluser nginx
-addgroup -g ${PGID} nginx
-adduser -D -S -h /var/cache/nginx -s /sbin/nologin -G nginx -u ${PUID} nginx
-else
 if [ -z "$SKIP_CHOWN" ]; then
-chown -Rf nginx.nginx /var/www/html
-fi
+	chown -Rf nginx.nginx /var/www/html
 fi
 
 # Run custom scripts
 if [[ "$RUN_SCRIPTS" == "1" ]] ; then
-echo "Running init scripts"
-if [ -d "/var/www/html/scripts/" ]; then
-# make scripts executable incase they aren't
-chmod -Rf 750 /var/www/html/scripts/*; sync;
-# run scripts in number order
-for i in `ls /var/www/html/scripts/`; do /var/www/html/scripts/$i ; done
-else
-echo "Can't find script directory"
-fi
+	echo "Running init scripts"
+	if [ -d "/var/www/html/scripts/" ]; then
+		# make scripts executable incase they aren't
+		chmod -Rf 750 /var/www/html/scripts/*; sync;
+		# run scripts in number order
+		for i in `ls /var/www/html/scripts/`; do /var/www/html/scripts/$i ; done
+	else
+		echo "Can't find script directory"
+	fi
 fi
 
 if [ -z "$SKIP_COMPOSER" ]; then
-echo "Doing composer"
-# Try auto install for composer
-if [ -f "/var/www/html/composer.lock" ]; then
-if [ "$APPLICATION_ENV" == "development" ]; then
-composer global require hirak/prestissimo
-composer install --working-dir=/var/www/html
-else
-composer global require hirak/prestissimo
-composer install --no-dev --working-dir=/var/www/html
-fi
-fi
+	echo "Doing composer"
+	# Try auto install for composer
+	if [ -f "/var/www/html/composer.lock" ]; then
+		if [ "$APPLICATION_ENV" == "development" ]; then
+			composer global require hirak/prestissimo
+			composer install --working-dir=/var/www/html
+		else
+			composer global require hirak/prestissimo
+			composer install --no-dev --working-dir=/var/www/html
+		fi
+	fi
 fi
 
 echo "Starting supervisord"
