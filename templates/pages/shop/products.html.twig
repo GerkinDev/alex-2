@@ -21,7 +21,7 @@
 						<img src="{{model.image}}" alt="{{ model.entity.title }}"/>
 						<h3>{{ model.entity.title }}</h3>
 						<p class="description">{{'' | default('No description provided')}}</p>
-						<p class="meta">Starting at <span>{{ model.price }}€</span></p>
+						<p class="meta">Starting at <span>{{ model.price * 100}}€</span></p>
 					</div>
 				</a>
 				{% endfor %}
