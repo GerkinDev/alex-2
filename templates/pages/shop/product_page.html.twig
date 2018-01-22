@@ -13,19 +13,18 @@
 				</div>
 				<form method="post" action="{{path('addToCart', {slug: model.entity.slug})}}">
 					<div class="materials-choices">
-						{% for piece, mass in model.entity.masses(true) %}
+						{% for partName, mass in model.entity.masses(true) %}
 						<div class="mx-0 form-row align-items-stretch" data-part-mass="{{ mass }}">
-							<label  class="sr-only" for="material-{{ piece }}">{{piece}}</label>
+							<label  class="sr-only" for="material-{{ partName }}">{{partName}}</label>
 							<div class="input-group">
 								<div class="input-group-prepend">
-									<div class="input-group-text">{{ piece }}</div>
+									<div class="input-group-text">{{ partName }}</div>
 								</div>
-								<select class="form-control custom-select" id="material-{{ piece }}" name="materials[{{ piece }}]" required>
-									<option value="" disabled selected>Please select one</option>
-									{% for material in materials %}
-									<option value="{{ material.id }}" data-price="{{ material.price }}">{{ material.name }} ( {{ material.price }}€/kg )</option>
-									{% endfor %}
-								</select>
+								{{ include(
+								'components/material-select.html.twig',
+								{ partName: partName, materials: materials },
+								with_context = false
+								) }}
 								<div class="input-group-append">
 									<div class="input-group-text">{{mass*1000}}g</div>
 								</div>
@@ -35,7 +34,7 @@
 					</div>
 					<div class="d-flex flex-row mx-0 flex-nowrap ">
 						<button type="submit" class="col btn btn-primary">Add to cart</button>
-						<output  class="col alert alert-info"></output>
+						<output  class="col alert alert-info unit-price"></output>
 					</div>
 				</form>
 			</div>

@@ -15,6 +15,11 @@
 * `php bin/console doctrine:migrations:diff`: Generate SQL diff for models
 * `php bin/console doctrine:migrations:migrate`: Apply diff
 
+### Translations related
+
+* `php bin/console debug:translation fr`: show debug infos about locale *fr*
+* `php bin/console translation:update --dump-messages --force fr`: refresh translation files for locale *fr*
+
 ## Links:
 
 For MySQL connection: https://symfony.com/doc/current/doctrine.html

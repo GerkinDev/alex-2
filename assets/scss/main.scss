@@ -69,6 +69,17 @@ body {
 	margin:0;
 	text-align: right;
 }
+.templatemo-content {
+	th, td{
+		font-family: 'Raleway', sans-serif;
+		color: #fff;
+	}
+}
+.black-bg > table{
+	> tbody > tr:nth-child(odd){
+		background-color: rgba(100,100,100,0.3);
+	}
+}
 .materials-choices{
 	@media (min-width: 768px){
 		display: table;

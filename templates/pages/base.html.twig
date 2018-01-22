@@ -61,6 +61,7 @@
 		<script src="js/jquery-ui.min.js"></script>
 		<script src="js/jquery.backstretch.min.js"></script>
 		<script src="js/templatemo_script.js"></script>
+		<script>window.currencyFormat = '{{ 0 | localizedcurrency('EUR') }}'</script>
 		<script src="{{ asset('build/app.js') }}"></script>
 		{% block javascripts %}{% endblock %}
 	</body>

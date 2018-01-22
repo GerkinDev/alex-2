@@ -1,0 +1,14 @@
+{% set prefix = namePrefix | default(false) %}
+{% set selected = selected | default('') %}
+<select
+		class="form-control custom-select"
+		id="{{ prefix ? prefix ~ '-' : '' }}material-{{ partName }}"
+		name="{{ prefix ? prefix ~ '[materials]' : 'materials' }}[{{ partName }}]"
+		required>
+	{% if selected == '' %}
+	<option value="" disabled selected>Please select one</option>
+	{% endif %}
+	{% for material in materials %}
+	<option {{ selected == material.id ? 'selected' : '' }} value="{{ material.id }}" data-price="{{ material.price }}">{{ material.name }} ( {{ material.price }}€/kg )</option>
+	{% endfor %}
+</select>

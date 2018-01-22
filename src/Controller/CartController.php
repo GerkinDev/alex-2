@@ -38,22 +38,32 @@ class CartController extends Controller
 		}, []);
 		// Replace ids by entities
 		$helper = $this->container->get('vich_uploader.templating.helper.uploader_helper');
-		$materialsCache = [];
+		$materialsCache = array_reduce(
+			$this->getDoctrine()
+			->getRepository(Material::class)
+			->findAll(), function($acc, $material){
+				$acc[$material->getId()] = $material;
+				return $acc;
+			}, []);
 		$cartList = array_map(function($cartItem) use ($modelsById, $helper, $materialsCache) {
 			$materialsWanted = $cartItem['materials'];
 
 			$matsOnParts = $this->getMaterialsForParts($materialsWanted, $materialsCache);
 			$infos = $modelsById[$cartItem['id']]->computeModelInfos($helper, $matsOnParts);
 			$infos['parts'] = $matsOnParts;
+			$infos['count'] = $cartItem['count'];
+			$infos['masses'] = $modelsById[$cartItem['id']]->getMasses(true);
 			return $infos;
 		}, $cart);
 
-		$materialsCache = [];
-		foreach($cartList as $key => $cart){
-			echo $this->get('jms_serializer')->serialize($cart, 'json');
+		/*foreach($cartList as $key => $cart){
+			echo '<pre>'.$this->get('jms_serializer')->serialize($cart, 'json').'</pre>';
 		}
+		foreach($materialsCache as $key => $material){
+			echo '<pre>'.$this->get('jms_serializer')->serialize($material, 'json').'</pre>';
+		}*/
 
-		return $this->render('pages/cart/cart.html.twig', ['cartList' => $cartList]);
+		return $this->render('pages/cart/cart.html.twig', ['cartList' => $cartList, 'materials' => $materialsCache]);
 	}
 
 	/**
