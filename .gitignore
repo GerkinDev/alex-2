@@ -15,3 +15,5 @@ package-lock\.json
 public/build/manifest\.json
 
 public/uploads/
+
+public/build/

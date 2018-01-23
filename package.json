@@ -212,7 +212,8 @@
 	},
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"webpack:run:dev": "./node_modules/.bin/encore dev-server --hot --watch"
+		"webpack:run:dev": "./node_modules/.bin/encore dev-server --hot --watch",
+		"webpack:build:prod": "./node_modules/.bin/encore production"
 	},
 	"repository": {
 		"type": "git",

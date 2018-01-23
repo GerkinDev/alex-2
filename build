@@ -2,8 +2,8 @@
 
 CONTAINER_NAME=self-3dprint
 
-if [ "$1" == "-a" ]; then
-	./node_modules/.bin/encore production
+if [ "$1" != "-A" ]; then
+	npm run webpack:build:prod
 fi
 docker build -t $CONTAINER_NAME .
 
