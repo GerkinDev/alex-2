@@ -10,51 +10,18 @@ use Symfony\Component\HttpFoundation\Session\Session;
 
 use App\Entity\Model;
 use App\Entity\Material;
+use App\Service\Cart;
 
 /**
- * @Route("/cart")
- */
+* @Route("/cart")
+*/
 class CartController extends Controller
 {
 	/**
-	 * @Route("", name="cart")
-	 */
-	public function index() {
-		$session = new Session();
-		$cart = $session->get('cart', []);
-
-		// Get ids on whole cart
-		$ids = array_map(function($cartItem) {
-			return $cartItem['id'];
-		}, $cart);
-		// Fetch all models
-		$modelsRaw = $this->getDoctrine()
-			->getRepository(Model::class)
-			->findById($ids);
-		// Associate them with key
-		$modelsById = array_reduce($modelsRaw, function($acc, $model) {
-			$acc[$model->getId()] = $model;
-			return $acc;
-		}, []);
-		// Replace ids by entities
-		$helper = $this->container->get('vich_uploader.templating.helper.uploader_helper');
-		$materialsCache = array_reduce(
-			$this->getDoctrine()
-			->getRepository(Material::class)
-			->findAll(), function($acc, $material){
-				$acc[$material->getId()] = $material;
-				return $acc;
-			}, []);
-		$cartList = array_map(function($cartItem) use ($modelsById, $helper, $materialsCache) {
-			$materialsWanted = $cartItem['materials'];
-
-			$matsOnParts = $this->getMaterialsForParts($materialsWanted, $materialsCache);
-			$infos = $modelsById[$cartItem['id']]->computeModelInfos($helper, $matsOnParts);
-			$infos['parts'] = $matsOnParts;
-			$infos['count'] = $cartItem['count'];
-			$infos['masses'] = $modelsById[$cartItem['id']]->getMasses(true);
-			return $infos;
-		}, $cart);
+	* @Route("", name="cart")
+	*/
+	public function index(Cart $cart) {
+		$cart->loadFromSession();
 
 		/*foreach($cartList as $key => $cart){
 			echo '<pre>'.$this->get('jms_serializer')->serialize($cart, 'json').'</pre>';
@@ -63,16 +30,20 @@ class CartController extends Controller
 			echo '<pre>'.$this->get('jms_serializer')->serialize($material, 'json').'</pre>';
 		}*/
 
-		return $this->render('pages/cart/cart.html.twig', ['cartList' => $cartList, 'materials' => $materialsCache]);
+		return $this->render('pages/cart/cart.html.twig', [
+			'cartList' => $cart->getCartList(),
+			'materials' => $cart->getMaterials(),
+			]
+		);
 	}
 
 	/**
-	 * @Route("/add/{slug}", name="addToCart")
-	 */
+	* @Route("/add/{slug}", name="addToCart")
+	*/
 	public function addToCart(Request $request, $slug){
 		$modelRaw = $this->getDoctrine()
-			->getRepository(Model::class)
-			->findOneBySlug($slug);
+		->getRepository(Model::class)
+		->findOneBySlug($slug);
 
 		$materialsWanted = array_map('intval', $request->request->get('materials'));
 
@@ -98,24 +69,6 @@ class CartController extends Controller
 		return $this->redirectToRoute('cart');
 	}
 
-	private function getMaterialsForParts($partsAssociation, &$materialsCache = []){
-		// Retrieve mats from DB
-		foreach($partsAssociation as $matSlot => $matId){
-			if(!isset($materialsCache[$matId])){
-				$materialsCache[$matId] = $this->getDoctrine()
-					->getRepository(Material::class)
-					->findOneById($matId);
-			}
-		}
-
-		// Inject them in wanted
-		$matsOnParts = array_map(function($matId) use ($materialsCache) {
-			return $materialsCache[$matId];
-		}, $partsAssociation);
-
-		return $matsOnParts;
-	}
-
 	public function cartSum(){
 		$session = new Session();
 		$cart = $session->get('cart', []);
@@ -130,6 +83,7 @@ class CartController extends Controller
 		return $this->render( 'components/cart_indicator.html.twig', [
 			'amount' => $session->get('cartSum', 0),
 			'count' => $count,
-		]);
+			]
+		);
 	}
 }

@@ -17,3 +17,8 @@ public/build/manifest\.json
 public/uploads/
 
 public/build/
+
+###> symfony/phpunit-bridge ###
+.phpunit
+/phpunit.xml
+###< symfony/phpunit-bridge ###

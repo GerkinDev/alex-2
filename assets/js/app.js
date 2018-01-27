@@ -27,7 +27,7 @@ const formatCurrency = value => {
 
 $(document).ready(() => {
 	$('.post-enable').attr('disabled', false);
-	$("form input, form select").keydown(function (e) {
+	$("form input, form select").on('input keydown change', function (e) {
 		const $form = $(this).closest('form');
 		const sels = ['button', 'input'].map(tag => '[type="submit"].default');
 		const selsIn = sels.join(', ');

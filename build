@@ -3,6 +3,7 @@
 CONTAINER_NAME=self-3dprint
 
 if [ "$1" != "-A" ]; then
+	echo "Building webpack assets"
 	npm run webpack:build:prod
 fi
 docker build -t $CONTAINER_NAME .
