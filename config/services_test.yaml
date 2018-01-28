@@ -7,3 +7,8 @@ services:
     # aliases are prefixed with test. For example:
     #
     # test.App\Service\MyService: '@App\Service\MyService'
+    test.App\Service\Cart: '@App\Service\Cart'
+
+#    app.cart:
+#        class: App\Service\Cart
+#        arguments: ['%doctrine.orm.entity_manager.class%', '%vich_uploader.templating.helper.uploader_helper%']

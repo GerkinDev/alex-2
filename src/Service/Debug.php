@@ -12,12 +12,16 @@ class Debug {
 	}
 
 	public function dumpModel($model){
+		dump($model);
+		return;
 		echo '<pre>';
 		echo $this->serializer->serialize($model, 'json');
 		echo '</pre>';
 	}
 
 	public function dumpCollection($collection){
+		dump($collection);
+		return;
 		$datas = [];
 		foreach($collection as $key => $model){
 			$datas[$key] = json_decode($this->serializer->serialize($model, 'json'), true);
