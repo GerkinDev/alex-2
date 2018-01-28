@@ -32,7 +32,7 @@ class Cart {
 		$this->filterInfos = $filterInfos;
 	}
 
-	public function loadFromData(array $cartData){
+	public function deserialize(array $cartData){
 		// Get all product ids
 		$productIds = array_unique(array_map('intval', array_map(function($cartItem) {
 			return $cartItem[self::PRODUCT_KEY];
@@ -159,13 +159,6 @@ class Cart {
 		return $this;
 	}
 
-	private function arrayColToKeyed($col){
-		return array_reduce($col, function($acc, $item) {
-			$acc[$item->getId()] = $item;
-			return $acc;
-		}, []);
-	}
-
 	public function attributesEqual($a, $b){
 		foreach($a as $part => $mat){
 			$comparison = $b[$part] === $mat;
@@ -179,12 +172,27 @@ class Cart {
 
 	public function getCart($datas = null){
 		if($datas !== null){
-			$this->loadFromData($datas);
+			$this->deserialize($datas);
 		}
 		return $this->cart;
 	}
 
-	public function getCartData(){
+	public function serialize(){
+		return array_map(function($cartItem){
+			return [
+				self::COUNT_KEY => $cartItem[self::COUNT_KEY],
+				self::PRODUCT_KEY => $cartItem[self::PRODUCT_KEY]->getId(),
+				self::ATTRS_KEY => array_map(function($attr){
+					return $attr->getId();
+				}, $cartItem[self::ATTRS_KEY]),
+			];
+		}, $this->cart);
+	}
 
+	private function arrayColToKeyed($col){
+		return array_reduce($col, function($acc, $item) {
+			$acc[$item->getId()] = $item;
+			return $acc;
+		}, []);
 	}
 }

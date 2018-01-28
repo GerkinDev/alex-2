@@ -23,7 +23,7 @@ class CartTest extends KernelTestCase
     public function testLoadEmptyCart()
     {
         $cart = $this->cart;
-        $cart->loadFromData([]);
+        $cart->deserialize([]);
         $this->assertEquals([], $cart->getCart());
     }
 
@@ -33,7 +33,7 @@ class CartTest extends KernelTestCase
         global $models;
 
         $cart = $this->cart;
-        $cart->loadFromData([[
+        $cart->deserialize([[
             Cart::PRODUCT_KEY => 1,
             Cart::ATTRS_KEY => [ 'main' => 1 ],
             Cart::COUNT_KEY => 1,
@@ -50,8 +50,8 @@ class CartTest extends KernelTestCase
     }
 
     /**
-    * @expectedException Exception
-    */
+     * @expectedException Exception
+     */
     public function testAddToCartUnInited(){
 
         $cart = $this->cart;
@@ -59,34 +59,34 @@ class CartTest extends KernelTestCase
     }
 
     /**
-    * @expectedException Exception
-    */
+     * @expectedException Exception
+     */
     public function testAddToCartNoProduct(){
         $cart = $this->cart;
-        $cart->loadFromData([]);
+        $cart->deserialize([]);
         $cart->addItem(null, []);
     }
 
     /**
-    * @expectedException Exception
-    */
+     * @expectedException Exception
+     */
     public function testAddToCartMissingPart(){
         global $models;
 
         $cart = $this->cart;
-        $cart->loadFromData([]);
+        $cart->deserialize([]);
         $cart->addItem($models[0], []);
     }
 
     /**
-    * @expectedException Exception
-    */
+     * @expectedException Exception
+     */
     public function testAddToCartExcessingPart(){
         global $models;
         global $materials;
 
         $cart = $this->cart;
-        $cart->loadFromData([]);
+        $cart->deserialize([]);
         $cart->addItem($models[0], ['main' => $materials[0], 'sec' => $materials[1]]);
     }
 
@@ -95,7 +95,7 @@ class CartTest extends KernelTestCase
         global $models;
 
         $cart = $this->cart;
-        $cart->loadFromData([]);
+        $cart->deserialize([]);
 
         // Test with materials as objects
         $cart->addItem($models[0], ['main' => $materials[0]]);
@@ -130,7 +130,7 @@ class CartTest extends KernelTestCase
         global $models;
 
         $cart = $this->cart;
-        $cart->loadFromData([]);
+        $cart->deserialize([]);
 
         // Test with materials as objects
         $cart->addItem($models[0], ['main' => $materials[0]]);
@@ -160,7 +160,7 @@ class CartTest extends KernelTestCase
         global $models;
 
         $cart = $this->cart;
-        $cart->loadFromData([]);
+        $cart->deserialize([]);
 
         // Test with materials as objects
         $cart->addItem($models[0], ['main' => $materials[0]]);
@@ -195,7 +195,7 @@ class CartTest extends KernelTestCase
         global $models;
 
         $cart = $this->cart;
-        $cart->loadFromData([[
+        $cart->deserialize([[
             Cart::PRODUCT_KEY => 1,
             Cart::ATTRS_KEY => [ 'main' => 1 ],
             Cart::COUNT_KEY => 1,
@@ -221,7 +221,7 @@ class CartTest extends KernelTestCase
         global $models;
 
         $cart = $this->cart;
-        $cart->loadFromData([[
+        $cart->deserialize([[
             Cart::PRODUCT_KEY => 1,
             Cart::ATTRS_KEY => [ 'main' => 1 ],
             Cart::COUNT_KEY => 1,
@@ -251,7 +251,7 @@ class CartTest extends KernelTestCase
         global $models;
 
         $cart = $this->cart;
-        $cart->loadFromData([[
+        $cart->deserialize([[
             Cart::PRODUCT_KEY => 1,
             Cart::ATTRS_KEY => [ 'main' => 1 ],
             Cart::COUNT_KEY => 1,
@@ -267,5 +267,21 @@ class CartTest extends KernelTestCase
         );
         $cart->removeItem(true);
         $this->assertEquals([], $cart->getCart());
+    }
+
+    public function testExportCartData()
+    {
+        global $materials;
+        global $models;
+
+        $cart = $this->cart;
+        $data = [[
+            Cart::PRODUCT_KEY => 1,
+            Cart::ATTRS_KEY => [ 'main' => 1 ],
+            Cart::COUNT_KEY => 1,
+            ]
+        ];
+        $cart->deserialize($data);
+        $this->assertEquals($data, $cart->serialize());
     }
 }
