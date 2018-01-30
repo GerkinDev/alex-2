@@ -6,7 +6,7 @@
 		<section id="products-section" class="inactive active" style="display: block;">
 			<div class="products">
 				<div data-product-id="{{ model.entity.id }}" class="product my-2 mx-3">
-					<div class="black-bg btn-menu">
+					<div class="black-bg">
 						<img src="{{model.image}}" alt="{{ model.entity.title }}"/>
 						<h3>{{ model.entity.title }}</h3>
 						<p class="description">{{'' | default('No description provided')}}</p>

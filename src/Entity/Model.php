@@ -8,11 +8,13 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
+use App\GenericClass\ICartItem;
+
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ModelRepository")
  * @Vich\Uploadable
  */
-class Model
+class Model implements ICartItem
 {
 	/**
 	 * @ORM\Id
@@ -171,6 +173,9 @@ class Model
 	public function setMasses($masses) {
 		$this->masses = $masses;
 		return $this;
+	}
+	public function getAttrsFactors(){
+		return $this->getMasses(true);
 	}
 
 	public function computeModelInfos(UploaderHelper $helper, array $materials = null){

@@ -1,7 +1,11 @@
 {
 	"devDependencies": {
+		"@types/bootstrap": "^3.3.37",
+		"@types/jquery": "^3.3.0",
 		"node-sass": "^4.7.2",
 		"sass-loader": "^6.0.6",
+		"ts-loader": "^3.3.1",
+		"typescript": "^2.6.2",
 		"webpack-notifier": "^1.5.0"
 	},
 	"name": "alex-2",

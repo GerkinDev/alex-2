@@ -10,8 +10,13 @@ use App\Service\Debug;
 
 use App\Entity\Cart as CartEntity;
 
-use App\Entity\Model;
-use App\Entity\Material;
+interface ICartItem{
+	public function getId();
+	public function getAttrsFactors();
+}
+interface ICartAttribute{
+	public function getId();
+}
 
 class Cart {
 	public const PRODUCT_KEY = 'product';
@@ -23,13 +28,24 @@ class Cart {
 	private $findMaterialFct;
 	private $filterInfos;
 
-	private $cart = null;
-	private $attrs = null;
+	protected $cart = null;
 
 	public function __construct(callable $findItemFct, callable $findMaterialFct, callable $filterInfos = null){
 		$this->findItemFct = $findItemFct;
 		$this->findMaterialFct = $findMaterialFct;
 		$this->filterInfos = $filterInfos;
+	}
+
+	public function serialize(){
+		return array_map(function($cartItem){
+			return [
+				self::COUNT_KEY => $cartItem[self::COUNT_KEY],
+				self::PRODUCT_KEY => $cartItem[self::PRODUCT_KEY]->getId(),
+				self::ATTRS_KEY => array_map(function($attr){
+					return $attr->getId();
+				}, $cartItem[self::ATTRS_KEY]),
+			];
+		}, $this->cart);
 	}
 
 	public function deserialize(array $cartData){
@@ -52,17 +68,18 @@ class Cart {
 		$attrIds = array_unique($attrIds);
 
 		// Get attrs in [id => attr]
-		$attrs = $this->arrayColToKeyed(call_user_func($this->findMaterialFct, $attrIds));
+		$attrsList = $this->arrayColToKeyed(call_user_func($this->findMaterialFct, $attrIds));
 
-		$this->cart = array_map(function($cartItem) use ($products, $attrs) {
+		$this->cart = array_map(function($cartItem) use ($products, $attrsList) {
 			$product = $products[$cartItem[self::PRODUCT_KEY]];
 
-			$infos = isset($this->filterInfos) ? $this->filterInfos($product) : [];
-
 			$attrsWanted = $cartItem[self::ATTRS_KEY];
-			$infos[self::ATTRS_KEY] = array_map(function($attr) use ($attrs){
-				return $attrs[$attr];
+			$attrs = array_map(function($attr) use ($attrsList){
+				return $attrsList[$attr];
 			}, $attrsWanted);
+			$infos = isset($this->filterInfos) ? call_user_func($this->filterInfos, $product, $attrs) : [];
+
+			$infos[self::ATTRS_KEY] = $attrs;
 			$infos[self::PRODUCT_KEY] = $product;
 			$infos[self::COUNT_KEY] = $cartItem[self::COUNT_KEY];
 			$infos[self::ATTRS_FACTOR_KEY] = $products[$cartItem[self::PRODUCT_KEY]]->getAttrsFactors();
@@ -72,7 +89,7 @@ class Cart {
 		return $this;
 	}
 
-	public function addItem($product, array $attrs, $count = 1){
+	public function addItem(ICartItem $product, array $attrs, $count = 1){
 		if($this->cart === null){
 			throw new \Exception('Call '.__NAMESPACE__.'::loadFromData before');
 		}
@@ -124,7 +141,7 @@ class Cart {
 		}
 
 		// Compose cart item
-		$infos = isset($this->filterInfos) ? $this->filterInfos($product) : [];
+		$infos = isset($this->filterInfos) ? call_user_func($this->filterInfos, $product, $attrs) : [];
 		$infos[self::ATTRS_KEY] = $attrs;
 		$infos[self::PRODUCT_KEY] = $product;
 		$infos[self::COUNT_KEY] = $count;
@@ -133,7 +150,7 @@ class Cart {
 		$this->cart[] = $infos;
 	}
 
-	public function removeItem($product, array $attrs = null){
+	public function removeItem(ICartItem $product, array $attrs = null){
 		if($this->cart === null){
 			throw new \Exception('Call '.__NAMESPACE__.'::loadFromData before');
 		}
@@ -177,19 +194,7 @@ class Cart {
 		return $this->cart;
 	}
 
-	public function serialize(){
-		return array_map(function($cartItem){
-			return [
-				self::COUNT_KEY => $cartItem[self::COUNT_KEY],
-				self::PRODUCT_KEY => $cartItem[self::PRODUCT_KEY]->getId(),
-				self::ATTRS_KEY => array_map(function($attr){
-					return $attr->getId();
-				}, $cartItem[self::ATTRS_KEY]),
-			];
-		}, $this->cart);
-	}
-
-	private function arrayColToKeyed($col){
+	protected function arrayColToKeyed($col){
 		return array_reduce($col, function($acc, $item) {
 			$acc[$item->getId()] = $item;
 			return $acc;

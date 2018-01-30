@@ -1,0 +1,20 @@
+.materials-choices{
+	@media (min-width: 768px){
+		display: table;
+		width: 100%;
+
+		.row{
+			display:table-row;
+		}
+		.col{
+			display: table-cell;
+			width: auto;
+		}
+	}
+	.mass-indicator{
+		padding: 0;
+    }
+    label{
+        margin: 0;
+    }
+}
