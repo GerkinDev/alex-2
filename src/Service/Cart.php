@@ -37,7 +37,6 @@ class Cart extends BaseCart{
 			return $model->computeModelInfos($this->uploaderHelper, $materials);
 		});
 		$this->deserialize($this->session->get(self::SESSION_CART_KEY, []));
-		dump('Inited cart', $this);
 	}
 
 	public function getMaterials(){
