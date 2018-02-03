@@ -5,7 +5,7 @@
 	<div class="templatemo-content">
 		<div class="black-bg" id="cart">
 			{% if cartList is empty %}
-			{% trans with {shopUrl: path('products') }%}<b>Your cart is empty.</b> Browse the <a href="%shopUrl%">shop</a>{% endtrans %}
+			{% trans with {'%shopUrl%': path('products') }%}<b>Your cart is empty.</b> Browse the <a href="%shopUrl%">shop</a>{% endtrans %}
 			{% else %}
 			<table>
 				<thead><tr>
@@ -74,7 +74,7 @@
 							<p>{% trans %}Are you sure you want to empty your cart?{% endtrans %}</p>
 						</div>
 						<div class="modal-footer">
-							<button type="button" class="btn btn-primary">{% trans %}Empty cart{% endtrans %}</button>
+							<a href="{{path('emptyCart')}}" type="button" class="btn btn-primary">{% trans %}Empty cart{% endtrans %}</a>
 							<button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans %}Dismiss{% endtrans %}</button>
 						</div>
 					</div>

@@ -24,11 +24,14 @@ class ShopController extends Controller
 		$modelsRaw = $this->getDoctrine()
 			->getRepository(Model::class)
 			->getPaged($page);
+		$cheapestMaterial = $this->getDoctrine()
+			->getRepository(Material::class)
+			->findCheapest();
 
 		$helper = $this->container->get('vich_uploader.templating.helper.uploader_helper');
 		$models = [];
 		foreach($modelsRaw as $modelRaw){
-			$models[$modelRaw->getId()] = $modelRaw->computeModelInfos($helper);
+			$models[$modelRaw->getId()] = $modelRaw->computeModelInfos($helper, $cheapestMaterial);
 		}
 
 		return $this->render('pages/shop/products.html.twig', ['models' => $models]);

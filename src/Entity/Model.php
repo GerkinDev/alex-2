@@ -8,6 +8,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
+use App\Entity\Material;
 use App\GenericClass\ICartItem;
 
 /**
@@ -178,7 +179,7 @@ class Model implements ICartItem
 		return $this->getMasses(true);
 	}
 
-	public function computeModelInfos(UploaderHelper $helper, array $materials = null){
+	public function computeModelInfos(UploaderHelper $helper, $materials = null){
 		$sum = 0;
 		$modelInfos = [
 			'entity' => $this,
@@ -186,10 +187,13 @@ class Model implements ICartItem
 			'image' => $helper->asset($this, 'imageFile'),
 			'file' => $helper->asset($this, 'modelFile'),
 		];
+		if(!$modelInfos['image']){
+			$modelInfos['image'] = '/assets/images/no-image.jpg';
+		}
 		foreach($this->getMasses(true) as $piece => $mass){
-			if($materials === null){
-				$sum += $mass;
-			} else {
+			if($materials instanceof Material){
+				$sum += $mass * $materials->getPrice();
+			} else if(is_array($materials)){
 				if(!isset($materials[$piece])){
 					return $modelInfos;
 				}

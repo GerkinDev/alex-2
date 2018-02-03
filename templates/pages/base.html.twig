@@ -53,7 +53,11 @@
 		{% endif %}
 
 		<section id="body" class="container">
-			{% block body %}{% endblock %}
+			<div class="templatemo-content-wrapper">
+				<div class="templatemo-content">
+					{% block body %}{% endblock %}
+				</div>
+			</div>
 		</section>
 
 		<footer class="row">

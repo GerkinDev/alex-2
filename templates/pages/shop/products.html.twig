@@ -1,41 +1,41 @@
 {% extends 'pages/base.html.twig' %}
 
 {% block body %}
-<div class="templatemo-content-wrapper">
-	<div class="templatemo-content">
-		<section id="products-section" class="inactive active" style="display: block;">
-			<div class="products">
-				{% if models is empty %}
-				<div class="col margin-bottom-20">
+<section id="products-section" class="inactive active" style="display: block;">
+	<div class="products d-flex flex-row flex-wrap align-items-stretch justify-content-center">
+		{% if models is empty %}
+		<div class="col margin-bottom-20">
 					<div class="black-bg col-md-12 col-lg-12 col-xl-12">
 						<h2>NOTHING HERE</h2>
 						<p>Go away. Nothing to see here.</p>
 						<hr />
 						<p>No, seriously, there's just nothing.</p>
 					</div>
-				</div>
-				{% else %}
-				{% for id, model in models %}
-				<a href="{{ path("product", {slug: model.entity.slug}) }}" data-product-id="{{ id }}" class="product my-2 mx-3">
-					<div class="black-bg btn-menu">
-						<img src="{{model.image}}" alt="{{ model.entity.title }}"/>
-						<h3>{{ model.entity.title }}</h3>
-						<p class="description">{{'' | default('No description provided')}}</p>
-						<p class="meta">Starting at <span>{{ model.price }}€</span></p>
-						{# Waiting for material min. implementation #}
-					</div>
-				</a>
-				{% endfor %}
-				{% endif %}
-			</div>
-			<div class="row margin-top-20">
+		</div>
+		{% else %}
+		{% for id, model in models %}
+		<a href="{{ path("product", {slug: model.entity.slug}) }}" data-product-id="{{ id }}" class="product my-2 mx-3">
+			<article class="black-bg d-flex justify-content-between flex-column">
+				<section>
+					<div class="product-image mb-2" style="background-image: url({{model.image}});" title="{{ model.entity.title }}"></div>
+					<h3>{{ model.entity.title }}</h3>
+					<p class="description">{{'' | default('No description provided')}}</p>
+				</section>
+				<footer>
+					{# Waiting for material min. implementation #}
+					<p class="meta">Starting at <span>{{ model.price }}€</span></p>
+				</footer>
+			</article>
+		</a>
+		{% endfor %}
+		{% endif %}
+	</div>
+	<div class="row margin-top-20">
 				<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6  pull-right">
 					{{ include('components/back-to-menu-btn.html.twig') }}
 				</div>
-			</div>
-		</section><!-- /.product-section -->
-	</div><!-- /.templatemo-content -->
-</div><!-- /.templatemo-content-wrapper -->
+	</div>
+</section><!-- /.product-section -->
 {% endblock %}
 
 

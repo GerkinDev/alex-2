@@ -3,11 +3,12 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use App\GenericClass\ICartAttribute;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\MaterialRepository")
  */
-class Material
+class Material implements ICartAttribute
 {
 	/**
 	 * @ORM\Id
@@ -15,26 +16,26 @@ class Material
 	 * @ORM\Column(type="integer")
 	 */
 	private $id;
-	
+
 	/**
 	 * @ORM\Column(type="float")
 	 */
 	private $price;
-	
+
 	/**
 	 * @ORM\Column(type="boolean")
 	 */
 	private $available;
-	
+
 	/**
 	 * @ORM\Column(type="string")
 	 */
 	private $name;
-	
+
 	public function getId() {
 		return $this->id;
 	}
-	
+
 	public function getPrice() {
 		return $this->price;
 	}
@@ -42,7 +43,7 @@ class Material
 		$this->price = $price;
 		return $this;
 	}
-	
+
 	public function isAvailable() {
 		return $this->available;
 	}
@@ -50,7 +51,7 @@ class Material
 		$this->available = $available;
 		return $this;
 	}
-	
+
 	public function getName() {
 		return $this->name;
 	}

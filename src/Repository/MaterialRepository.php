@@ -12,16 +12,18 @@ class MaterialRepository extends ServiceEntityRepository
 		parent::__construct($registry, Material::class);
 	}
 
-	/*
-    public function findBySomething($value)
-    {
-        return $this->createQueryBuilder('m')
-            ->where('m.something = :value')->setParameter('value', $value)
-            ->orderBy('m.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+	public function findCheapest()
+	{
+		$queryRes = $this->createQueryBuilder('m')
+		->orderBy('m.price', 'ASC')
+		->setMaxResults(1)
+		->getQuery()
+		->getResult()
+		;
+		if(count($queryRes) === 0){
+			return null;
+		} else {
+			return $queryRes[0];
+		}
+	}
 }

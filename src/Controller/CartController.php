@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,6 +31,7 @@ class CartController extends Controller
 
 	/**
 	* @Route("/add/{slug}", name="addToCart")
+	* @Method("POST")
 	*/
 	public function addToCart(Cart $cart, Request $request, $slug){
 		$model = $this->getDoctrine()
@@ -38,10 +40,29 @@ class CartController extends Controller
 
 		$materialsWanted = array_map('intval', $request->request->get('materials'));
 
-		dump($materialsWanted);
 		$cart->addItem($model, $materialsWanted);
 
 		return $this->redirectToRoute('cart');
+	}
+
+	/**
+	* @Route("/empty", name="emptyCart")
+	*/
+	public function emptyCart(Cart $cart){
+		$cart->removeItem(true);
+		return $this->redirectToRoute('cart');
+	}
+
+	/**
+	 * ContactAction
+	 *
+	 * @Route("/remove/{index}", name="removeFromCart", condition="request.isXmlHttpRequest()")
+	 */
+	public function deleteFromCart(Cart $cart, $index){
+		$cartItem = $cart->getCart()[intval($index) - 1];
+		$cart->removeItem($cartItem['entity'], array_map(function($material){
+			return $material->getId();
+		}, $cartItem['attrs']));
 	}
 
 	public function cartSum(Cart $cart){

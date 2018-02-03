@@ -8,15 +8,6 @@ use \Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
 use App\Service\Debug;
 
-use App\Entity\Cart as CartEntity;
-
-interface ICartItem{
-	public function getId();
-	public function getAttrsFactors();
-}
-interface ICartAttribute{
-	public function getId();
-}
 
 class Cart {
 	public const PRODUCT_KEY = 'product';
@@ -150,7 +141,16 @@ class Cart {
 		$this->cart[] = $infos;
 	}
 
-	public function removeItem(ICartItem $product, array $attrs = null){
+	/*public function removeItemIndex($index){
+		if($this->cart === null){
+			throw new \Exception('Call '.__NAMESPACE__.'::loadFromData before');
+		}
+
+		unset($this->cart[$index]);
+
+		return $this;
+	}*/
+	public function removeItem($product, array $attrs = null){
 		if($this->cart === null){
 			throw new \Exception('Call '.__NAMESPACE__.'::loadFromData before');
 		}
@@ -161,16 +161,17 @@ class Cart {
 		// Handle purge
 		if($product === true){
 			$this->cart = [];
-		}
-		if($attrs === null){
-			$this->cart = array_values(array_filter($this->cart, function($cartItem) use ($product){
-				return $cartItem[self::PRODUCT_KEY]->getId() !== $product->getId();
-			}));
-		} else {
-			$this->cart = array_values(array_filter($this->cart, function($cartItem) use ($product, $attrs){
-				return ($cartItem[self::PRODUCT_KEY]->getId() !== $product->getId()) ||
-				($this->attributesEqual($cartItem[self::ATTRS_KEY], $attrs) === false);
-			}));
+		} else if($product instanceof ICartItem){
+			if($attrs === null){
+				$this->cart = array_values(array_filter($this->cart, function($cartItem) use ($product){
+					return $cartItem[self::PRODUCT_KEY]->getId() !== $product->getId();
+				}));
+			} else {
+				$this->cart = array_values(array_filter($this->cart, function($cartItem) use ($product, $attrs){
+					return ($cartItem[self::PRODUCT_KEY]->getId() !== $product->getId()) ||
+					($this->attributesEqual($cartItem[self::ATTRS_KEY], $attrs) === false);
+				}));
+			}
 		}
 
 		return $this;

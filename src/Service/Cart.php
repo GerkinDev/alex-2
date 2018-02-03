@@ -55,4 +55,9 @@ class Cart extends BaseCart{
 		parent::addItem($product, $attrs, $count);
 		$this->session->set(self::SESSION_CART_KEY, $this->serialize());
 	}
+
+	public function removeItem($product, array $attrs = null){
+		parent::removeItem($product, $attrs);
+		$this->session->set(self::SESSION_CART_KEY, $this->serialize());
+	}
 }
