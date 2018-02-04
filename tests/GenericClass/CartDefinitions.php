@@ -2,7 +2,7 @@
 
 namespace App\Test\GenericClass;
 
-class Model{
+class Model implements \App\GenericClass\ICartItem{
     private $id;
     public function __construct($id){
         $this->id = $id;
@@ -16,7 +16,7 @@ class Model{
         return ['main' => 1];
     }
 }
-class Material{
+class Material implements \App\GenericClass\ICartAttribute{
     private $id;
     public function __construct($id){
         $this->id = $id;

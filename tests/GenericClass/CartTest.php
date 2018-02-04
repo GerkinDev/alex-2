@@ -50,7 +50,7 @@ class CartTest extends KernelTestCase
     }
 
     /**
-     * @expectedException Exception
+     * @expectedException TypeError
      */
     public function testAddToCartUnInited(){
 
@@ -59,7 +59,7 @@ class CartTest extends KernelTestCase
     }
 
     /**
-     * @expectedException Exception
+     * @expectedException TypeError
      */
     public function testAddToCartNoProduct(){
         $cart = $this->cart;

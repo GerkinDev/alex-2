@@ -7,6 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 use App\Entity\Model;
@@ -59,10 +60,12 @@ class CartController extends Controller
 	 * @Route("/remove/{index}", name="removeFromCart", condition="request.isXmlHttpRequest()")
 	 */
 	public function deleteFromCart(Cart $cart, $index){
-		$cartItem = $cart->getCart()[intval($index) - 1];
-		$cart->removeItem($cartItem['entity'], array_map(function($material){
-			return $material->getId();
-		}, $cartItem['attrs']));
+		$cartItem = $cart->getCart()[intval($index)];
+		if($cartItem === null){
+			return new JsonResponse(array('success' => false, 'error' => 'Unexistent cart item'));
+		}
+		$cart->removeItem($cartItem[Cart::PRODUCT_KEY], $cartItem[Cart::ATTRS_KEY]);
+		return new JsonResponse(array('success' => true));
 	}
 
 	public function cartSum(Cart $cart){

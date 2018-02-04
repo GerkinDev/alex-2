@@ -22,6 +22,7 @@
 		<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous" defer></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous" defer></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous" defer></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.13/vue.runtime.min.js" integrity="sha256-AokZsb44IGh3nH4k6RRYDnpCBYystnCK0FkN3I3ENlI=" crossorigin="anonymous"></script>
 	</head>
 	<body data-route="{{ app.request.attributes.get('_route') }}" style="background-image : url(/assets/images/{% block background_image %}{% endblock %})">
 		<header class="templatemo-logo black-bg" id="header">
@@ -66,7 +67,19 @@
 			</div><!-- /.footer -->
 		</footer>
 
-		<script>window.currencyFormat = '{{ 0 | localizedcurrency('EUR') }}'</script>
+		<div id="flashMessages">
+			<% headText %>
+			<flashmessage
+				v-for="flash in flashes"
+				v-bind:flash="flash"></flashmessage>
+		</div>
+
+		<script>
+		window.currencyFormat = '{{ 0 | localizedcurrency('EUR') }}';
+		window.routes = {
+			removeFromCart: '{{ path('removeFromCart', {index: '{id}'}) }}',
+		}
+		</script>
 		<script src="{{ asset('build/app.js') }}" defer></script>
 		{% block javascripts %}{% endblock %}
 		<!-- Global site tag (gtag.js) - Google Analytics -->

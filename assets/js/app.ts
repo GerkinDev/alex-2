@@ -2,11 +2,14 @@ require('../scss/main.scss');
 
 import { cartCalculator } from './components/priceCalculator';
 import { emptyCart, handleDeleteButtons } from './components/cartManager';
+import { computeRouteUrl } from './components/routes';
+import './components/vue';
 
 $(document).ready(() => {
+
 	const route = $('body').data('route');
 	console.log(`On route "${route}"`);
-	$('.post-enable').attr('disabled', '');
+	$('.post-enable').removeAttr('disabled');
 	$("form input, form select").on('input keydown change', function (e) {
 		const $form = $(this).closest('form');
 		const sels = ['button', 'input'].map(tag => '[type="submit"].default');
