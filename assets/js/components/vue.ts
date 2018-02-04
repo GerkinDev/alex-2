@@ -1,6 +1,5 @@
-import V from 'vue';
+import Vue from 'vue';
 import Component from 'vue-class-component'
-declare const Vue: typeof V;
 
 (Vue.config as any).delimiters = ['<%', '%>'];
 

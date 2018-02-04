@@ -34,8 +34,8 @@ Encore
 
 // export the final configuration
 const config = Encore.getWebpackConfig();
-config.externals = {
+/*config.externals = {
 	vue: 'Vue',
-};
+};*/
 
 module.exports = config;
