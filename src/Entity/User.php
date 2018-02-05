@@ -7,11 +7,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 use App\Service\UriTokenHandler;
+use App\Entity\Model;
 
 /**
 * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
 */
-class User implements UserInterface, \Serializable
+class User extends \App\GenericClass\BaseEntity implements UserInterface, \Serializable
 {
 	/**
 	* @ORM\Column(type="integer")
@@ -64,6 +65,12 @@ class User implements UserInterface, \Serializable
 	* @ORM\Column(name="is_active", type="boolean")
 	*/
 	private $isActive;
+
+	/**
+	* @ORM\OneToMany(targetEntity="App\Entity\Model", mappedBy="user")
+	* @ORM\JoinColumn(nullable=true)
+	*/
+	private $models;
 
 	public function __construct($username = null, $password = null, $salt = null, $role = 'ROLE_USER') {
 		$this->isActive = false;
@@ -164,6 +171,18 @@ class User implements UserInterface, \Serializable
 		return $this;
 	}
 
+	public function getModels() {
+		return $this->models;
+	}
+	public function addModel(Model $model) {
+		return $this->addToCol('models', $model);
+	}
+	public function setModels(array $models) {
+		$this->models = self::ensureArrayCollection($models);
+
+		return $this;
+	}
+
 	public function eraseCredentials() {
 	}
 
@@ -186,8 +205,8 @@ class User implements UserInterface, \Serializable
 			$this->salt
 		) = unserialize($serialized);
 	}
-	
+
 	public function __toString() {
-		return $this->email;
+		return sprintf('%s %s (%d)', $this->getFirstName(), $this->getLastName(), $this->getId());
 	}
 }

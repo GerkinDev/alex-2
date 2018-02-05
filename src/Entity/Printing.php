@@ -12,7 +12,7 @@ class Printing
 	const WAITING_VALIDATION = 2;
 	const WAITING_PROCESSING = 1;
 	const DONE = 0;
-	
+
 	/**
 	 * @ORM\Id
 	 * @ORM\GeneratedValue
@@ -20,7 +20,6 @@ class Printing
 	 */
 	private $id;
 
-	// add your own fields
 	/**
 	 * @ORM\OneToOne(targetEntity="App\Entity\Model")
 	 * @ORM\JoinColumn(nullable=false)
@@ -30,11 +29,11 @@ class Printing
 	 * @ORM\Column(type="smallint")
 	 */
 	private $status;
-	
+
 	public function getId() {
 		return $this->id;
 	}
-	
+
 	public function getModel() {
 		return $this->model;
 	}
@@ -42,7 +41,7 @@ class Printing
 		$this->model = $model;
 		return $this;
 	}
-	
+
 	public function getStatus() {
 		return $this->status;
 	}

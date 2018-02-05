@@ -4,13 +4,14 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Selectable;
 
-use App\Entity\AttributeCategory;
+use App\Entity\VariableAttributeCategory;
 
 /**
 * @ORM\Entity(repositoryClass="App\Repository\ProductAttributeRepository")
 */
-class ProductAttribute
+class ProductAttribute extends \App\GenericClass\BaseEntity
 {
 	/**
 	* @ORM\Id
@@ -25,72 +26,69 @@ class ProductAttribute
 	private $name;
 
 	/**
-	* @ORM\Column(type="integer")
+	* @ORM\Column(type="float")
 	*/
 	private $factor;
 
 	/**
-	* @ORM\OneToOne(targetEntity="App\Entity\AttributeCategory")
-	* @ORM\JoinColumn(nullable=true)
+	* @ORM\OneToOne(targetEntity="App\Entity\VariableAttributeCategory", cascade={"persist"})
 	*/
 	private $category;
 
 	/**
-	* @ORM\ManyToMany(targetEntity="App\Entity\Model", inversedBy="attributes")
-	* @ORM\JoinColumn(nullable=true)
+	* @ORM\ManyToOne(targetEntity="App\Entity\Model", inversedBy="attributes", cascade={"persist"})
 	*/
-	private $models;
+	private $model;
 
-	public function __construct() {
-		$this->models = new ArrayCollection();
-	}
+	// ## Get / Set
 
-	public function getId() {
+	// ID
+	public function getId(): int {
 		return $this->id;
 	}
 
-	public function getName() {
+	// Name
+	public function getName(): string {
 		return $this->name;
 	}
-	public function setName($name) {
+	public function setName(string $name): self {
 		$this->name = $name;
 
 		return $this;
 	}
 
-	public function getFactor() {
+	// Factor
+	public function getFactor(): float {
 		return $this->factor;
 	}
-	public function setFactor($factor) {
+	public function setFactor(float $factor): self {
 		$this->factor = $factor;
 
 		return $this;
 	}
 
-	public function getCategory() {
+	// Category
+	public function getCategory(): ?VariableAttributeCategory {
 		return $this->category;
 	}
-	public function setCategory(AttributeCategory $category) {
+	public function setCategory(VariableAttributeCategory $category = null): self {
 		$this->category = $category;
 
 		return $this;
 	}
 
-	public function getModels() {
-		return $this->models;
+	// Model
+	public function getModel(): ?Model {
+		return $this->model;
 	}
-	public function addModel(Model $model) {
-		if ($this->models->contains($model)) {
-			return;
-		}
-
-		$this->models->add($model);
+	public function setModel(Model $model): self {
+		$this->model = $model;
 
 		return $this;
 	}
-	public function setModels(array $models) {
-		$this->models = new ArrayCollection($models);
 
-		return $this;
+	// ## Other
+	public function __toString() {
+		return sprintf('%s (%s)', $this->getName(), $this->getId());
 	}
 }
