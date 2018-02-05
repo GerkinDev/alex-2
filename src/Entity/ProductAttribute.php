@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+
 use App\Entity\AttributeCategory;
 
 /**
@@ -34,62 +36,60 @@ class ProductAttribute
 	private $category;
 
 	/**
-	* Get the value of id
+	* @ORM\ManyToMany(targetEntity="App\Entity\Model", inversedBy="attributes")
+	* @ORM\JoinColumn(nullable=true)
 	*/
+	private $models;
+
+	public function __construct() {
+		$this->models = new ArrayCollection();
+	}
+
 	public function getId() {
 		return $this->id;
 	}
 
-	/**
-	* Get the value of name
-	*/
 	public function getName() {
 		return $this->name;
 	}
-
-	/**
-	* Set the value of name
-	*
-	* @return  self
-	*/
 	public function setName($name) {
 		$this->name = $name;
 
 		return $this;
 	}
 
-	/**
-	* Get the value of factor
-	*/
 	public function getFactor() {
 		return $this->factor;
 	}
-
-	/**
-	* Set the value of factor
-	*
-	* @return  self
-	*/
 	public function setFactor($factor) {
 		$this->factor = $factor;
 
 		return $this;
 	}
 
-	/**
-	 * Get the category
-	 */
 	public function getCategory() {
 		return $this->category;
 	}
-
-	/**
-	 * Set the category
-	 *
-	 * @return  self
-	 */
 	public function setCategory(AttributeCategory $category) {
 		$this->category = $category;
+
+		return $this;
+	}
+
+	public function getModels() {
+		return $this->models;
+	}
+	public function addModel(Model $model) {
+		if ($this->models->contains($model)) {
+			return;
+		}
+
+		$this->models->add($model);
+
+		return $this;
+	}
+	public function setModels(array $models) {
+		$this->models = new ArrayCollection($models);
 
 		return $this;
 	}

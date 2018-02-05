@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
@@ -15,7 +16,7 @@ use App\GenericClass\ICartItem;
 * @ORM\Entity(repositoryClass="App\Repository\ModelRepository")
 * @Vich\Uploadable
 */
-class Model implements ICartItem, \JsonSerializable
+class Model
 {
 	/**
 	* @ORM\Id
@@ -23,7 +24,7 @@ class Model implements ICartItem, \JsonSerializable
 	* @ORM\Column(type="integer")
 	*/
 	private $id;
-	
+
 	/**
 	* @ORM\Column(type="string", length=255, nullable=true)
 	* @var string
@@ -34,7 +35,7 @@ class Model implements ICartItem, \JsonSerializable
 	* @var File
 	*/
 	private $modelFile;
-	
+
 	/**
 	* @ORM\Column(type="string", length=255, nullable=true)
 	* @var string
@@ -45,54 +46,54 @@ class Model implements ICartItem, \JsonSerializable
 	* @var File
 	*/
 	private $imageFile;
-	
+
 	/**
 	* @ORM\Column(type="datetime")
 	* @var \DateTime
 	*/
 	private $updatedAt;
-	
+
 	/**
 	* @ORM\Column(type="string")
 	* @Gedmo\Translatable
 	*/
 	private $title;
-	
+
 	/**
 	* @Gedmo\Slug(fields={"title"})
 	* @ORM\Column(type="string")
 	*/
 	private $slug;
-	
+
 	/**
 	* @ORM\Column(type="boolean")
 	*/
 	private $public;
-	
+
 	/**
 	* @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="models")
 	* @ORM\JoinColumn(nullable=false)
 	*/
 	private $creator;
-	
+
 	/**
-	* @ORM\Column(type="string")
+	* @ORM\ManyToMany(targetEntity="App\Entity\ProductAttribute", mappedBy="models")
 	*/
-	private $masses;
-	
-	
+	private $attributes;
+
+
 	public function __construct() {
 		$this->updatedAt = new \DateTime();
 	}
-	
-	
+
+
 	public function getId() {
 		return $this->id;
 	}
-	
+
 	public function setModelFile(File $model = null) {
 		$this->modelFile = $model;
-		
+
 		// VERY IMPORTANT:
 		// It is required that at least one field changes if you are using Doctrine,
 		// otherwise the event listeners won't be called and the file is lost
@@ -110,10 +111,10 @@ class Model implements ICartItem, \JsonSerializable
 	public function getModel() {
 		return $this->model;
 	}
-	
+
 	public function setImageFile(File $image = null) {
 		$this->imageFile = $image;
-		
+
 		// VERY IMPORTANT:
 		// It is required that at least one field changes if you are using Doctrine,
 		// otherwise the event listeners won't be called and the file is lost
@@ -131,7 +132,7 @@ class Model implements ICartItem, \JsonSerializable
 	public function getImage() {
 		return $this->image;
 	}
-	
+
 	public function getTitle() {
 		return $this->title;
 	}
@@ -139,7 +140,7 @@ class Model implements ICartItem, \JsonSerializable
 		$this->title = $title;
 		return $this;
 	}
-	
+
 	public function getSlug() {
 		return $this->slug;
 	}
@@ -147,7 +148,7 @@ class Model implements ICartItem, \JsonSerializable
 		$this->slug = $slug;
 		return $this;
 	}
-	
+
 	public function isPublic() {
 		return $this->public;
 	}
@@ -155,7 +156,7 @@ class Model implements ICartItem, \JsonSerializable
 		$this->public = $public;
 		return $this;
 	}
-	
+
 	public function getCreator() {
 		return $this->creator;
 	}
@@ -163,53 +164,22 @@ class Model implements ICartItem, \JsonSerializable
 		$this->creator = $creator;
 		return $this;
 	}
-	
-	public function getMasses($decoded = false) {
-		if ($decoded) {
-			return json_decode($this->masses, true);
-		} else {
-			return $this->masses;
-		}
+
+	public function getAttributes() {
+		return $this->attributes;
 	}
-	public function setMasses($masses) {
-		$this->masses = $masses;
+	public function addAttribute(ProductAttribute $attribute) {
+        if ($this->attributes->contains($attribute)) {
+            return;
+		}
+
+		$this->attributes->add($attribute);
+
 		return $this;
 	}
-	public function getAttrsFactors() {
-		return $this->getMasses(true);
-	}
-	
-	public function computeModelInfos(UploaderHelper $helper, $materials = null) {
-		$sum = 0;
-		$modelInfos = [
-			'entity' => $this,
-			'price' => false,
-			'image' => $helper->asset($this, 'imageFile'),
-			'file' => $helper->asset($this, 'modelFile'),
-		];
-		if (!$modelInfos['image']) {
-			$modelInfos['image'] = '/assets/images/no-image.jpg';
-		}
-		foreach ($this->getMasses(true) as $piece => $mass) {
-			if ($materials instanceof Material) {
-				$sum += $mass * $materials->getPrice();
-			} elseif (is_array($materials)) {
-				if (!isset($materials[$piece])) {
-					return $modelInfos;
-				}
-				$material = $materials[$piece];
-				$sum += $mass * $material->getPrice();
-			}
-		}
-		$modelInfos['price'] = $sum;
-		return $modelInfos;
-	}
-	
-	public function jsonSerialize() {
-		return array(
-			'id' => $this->id,
-			'title'=> $this->title,
-			'slug'=> $this->slug,
-		);
+	public function setAttributes(array $attributes) {
+		$this->attributes = new ArrayCollection($attributes);
+
+		return $this;
 	}
 }

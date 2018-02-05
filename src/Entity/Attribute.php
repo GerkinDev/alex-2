@@ -31,6 +31,14 @@ class Attribute
 	 */
 	private $name;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\AttributeCategory", inversedBy="attributes")
+     * @ORM\JoinColumn(nullable=true)
+     */
+	private $category;
+
+
+
 	public function getId() {
 		return $this->id;
 	}
@@ -59,6 +67,16 @@ class Attribute
 		return $this;
 	}
 
+	public function getCategory()
+	{
+		return $this->category;
+	}
+	public function setCategory($category)
+	{
+		$this->category = $category;
+
+		return $this;
+	}
 
 
 	public function jsonSerialize() {

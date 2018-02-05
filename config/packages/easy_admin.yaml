@@ -7,7 +7,9 @@ easy_admin:
         menu:
             - { label: 'Go to site', url: '/' }
             - Model
-            - Material
+            - ProductAttribute
+            - AttributeCategory
+            - Attribute
             - User
     site_name: 'Wello Horld'
     entities:
@@ -42,8 +44,12 @@ easy_admin:
                     - { property: 'model', type: 'file', base_path: '%app.path.models_files%' }
                     - { property: 'image', type: 'image', base_path: '%app.path.models_images%' }
         # List the entity class name you want to manage
-        Material:
-            class: App\Entity\Material
+        ProductAttribute:
+            class: App\Entity\ProductAttribute
+        AttributeCategory:
+            class: App\Entity\AttributeCategory
+        Attribute:
+            class: App\Entity\Attribute
             list:
                 fields:
                     - id

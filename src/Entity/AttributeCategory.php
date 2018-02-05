@@ -41,7 +41,6 @@ class AttributeCategory
 	public function getName() {
 		return $this->name;
 	}
-
 	public function setName($name) {
 		$this->name = $name;
 
@@ -52,6 +51,10 @@ class AttributeCategory
 		return $this->attributes;
 	}
 	public function addAttribute(Attribute $attribute) {
+        if ($this->attributes->contains($attribute)) {
+            return;
+		}
+
 		$this->attributes->add($attribute);
 
 		return $this;
