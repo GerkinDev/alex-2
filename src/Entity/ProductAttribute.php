@@ -23,15 +23,15 @@ class ProductAttribute extends \App\GenericClass\BaseEntity
 	/**
 	* @ORM\Column(type="string")
 	*/
-	private $name;
+	private $name = '';
 
 	/**
 	* @ORM\Column(type="float")
 	*/
-	private $factor;
+	private $factor = 0;
 
 	/**
-	* @ORM\OneToOne(targetEntity="App\Entity\VariableAttributeCategory", cascade={"persist"})
+	* @ORM\ManyToOne(targetEntity="App\Entity\VariableAttributeCategory", inversedBy="productAttributes", cascade={"persist"})
 	*/
 	private $category;
 
@@ -43,7 +43,7 @@ class ProductAttribute extends \App\GenericClass\BaseEntity
 	// ## Get / Set
 
 	// ID
-	public function getId(): int {
+	public function getId(): ?int {
 		return $this->id;
 	}
 
@@ -89,6 +89,6 @@ class ProductAttribute extends \App\GenericClass\BaseEntity
 
 	// ## Other
 	public function __toString() {
-		return sprintf('%s (%s)', $this->getName(), $this->getId());
+		return sprintf('%s (%s, %.3f units)', $this->getName(), $this->getId(), $this->getFactor());
 	}
 }

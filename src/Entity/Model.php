@@ -59,24 +59,24 @@ class Model extends \App\GenericClass\BaseEntity
 	* @ORM\Column(type="string")
 	* @Gedmo\Translatable
 	*/
-	private $title;
+	private $title = '';
 
 	/**
 	* @Gedmo\Slug(fields={"title"})
 	* @ORM\Column(type="string")
 	*/
-	private $slug;
+	private $slug = '';
 
 	/**
 	* @ORM\Column(type="boolean")
 	*/
-	private $public;
+	private $public = true;
 
 	/**
 	* @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="models")
 	* @ORM\JoinColumn(nullable=false)
 	*/
-	private $user;
+	private $user = null;
 
 	/**
 	* @ORM\OneToMany(targetEntity="App\Entity\ProductAttribute", mappedBy="model", orphanRemoval=true, cascade={"persist"})
@@ -86,13 +86,13 @@ class Model extends \App\GenericClass\BaseEntity
 	/**
 	* @ORM\Column(type="float")
 	*/
-	private $basePrice;
+	private $basePrice = 0;
 
 
 	// ## Get/Set
 
 	// ID
-	public function getId(): int {
+	public function getId(): ?int {
 		return $this->id;
 	}
 
@@ -162,7 +162,7 @@ class Model extends \App\GenericClass\BaseEntity
 	public function getSlug(): string {
 		return $this->slug;
 	}
-	public function setSlug(string $slug): self {
+	public function setSlug(string $slug = null): self {
 		$this->slug = $slug;
 
 		return $this;
@@ -179,7 +179,7 @@ class Model extends \App\GenericClass\BaseEntity
 	}
 
 	// User
-	public function getUser(): User {
+	public function getUser(): ?User {
 		return $this->user;
 	}
 	public function setUser(User $user): self {

@@ -26,6 +26,11 @@ class VariableAttributeCategory extends \App\GenericClass\BaseEntity
 	private $name;
 
 	/**
+	* @ORM\OneToMany(targetEntity="App\Entity\ProductAttribute", mappedBy="category", cascade={"persist"})
+	*/
+	protected $productAttributes;
+
+	/**
 	* @ORM\OneToMany(targetEntity="App\Entity\VariableAttribute", mappedBy="category", cascade={"persist"})
 	*/
 	protected $attributes;
@@ -37,6 +42,7 @@ class VariableAttributeCategory extends \App\GenericClass\BaseEntity
 		return $this->id;
 	}
 
+	// Name
 	public function getName(): string {
 		return $this->name;
 	}
@@ -46,6 +52,32 @@ class VariableAttributeCategory extends \App\GenericClass\BaseEntity
 		return $this;
 	}
 
+	// Product attributes
+	public function getProductAttributes(): Selectable {
+		return $this->productAttributes;
+	}
+	public function addProductAttribute(ProductAttribute $productAttribute) {
+		$this->addToCol('productAttributes', $productAttribute);
+		$productAttribute->setCategory($this);
+
+		return $this;
+	}
+	public function removeProductAttribute(ProductAttribute $productAttribute): self {
+		$this->productAttributes->removeElement($productAttribute);
+		$productAttribute->setCategory(null);
+
+		return $this;
+	}
+	public function setProductAttributes(\ArrayAccess $productAttributes): self {
+		$this->productAttributes = self::ensureArrayCollection($productAttributes);
+		$this->productAttributes->map(function($productAttribute){
+			return $productAttribute->setCategory($this);
+		});
+
+		return $this;
+	}
+
+	// Attributes
 	public function getAttributes(): Selectable {
 		return $this->attributes;
 	}

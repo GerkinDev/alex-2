@@ -6,12 +6,12 @@ easy_admin:
             js:
         menu:
             - { label: 'Go to site', url: '/' }
-            - Model
-            - ProductAttribute
-            - VariableAttributeCategory
-            - VariableAttribute
-            - User
-    site_name: 'Wello Horld'
+            - { label: 'Models', entity: 'Model' }
+            - { label: 'Product attributes', entity: 'ProductAttribute' }
+            - { label: 'Attributes categories', entity: 'VariableAttributeCategory' }
+            - { label: 'Attributes', entity: 'VariableAttribute' }
+            - { label: 'Users', entity: 'User' }
+    site_name: '%app.name% admin'
     entities:
         Model:
             class: App\Entity\Model
@@ -24,7 +24,7 @@ easy_admin:
                     - public
                     - user
                     - basePrice
-                    - attributes
+                    - { property: 'attributes', type_options: { by_reference: false} }
             new:
                 fields:
                     - { property: 'modelFile', type: 'vich_file', type_options: { required: false } }
@@ -57,9 +57,10 @@ easy_admin:
             class: App\Entity\ProductAttribute
         VariableAttributeCategory:
             class: App\Entity\VariableAttributeCategory
-            edit:
+            form:
                 fields:
                     - name
+                    - { property: 'productAttributes', type_options: { by_reference: false} }
                     - { property: 'attributes', type_options: { by_reference: false} }
         VariableAttribute:
             class: App\Entity\VariableAttribute
