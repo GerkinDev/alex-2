@@ -1,6 +1,6 @@
 <template>
 	<b-alert class="fade" :class="{show}"
-		:show="dismissCountDown"
+		:show="typeof dismissCountDown === 'undefined' || dismissCountDown"
 		dismissible
 		:variant="type"
 		@dismissed="alertDismissed"
@@ -10,7 +10,7 @@
 		<b-progress v-if="typeof expiration !== 'undefined'"
 			variant="warning"
 			:max="expiration"
-			:value="dismissCountDown"
+			:value="dismissCountDown - 1"
 			height="4px">
 		</b-progress>
 	</b-alert>

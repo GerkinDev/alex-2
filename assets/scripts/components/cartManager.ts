@@ -15,10 +15,17 @@ export const handleDeleteButtons = () => {
 		if(route){
 			$.ajax(route, {
 				method: 'POST',
-				complete(res){
-					if(res && res.responseJSON){
+				statusCode: {
+					500: () => flashes.addMessage('Server error. Please retry', FLASH_TYPE.error),
+				},
+				error: (data) => {
+					console.error('Error XHR with data: ', data);
+					flashes.addMessage('Server error. Please retry', FLASH_TYPE.error);
+				},
+				complete(res, status){
+					if(status === 'success' && res && res.responseJSON){
 						if(res.responseJSON.success === true){
-//							$cartItem.remove();
+							//							$cartItem.remove();
 							flashes.addMessage('Item removed from cart', FLASH_TYPE.info, 10);
 						} else {
 							flashes.addMessage('An error occured. Please retry', FLASH_TYPE.error);
