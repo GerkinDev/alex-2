@@ -1,6 +1,15 @@
 import { computeRouteUrl } from './routes';
 import { flashes, FLASH_TYPE } from './vue';
 
+import Cart from '../../vues/cart/cart.vue'
+
+export const initCartVue = () => {
+	const cart = new Cart([{
+		entity: {
+			id: 1,
+		},
+	}]);
+}
 export const emptyCart = () => {
 	$('#emptyCart').click(() => {
 		$('#confirmEmptyCart').modal();

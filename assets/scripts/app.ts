@@ -7,7 +7,7 @@ Vue.use(BootstrapVue);
 
 // My modules
 import { cartCalculator } from './components/priceCalculator';
-import { emptyCart, handleDeleteButtons } from './components/cartManager';
+import { emptyCart, handleDeleteButtons, initCartVue } from './components/cartManager';
 import { computeRouteUrl } from './components/routes';
 import './components/vue';
 
@@ -36,6 +36,7 @@ $(document).ready(() => {
 
 	switch(route){
 		case 'cart': {
+			initCartVue();
 			emptyCart();
 			handleDeleteButtons();
 		}

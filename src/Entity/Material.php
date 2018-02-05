@@ -8,7 +8,7 @@ use App\GenericClass\ICartAttribute;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\MaterialRepository")
  */
-class Material implements ICartAttribute
+class Material implements ICartAttribute, \JsonSerializable
 {
 	/**
 	 * @ORM\Id
@@ -58,5 +58,16 @@ class Material implements ICartAttribute
 	public function setName($name) {
 		$this->name = $name;
 		return $this;
+	}
+
+
+	
+	public function jsonSerialize()
+	{
+		return array(
+			'id' => $this->id,
+			'name'=> $this->name,
+			'price'=> $this->price,
+		);
 	}
 }

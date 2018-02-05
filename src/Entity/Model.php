@@ -12,87 +12,87 @@ use App\Entity\Material;
 use App\GenericClass\ICartItem;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\ModelRepository")
- * @Vich\Uploadable
- */
-class Model implements ICartItem
+* @ORM\Entity(repositoryClass="App\Repository\ModelRepository")
+* @Vich\Uploadable
+*/
+class Model implements ICartItem, \JsonSerializable
 {
 	/**
-	 * @ORM\Id
-	 * @ORM\GeneratedValue
-	 * @ORM\Column(type="integer")
-	 */
+	* @ORM\Id
+	* @ORM\GeneratedValue
+	* @ORM\Column(type="integer")
+	*/
 	private $id;
-
+	
 	/**
-	 * @ORM\Column(type="string", length=255, nullable=true)
-	 * @var string
-	 */
+	* @ORM\Column(type="string", length=255, nullable=true)
+	* @var string
+	*/
 	private $model;
 	/**
-	 * @Vich\UploadableField(mapping="models_files", fileNameProperty="model")
-	 * @var File
-	 */
+	* @Vich\UploadableField(mapping="models_files", fileNameProperty="model")
+	* @var File
+	*/
 	private $modelFile;
-
+	
 	/**
-	 * @ORM\Column(type="string", length=255, nullable=true)
-	 * @var string
-	 */
+	* @ORM\Column(type="string", length=255, nullable=true)
+	* @var string
+	*/
 	private $image;
 	/**
-	 * @Vich\UploadableField(mapping="models_images", fileNameProperty="image")
-	 * @var File
-	 */
+	* @Vich\UploadableField(mapping="models_images", fileNameProperty="image")
+	* @var File
+	*/
 	private $imageFile;
-
+	
 	/**
 	* @ORM\Column(type="datetime")
 	* @var \DateTime
 	*/
 	private $updatedAt;
-
+	
 	/**
-	 * @ORM\Column(type="string")
-	 * @Gedmo\Translatable
-	 */
+	* @ORM\Column(type="string")
+	* @Gedmo\Translatable
+	*/
 	private $title;
-
+	
 	/**
-	 * @Gedmo\Slug(fields={"title"})
-	 * @ORM\Column(type="string")
-	 */
+	* @Gedmo\Slug(fields={"title"})
+	* @ORM\Column(type="string")
+	*/
 	private $slug;
-
+	
 	/**
-	 * @ORM\Column(type="boolean")
-	 */
+	* @ORM\Column(type="boolean")
+	*/
 	private $public;
-
+	
 	/**
-	 * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="models")
-	 * @ORM\JoinColumn(nullable=false)
-	 */
+	* @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="models")
+	* @ORM\JoinColumn(nullable=false)
+	*/
 	private $creator;
-
+	
 	/**
-	 * @ORM\Column(type="string")
-	 */
+	* @ORM\Column(type="string")
+	*/
 	private $masses;
-
-
+	
+	
 	public function __construct(){
 		$this->updatedAt = new \DateTime();
 	}
-
-
+	
+	
 	public function getId() {
 		return $this->id;
 	}
-
+	
 	public function setModelFile(File $model = null) {
 		$this->modelFile = $model;
-
+		
 		// VERY IMPORTANT:
 		// It is required that at least one field changes if you are using Doctrine,
 		// otherwise the event listeners won't be called and the file is lost
@@ -110,10 +110,10 @@ class Model implements ICartItem
 	public function getModel() {
 		return $this->model;
 	}
-
+	
 	public function setImageFile(File $image = null) {
 		$this->imageFile = $image;
-
+		
 		// VERY IMPORTANT:
 		// It is required that at least one field changes if you are using Doctrine,
 		// otherwise the event listeners won't be called and the file is lost
@@ -131,7 +131,7 @@ class Model implements ICartItem
 	public function getImage() {
 		return $this->image;
 	}
-
+	
 	public function getTitle() {
 		return $this->title;
 	}
@@ -139,7 +139,7 @@ class Model implements ICartItem
 		$this->title = $title;
 		return $this;
 	}
-
+	
 	public function getSlug() {
 		return $this->slug;
 	}
@@ -147,7 +147,7 @@ class Model implements ICartItem
 		$this->slug = $slug;
 		return $this;
 	}
-
+	
 	public function isPublic() {
 		return $this->public;
 	}
@@ -155,7 +155,7 @@ class Model implements ICartItem
 		$this->public = $public;
 		return $this;
 	}
-
+	
 	public function getCreator() {
 		return $this->creator;
 	}
@@ -163,7 +163,7 @@ class Model implements ICartItem
 		$this->creator = $creator;
 		return $this;
 	}
-
+	
 	public function getMasses($decoded = false) {
 		if($decoded){
 			return json_decode($this->masses, true);
@@ -178,7 +178,7 @@ class Model implements ICartItem
 	public function getAttrsFactors(){
 		return $this->getMasses(true);
 	}
-
+	
 	public function computeModelInfos(UploaderHelper $helper, $materials = null){
 		$sum = 0;
 		$modelInfos = [
@@ -204,37 +204,13 @@ class Model implements ICartItem
 		$modelInfos['price'] = $sum;
 		return $modelInfos;
 	}
-
-
-
-
-	/** @see \Serializable::serialize() */
-	/*public function serialize() {
-		return serialize(array(
-			$this->id,
-			$this->model,
-			$this->image,
-			$this->updatedAt,
-			$this->title,
-			$this->slug,
-			$this->public,
-			$this->creator,
-			$this->mass,
-		));
-	}*/
-
-	/** @see \Serializable::unserialize() */
-	public function unserialize($serialized) {
-		list (
-			$this->id,
-			$this->model,
-			$this->image,
-			$this->updatedAt,
-			$this->title,
-			$this->slug,
-			$this->public,
-			$this->creator,
-			$this->masses,
-		) = unserialize($serialized);
+	
+	public function jsonSerialize()
+	{
+		return array(
+			'id' => $this->id,
+			'title'=> $this->title,
+			'slug'=> $this->slug,
+		);
 	}
 }

@@ -12,7 +12,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import {default as FlashMessage, IFlashItem, TYPE as FLASH_TYPE} from './flash.vue';
-import Component from 'vue-class-component'
 
 export {IFlashItem, FLASH_TYPE};
 export default class Flashes extends Vue{
