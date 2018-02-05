@@ -3,21 +3,22 @@
 		<flash
 			v-for="(message, index) in messages"
 			:key="index"
-			:type="message.type"
-			:message="message.message"></flash>
+			v-bind="message"
+			:original-message="message"
+			@dismissed="removeAlert"></flash>
 	</div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import {default as FlashMessage, IFlashMessage, TYPE as FLASH_TYPE} from './flash.vue';
+import {default as FlashMessage, IFlashItem, TYPE as FLASH_TYPE} from './flash.vue';
 import Component from 'vue-class-component'
 
-export {IFlashMessage, FLASH_TYPE};
+export {IFlashItem, FLASH_TYPE};
 export default class Flashes extends Vue{
 	private header = document.getElementById('header');
 
-	constructor(public messages: Array<IFlashMessage> = [{message: 'test', type: FLASH_TYPE.info}]){
+	constructor(public messages: Array<IFlashItem> = []){
 		super({
 			el: '#flashes',
 			data: {
@@ -41,20 +42,22 @@ export default class Flashes extends Vue{
 	}
 
 	addMessage(message: string, type: FLASH_TYPE, expiration?: number): void
-	addMessage(message: IFlashMessage): void
+	addMessage(message: IFlashItem): void
 	addMessage(message: any, type?: FLASH_TYPE, expiration?: number){
+		// Cast expiration in seconds
+		if(expiration && expiration > 1000){
+			expiration /= 1000;
+		}
 		if(type){
 			message = {message, type, expiration};
 		}
-		expiration = message.expiration;
 		this.messages.push(message);
-		if(expiration){
-			setTimeout(() => {
-				const index = this.messages.indexOf(message);
-				if(index >= 0){
-					this.messages.splice(index, 1);
-				}
-			}, expiration);
+	}
+
+	removeAlert = (originalMessage: IFlashItem) => {
+		const index = this.messages.indexOf(originalMessage)
+		if(index >= 0){
+			this.messages.splice(index, 1);
 		}
 	}
 }

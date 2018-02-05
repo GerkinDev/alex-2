@@ -19,7 +19,7 @@ export const handleDeleteButtons = () => {
 					if(res && res.responseJSON){
 						if(res.responseJSON.success === true){
 //							$cartItem.remove();
-							flashes.addMessage('Item removed from cart', FLASH_TYPE.info);
+							flashes.addMessage('Item removed from cart', FLASH_TYPE.info, 10);
 						} else {
 							flashes.addMessage('An error occured. Please retry', FLASH_TYPE.error);
 						}
