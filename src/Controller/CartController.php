@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 use App\Entity\Model;
-use App\Entity\Material;
+use App\Entity\VariableAttribute as Material;
 use App\Service\Cart;
 
 /**
@@ -68,6 +68,12 @@ class CartController extends Controller
 	}
 
 	public function cartSum(Cart $cart) {
+		return $this->render('components/cart_indicator.html.twig', [
+			'amount' => 0,
+			'count' => 0,
+			]);
+
+
 		$count = 0;
 		foreach ($cart->getCart() as $cartItem) {
 			$count += $cartItem[$cart::COUNT_KEY];

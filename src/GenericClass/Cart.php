@@ -61,7 +61,7 @@ class Cart {
 		// Get attrs in [id => attr]
 		$attrsList = $this->arrayColToKeyed(call_user_func($this->findMaterialFct, $attrIds));
 
-		$this->cart = array_map(function($cartItem) use ($products, $attrsList) {
+		$this->cart = [];/*array_map(function($cartItem) use ($products, $attrsList) {
 			$product = $products[$cartItem[self::PRODUCT_KEY]];
 
 			$attrsWanted = $cartItem[self::ATTRS_KEY];
@@ -75,7 +75,7 @@ class Cart {
 			$infos[self::COUNT_KEY] = $cartItem[self::COUNT_KEY];
 			$infos[self::ATTRS_FACTOR_KEY] = $products[$cartItem[self::PRODUCT_KEY]]->getAttrsFactors();
 			return $infos;
-		}, $cartData);
+		}, $cartData);*/
 
 		return $this;
 	}

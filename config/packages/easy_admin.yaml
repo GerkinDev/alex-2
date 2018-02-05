@@ -8,8 +8,8 @@ easy_admin:
             - { label: 'Go to site', url: '/' }
             - Model
             - ProductAttribute
-            - AttributeCategory
-            - Attribute
+            - VariableAttributeCategory
+            - VariableAttribute
             - User
     site_name: 'Wello Horld'
     entities:
@@ -22,8 +22,9 @@ easy_admin:
                     - title
                     - slug
                     - public
-                    - creator
-                    - { property: 'masses', type: 'text', help: 'A json with format <code>"partname": mass_in_kg</code>', type_options: { attr: { placeholder: 'eg: { "main": 1, "handle": 0.2 }'} }}
+                    - user
+                    - basePrice
+                    - attributes
             new:
                 fields:
                     - { property: 'modelFile', type: 'vich_file', type_options: { required: false } }
@@ -37,30 +38,31 @@ easy_admin:
                     - title
                     - slug
                     - public
-                    - creator
-                    - { property: 'masses', type: 'text', help: 'A json with format <code>"partname": mass_in_kg</code>'}
+                    - user
+                    - basePrice
+                    - attributes
             show:
                 fields:
+                    - id
                     - { property: 'model', type: 'file', base_path: '%app.path.models_files%' }
                     - { property: 'image', type: 'image', base_path: '%app.path.models_images%' }
+                    - title
+                    - slug
+                    - public
+                    - user
+                    - basePrice
+                    - attributes
         # List the entity class name you want to manage
         ProductAttribute:
             class: App\Entity\ProductAttribute
-        AttributeCategory:
-            class: App\Entity\AttributeCategory
-        Attribute:
-            class: App\Entity\Attribute
-            list:
+        VariableAttributeCategory:
+            class: App\Entity\VariableAttributeCategory
+            edit:
                 fields:
-                    - id
-                    - { property: 'price', type: 'float'}
-                    - { property: 'available', type: 'toggle'}
-                    - { property: 'name', trans: true, domain: 'materials'}
-            form:
-                fields:
-                    - { property: 'price', type: 'number', type_options: { scale: 2 }}
-                    - available
-                    - { property: 'name', trans: true, domain: 'materials'}
+                    - name
+                    - { property: 'attributes', type_options: { by_reference: false} }
+        VariableAttribute:
+            class: App\Entity\VariableAttribute
         User:
             class: App\Entity\User
             password_encoding: { algorithm: 'bcrypt', cost: 12 }

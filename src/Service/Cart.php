@@ -9,12 +9,11 @@ use \Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 use App\Service\Debug;
 
 use App\Entity\Model;
-use App\Entity\Material;
+use App\Entity\VariableAttribute as Material;
 
-use App\GenericClass\Cart as BaseCart;
 use App\GenericClass\ICartItem;
 
-class Cart extends BaseCart{
+class Cart extends \App\GenericClass\Cart{
 	const SESSION_CART_KEY = 'cart';
 
 	private $session = null;
@@ -34,7 +33,8 @@ class Cart extends BaseCart{
 		}, function($ids){
 			return $this->materialRepository->findById($ids);
 		}, function($model, $materials){
-			return $model->computeModelInfos($this->uploaderHelper, $materials);
+			return [];
+			$model->computeModelInfos($this->uploaderHelper, $materials);
 		});
 		$this->deserialize($this->session->get(self::SESSION_CART_KEY, []));
 	}

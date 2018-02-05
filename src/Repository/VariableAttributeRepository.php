@@ -2,19 +2,19 @@
 
 namespace App\Repository;
 
-use App\Entity\Attribute;
+use App\Entity\VariableAttribute;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
-use App\Entity\AttributeCategory;
+use App\Entity\VariableAttributeCategory;
 
-class AttributeRepository extends ServiceEntityRepository
+class VariableAttributeRepository extends ServiceEntityRepository
 {
 	public function __construct(RegistryInterface $registry) {
-		parent::__construct($registry, Attribute::class);
+		parent::__construct($registry, VariableAttribute::class);
 	}
 
-	public function findCheapest(AttributeCategory $category) {
+	public function findCheapest(VariableAttributeCategory $category) {
 		$queryRes = $this->createQueryBuilder('m')
 		->where('m.category = :categoryId')
 		->setParameter('categoryId', $category->getId())
