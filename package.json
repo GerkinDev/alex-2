@@ -2,12 +2,17 @@
 	"devDependencies": {
 		"@types/bootstrap": "^3.3.37",
 		"@types/jquery": "^3.3.0",
+		"bootstrap-vue": "^2.0.0-rc.1",
 		"node-sass": "^4.7.2",
 		"sass-loader": "^6.0.6",
 		"ts-loader": "^3.3.1",
-		"typescript": "^2.6.2",
+		"typescript": "^2.7.1",
+		"typescript-loader": "^1.1.3",
 		"vue": "^2.5.13",
 		"vue-class-component": "^6.1.2",
+		"vue-loader": "^14.1.1",
+		"vue-template-compiler": "^2.5.13",
+		"vuetype": "^0.3.0",
 		"webpack-notifier": "^1.5.0"
 	},
 	"name": "alex-2",
@@ -219,8 +224,10 @@
 	},
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"webpack:run:dev": "./node_modules/.bin/encore dev-server --hot --watch",
-		"webpack:build:prod": "./node_modules/.bin/encore production"
+		"webpack:run:dev": "encore dev-server --hot --watch",
+		"webpack:build:prod": "encore production",
+		"vuetype:build": "vuetype assets/vues",
+		"vuetype:watch": "vuetype --watch assets/vues"
 	},
 	"repository": {
 		"type": "git",

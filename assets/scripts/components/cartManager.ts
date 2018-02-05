@@ -1,4 +1,5 @@
 import { computeRouteUrl } from './routes';
+import { flashes, FLASH_TYPE } from './vue';
 
 export const emptyCart = () => {
 	$('#emptyCart').click(() => {
@@ -7,23 +8,23 @@ export const emptyCart = () => {
 }
 
 export const handleDeleteButtons = () => {
-	console.log('Init', $('.removeItem'))
 	$('.removeItem').click(function(){
 		const $cartItem = $(this).closest('.cart-item');
 		const index = $cartItem.index();
-		console.log(index, $cartItem);
 		const route = computeRouteUrl('removeFromCart', {id: index});
-		console.log(route);
 		if(route){
 			$.ajax(route, {
 				method: 'POST',
 				complete(res){
 					if(res && res.responseJSON){
 						if(res.responseJSON.success === true){
-							$cartItem.remove();
+//							$cartItem.remove();
+							flashes.addMessage('Item removed from cart', FLASH_TYPE.info);
+						} else {
+							flashes.addMessage('An error occured. Please retry', FLASH_TYPE.error);
 						}
 					} else {
-
+						flashes.addMessage('Invalid response. Please retry', FLASH_TYPE.error);
 					}
 				}
 			});

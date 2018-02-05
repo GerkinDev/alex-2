@@ -1,5 +1,11 @@
 require('../scss/main.scss');
 
+// Init & configure Vue.js
+import Vue from 'vue';
+const BootstrapVue = require('bootstrap-vue').default;
+Vue.use(BootstrapVue);
+
+// My modules
 import { cartCalculator } from './components/priceCalculator';
 import { emptyCart, handleDeleteButtons } from './components/cartManager';
 import { computeRouteUrl } from './components/routes';
