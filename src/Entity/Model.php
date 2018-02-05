@@ -81,7 +81,7 @@ class Model implements ICartItem, \JsonSerializable
 	private $masses;
 	
 	
-	public function __construct(){
+	public function __construct() {
 		$this->updatedAt = new \DateTime();
 	}
 	
@@ -165,7 +165,7 @@ class Model implements ICartItem, \JsonSerializable
 	}
 	
 	public function getMasses($decoded = false) {
-		if($decoded){
+		if ($decoded) {
 			return json_decode($this->masses, true);
 		} else {
 			return $this->masses;
@@ -175,11 +175,11 @@ class Model implements ICartItem, \JsonSerializable
 		$this->masses = $masses;
 		return $this;
 	}
-	public function getAttrsFactors(){
+	public function getAttrsFactors() {
 		return $this->getMasses(true);
 	}
 	
-	public function computeModelInfos(UploaderHelper $helper, $materials = null){
+	public function computeModelInfos(UploaderHelper $helper, $materials = null) {
 		$sum = 0;
 		$modelInfos = [
 			'entity' => $this,
@@ -187,14 +187,14 @@ class Model implements ICartItem, \JsonSerializable
 			'image' => $helper->asset($this, 'imageFile'),
 			'file' => $helper->asset($this, 'modelFile'),
 		];
-		if(!$modelInfos['image']){
+		if (!$modelInfos['image']) {
 			$modelInfos['image'] = '/assets/images/no-image.jpg';
 		}
-		foreach($this->getMasses(true) as $piece => $mass){
-			if($materials instanceof Material){
+		foreach ($this->getMasses(true) as $piece => $mass) {
+			if ($materials instanceof Material) {
 				$sum += $mass * $materials->getPrice();
-			} else if(is_array($materials)){
-				if(!isset($materials[$piece])){
+			} elseif (is_array($materials)) {
+				if (!isset($materials[$piece])) {
 					return $modelInfos;
 				}
 				$material = $materials[$piece];
@@ -205,8 +205,7 @@ class Model implements ICartItem, \JsonSerializable
 		return $modelInfos;
 	}
 	
-	public function jsonSerialize()
-	{
+	public function jsonSerialize() {
 		return array(
 			'id' => $this->id,
 			'title'=> $this->title,

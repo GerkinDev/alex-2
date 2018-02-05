@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,7 +29,7 @@ class ShopController extends Controller
 
 		$helper = $this->container->get('vich_uploader.templating.helper.uploader_helper');
 		$models = [];
-		foreach($modelsRaw as $modelRaw){
+		foreach ($modelsRaw as $modelRaw) {
 			$models[$modelRaw->getId()] = $modelRaw->computeModelInfos($helper, $cheapestMaterial);
 		}
 

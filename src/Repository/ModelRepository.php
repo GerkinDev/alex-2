@@ -18,7 +18,7 @@ class ModelRepository extends ServiceEntityRepository
 
 	public function getPaged($pageIndex = 1, $maxResults = 20, $onlyPublic = true) {
 		$qb = $this->createQueryBuilder(ENTITY_NAME);
-		if($onlyPublic === true){
+		if ($onlyPublic === true) {
 			$qb
 				->select(ENTITY_NAME)
 				->where(ENTITY_NAME.'.public = :public')

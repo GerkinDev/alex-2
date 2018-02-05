@@ -3,12 +3,11 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use App\GenericClass\ICartAttribute;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\MaterialRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\AttributeRepository")
  */
-class Material implements ICartAttribute, \JsonSerializable
+class Attribute
 {
 	/**
 	 * @ORM\Id
@@ -61,9 +60,8 @@ class Material implements ICartAttribute, \JsonSerializable
 	}
 
 
-	
-	public function jsonSerialize()
-	{
+
+	public function jsonSerialize() {
 		return array(
 			'id' => $this->id,
 			'name'=> $this->name,
