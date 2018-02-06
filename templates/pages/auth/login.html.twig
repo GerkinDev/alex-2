@@ -1,45 +1,41 @@
 {% extends 'pages/base.html.twig' %}
 
 {% block body %}
-<div class="templatemo-content-wrapper">
-	<div class="templatemo-content">
-		<section id="login-form" class="inactive active" style="display: block;">
-			<div class="col-md-12 black-bg">
-				<h2 class="text-center">Sign In</h2>
-				{% set flashMessages = app.session.flashbag.get('login') %}
-				{% if flashMessages is not empty %}
-				<div class="alert alert-danger col">
-					{% for flashMessage in flashMessages %}{{ flashMessage }}{% endfor %}
-				</div>
-				{% endif %}
-				<div class="row">
-					<div class="col-sm-6 col-md-6 text-center">
-						<form id="form-login" action="{{ path("login_check")}}" method="post">
-							<div class="form-group">
-								<!--<label for="login_mail">Email Address</label>-->
-								<input value="{{last_username}}" required name="_username" type="text" id="login_email" class="form-control" placeholder="Email Address" />
-							</div>
-							<div class="form-group">
-								<!--<label for="login_password">Password</label>-->
-								<input required name="_password" type="password" id="login_password" class="form-control" placeholder="Password" />
-							</div>
-						</form>
+<section id="login-form" class="inactive active" style="display: block;">
+	<div class="col-md-12 black-bg">
+		<h2 class="text-center">Sign In</h2>
+		{% set flashMessages = app.session.flashbag.get('login') %}
+		{% if flashMessages is not empty %}
+		<div class="alert alert-danger col">
+			{% for flashMessage in flashMessages %}{{ flashMessage }}{% endfor %}
+		</div>
+		{% endif %}
+		<div class="row">
+			<div class="col-sm-6 col-md-6 text-center">
+				<form id="form-login" action="{{ path("login_check")}}" method="post">
+					<div class="form-group">
+						<!--<label for="login_mail">Email Address</label>-->
+						<input value="{{last_username}}" required name="_username" type="text" id="login_email" class="form-control" placeholder="Email Address" />
 					</div>
-					<div class="col-sm-6 col-md-6 text-center">
-						<a class="btn btn-primary btn-block" href="{{path("signup")}}">Sign Up</a>
-						<button form="form-login" type="submit" class="post-enable btn btn-info btn-block" formaction="{{path("password_lost")}}" formnovalidate disabled>Lost your password ?</button>
+					<div class="form-group">
+						<!--<label for="login_password">Password</label>-->
+						<input required name="_password" type="password" id="login_password" class="form-control" placeholder="Password" />
 					</div>
-					<button form="form-login" type="submit" class="default m-3 btn btn-outline-primary btn-block btn-lg">LogIn</button>
-				</div>
+				</form>
 			</div>
-			<div class="row margin-top-20">
-				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-					{{ include('components/back-to-menu-btn.html.twig') }}
-				</div>
+			<div class="col-sm-6 col-md-6 text-center">
+				<a class="btn btn-primary btn-block" href="{{path("signup")}}">Sign Up</a>
+				<button form="form-login" type="submit" class="post-enable btn btn-info btn-block" formaction="{{path("password_lost")}}" formnovalidate disabled>Lost your password ?</button>
 			</div>
-		</section><!-- /.contact-section -->
+			<button form="form-login" type="submit" class="default m-3 btn btn-outline-primary btn-block btn-lg">LogIn</button>
+		</div>
 	</div>
-</div>
+	<div class="row margin-top-20">
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			{{ include('components/back-to-menu-btn.html.twig') }}
+		</div>
+	</div>
+</section><!-- /.contact-section -->
 {% endblock %}
 
 {% block background_image %}zoom-bg-7.jpg{% endblock %}

@@ -1,26 +1,22 @@
 {% extends 'pages/base.html.twig' %}
 
 {% block body %}
-<div class="templatemo-content-wrapper">
-	<div class="templatemo-content">
-		<section id="services-section" class="inactive active" style="display: block;">
-			<div class="row">
-				<div class="col-md-12 col-lg-12 col-xl-12">
-					<div class="col-md-12 col-lg-12 col-xl-12 black-bg">
-						<h2>OUR SERVICES</h2>
-						<p>We are providing two different services in our shop. The first, which sells our printed models, and the second that makes you able to sell yours.
-							The costs are calculated from the material you choose and the weight/complexity of your object.</p>
-					</div>
+<section id="services-section" class="inactive active" style="display: block;">
+	<div class="row">
+		<div class="col-md-12 col-lg-12 col-xl-12">
+			<div class="col-md-12 col-lg-12 col-xl-12 black-bg">
+				<h2>OUR SERVICES</h2>
+				<p>We are providing two different services in our shop. The first, which sells our printed models, and the second that makes you able to sell yours.
+					The costs are calculated from the material you choose and the weight/complexity of your object.</p>
 				</div>
 			</div>
-			<div class="row margin-top-20">
-				<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6  pull-right">
-					{{ include('components/back-to-menu-btn.html.twig') }}
-				</div>
+		</div>
+		<div class="row margin-top-20">
+			<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6  pull-right">
+				{{ include('components/back-to-menu-btn.html.twig') }}
 			</div>
-		</section><!-- /.services-section -->
-	</div><!-- /.templatemo-content -->
-</div><!-- /.templatemo-content-wrapper -->
+		</div>
+	</section><!-- /.services-section -->
 {% endblock %}
 
 {% block background_image %}zoom-bg-3.jpg{% endblock %}

@@ -1,45 +1,41 @@
 {% extends 'pages/base.html.twig' %}
 
 {% block body %}
-<div class="templatemo-content-wrapper">
-	<div class="templatemo-content">
-		<section id="contact-section" class="inactive active" style="display: block;">
-			<div class="row">
-				<div class="black-bg col-md-12 col-lg-12 col-xl-12">
-					<h2 class="text-center">Contact Us</h2>
-					<div class="col-md-12 col-lg-12 margin-bottom-20">
-						<form action="#" method="post">
-							<div class="form-group">
-								<!--<label for="contact_name">Name</label>-->
-								<input type="text" id="contact_name" class="form-control" placeholder="Name" />
-							</div>
-							<div class="form-group">
-								<!--<label for="contact_email">Email Address</label>-->
-								<input type="text" id="contact_email" class="form-control" placeholder="Email Address" />
-							</div>
-							<div class="form-group">
-								<!--<label for="contact_message">Message</label>-->
-								<textarea id="contact_message" class="form-control" rows="7" placeholder="Write a message"></textarea>
-							</div>
-							<button type="submit" class="btn btn-primary">Send</button>
-						</form>
+<section id="contact-section" class="inactive active" style="display: block;">
+	<div class="row">
+		<div class="black-bg col-md-12 col-lg-12 col-xl-12">
+			<h2 class="text-center">Contact Us</h2>
+			<div class="col-md-12 col-lg-12 margin-bottom-20">
+				<form action="#" method="post">
+					<div class="form-group">
+						<!--<label for="contact_name">Name</label>-->
+						<input type="text" id="contact_name" class="form-control" placeholder="Name" />
 					</div>
-					<div class="row margin-top-2">
-						<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-							<p>You can contact us at any time through this form. We try our best to answer as quick as possible.
-								If you you are insatisfied with any of our product please leave the reasons in the comment box.</p>
-						</div>
+					<div class="form-group">
+						<!--<label for="contact_email">Email Address</label>-->
+						<input type="text" id="contact_email" class="form-control" placeholder="Email Address" />
 					</div>
-				</div>
+					<div class="form-group">
+						<!--<label for="contact_message">Message</label>-->
+						<textarea id="contact_message" class="form-control" rows="7" placeholder="Write a message"></textarea>
+					</div>
+					<button type="submit" class="btn btn-primary">Send</button>
+				</form>
 			</div>
-			<div class="row margin-top-20">
+			<div class="row margin-top-2">
 				<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-					{{ include('components/back-to-menu-btn.html.twig') }}
+					<p>You can contact us at any time through this form. We try our best to answer as quick as possible.
+						If you you are insatisfied with any of our product please leave the reasons in the comment box.</p>
+					</div>
 				</div>
 			</div>
-		</section><!-- /.contact-section -->
-	</div><!-- /.templatemo-content -->
-</div><!-- /.templatemo-content-wrapper -->
+		</div>
+		<div class="row margin-top-20">
+			<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+				{{ include('components/back-to-menu-btn.html.twig') }}
+			</div>
+		</div>
+	</section><!-- /.contact-section -->
 {% endblock %}
 
 {% block background_image %}zoom-bg-5.jpg{% endblock %}

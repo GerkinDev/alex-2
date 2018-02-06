@@ -1,26 +1,22 @@
 {% extends 'pages/base.html.twig' %}
 
 {% block body %}
-<div class="templatemo-content-wrapper">
-	<div class="templatemo-content">
-		<section id="company-intro-section" class="inactive active" style="display: block;">
-			<div class="row">
-				<div class="black-bg col-md-12 col-lg-12 col-xl-12">
-					<h2 class="text-center">Print your own model</h2>
-					<div class="col-md-12 col-lg-12">
-						<p>You are able to previsualize your model before printing it ! We reccommand you to check you twice that your model is mainfold and therefore has no flows before ordering. After your order you will not be able to send another model.</p>
-						<p>Javascript thingiview</p>
-				</div>
+<section id="company-intro-section" class="inactive active" style="display: block;">
+	<div class="row">
+		<div class="black-bg col-md-12 col-lg-12 col-xl-12">
+			<h2 class="text-center">Print your own model</h2>
+			<div class="col-md-12 col-lg-12">
+				<p>You are able to previsualize your model before printing it ! We reccommand you to check you twice that your model is mainfold and therefore has no flows before ordering. After your order you will not be able to send another model.</p>
+				<p>Javascript thingiview</p>
 			</div>
 		</div>
-		<div class="row margin-top-20">
-			<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6  pull-right">
-				{{ include('components/back-to-menu-btn.html.twig') }}
-			</div>
+	</div>
+	<div class="row margin-top-20">
+		<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6  pull-right">
+			{{ include('components/back-to-menu-btn.html.twig') }}
 		</div>
-	</section><!-- /.company-intor-section -->
-</div><!-- /.templatemo-content -->
-</div><!-- /.templatemo-content-wrapper -->
+	</div>
+</section><!-- /.company-intor-section -->
 {% endblock %}
 
 {% block background_image %}zoom-bg-6.jpg{% endblock %}

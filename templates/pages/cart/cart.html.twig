@@ -1,13 +1,46 @@
 {% extends 'pages/base.html.twig' %}
 
 {% block body %}
-<div class="black-bg">
+
+<div class="black-bg" id="cart">
 	{% if cartList is empty %}
 	{% trans with {'%shopUrl%': path('products') }%}<b>Your cart is empty.</b> Browse the <a href="%shopUrl%">shop</a>{% endtrans %}
 	{% else %}
-	<script>window.cartElements = {{ cartList|json_encode()|raw }}</script>
-	<div id="cart">
-	</div>
+	<table>
+		<thead><tr>
+			<th>{% trans %}Name{% endtrans %}</th>
+			<th>{% trans %}Materials{% endtrans %}</th>
+			<th>{% trans %}Number{% endtrans %}</th>
+			<th>{% trans %}Unit price{% endtrans %}</th>
+			<th>{% trans %}Total price{% endtrans %}</th>
+		</tr></thead>
+		{% for cartIndex, cartItem in cartList %}
+		<tr class="cart-item" data-model-id="{{cartItem.entity.id}}">
+			<td><a href="{{ path('product', {slug: cartItem.entity.slug} ) }}">{{ cartItem.entity.title }}</a></td>
+			<td>
+				<table class="materials-choices">
+					{% for partName, material in cartItem.attrs %}
+					<tr data-part-mass="{{ cartItem.factors[partName] }}">
+						<td><label for="cart{{ cartIndex }}-{{ partName }}" >{{ partName }}</label></td>
+						<td>{{ include(
+						'components/material-select.html.twig',
+						{ partName: partName, materials: materials, namePrefix: 'cart' ~ cartIndex, selected: material.id },
+						with_context = false
+						) }}</td>
+					</tr>
+					{% endfor %}
+				</table>
+			</td>
+			<td><input type="number" min="1" value="{{ cartItem.count }}" name="cart{{ cartIndex }}[number]" class="unit-count form-control"/></td>
+			<td><output value="{{ cartItem.price | localizedcurrency('EUR') }}" class="unit-price form-control" disabled/></td>
+			<td><output value="{{ (cartItem.price * cartItem.count) | localizedcurrency('EUR') }}" class="sum-price form-control" disabled/></td>
+			<td>
+				<button class="btn btn-outline-danger removeItem" aria-hidden="true">&times;</button>
+			</td>
+		</tr>
+		{% endfor %}
+	</table>
+
 	<div class="btn-toolbar justify-content-between mt-3" role="toolbar" aria-label="{% trans %}Cart management{% endtrans %}">
 		<div class="btn-group">
 			<button type="button" class="btn btn-outline-danger" id="emptyCart">{% trans %}Empty cart{% endtrans %}</button>
@@ -16,11 +49,33 @@
 		<div class="btn-group" role="group" aria-label="First group">
 			<div class="input-group">
 				<div class="input-group-prepend">
-				<div class="input-group-text" id="cartSumCurrency">€</div>
+					<div class="input-group-text" id="cartSumCurrency">€</div>
 				</div>
 				<input type="text" class="form-control" placeholder="{% trans %}Cart sum{% endtrans %}" disabled aria-label="{% trans %}Cart sum{% endtrans %}" aria-describedby="cartSumCurrency" id="cartSum">
 			</div>
 			<button type="button" class="btn btn-primary">{% trans %}Checkout{% endtrans %}</button>
+		</div>
+	</div>
+	{% endif %}
+</div>
+
+
+<div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="emptyCart" aria-hidden="true" id="confirmEmptyCart">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">{% trans %}Please confirm{% endtrans %}</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<p>{% trans %}Are you sure you want to empty your cart?{% endtrans %}</p>
+			</div>
+			<div class="modal-footer">
+				<a href="{{path('emptyCart')}}" type="button" class="btn btn-primary">{% trans %}Empty cart{% endtrans %}</a>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans %}Dismiss{% endtrans %}</button>
+			</div>
 		</div>
 	</div>
 	{% endif %}
