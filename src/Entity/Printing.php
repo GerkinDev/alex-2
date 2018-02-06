@@ -11,7 +11,7 @@ class Printing
 {
 	const WAITING_VALIDATION = 2;
 	const WAITING_PROCESSING = 1;
-	const DONE = 0;
+	const DONE               = 0;
 
 	/**
 	 * @ORM\Id

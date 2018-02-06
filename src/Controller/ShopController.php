@@ -7,8 +7,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
+use App\GenericClass\Collection;
+
+use App\Service\ProductInfos;
 use App\Entity\Model;
-use App\Entity\Material;
+use App\Entity\VariableAttribute;
 
 class ShopController extends Controller
 {
@@ -19,41 +22,31 @@ class ShopController extends Controller
 	 *     requirements={"page": "\d+"},
 	 *      name="products")
 	 */
-	public function index(Request $request, $page) {
-		$modelsRaw = $this->getDoctrine()
+	public function index(ProductInfos $prodInfos, Request $request, $page) {
+		$modelsRaw        = $this->getDoctrine()
 			->getRepository(Model::class)
 			->getPaged($page);
-		$cheapestMaterial = $this->getDoctrine()
-			->getRepository(Material::class)
-			->findCheapest();
 
-		$helper = $this->container->get('vich_uploader.templating.helper.uploader_helper');
-		$models = [];
-		foreach ($modelsRaw as $modelRaw) {
-			$models[$modelRaw->getId()] = $modelRaw->computeModelInfos($helper, $cheapestMaterial);
-		}
+		$modelsInfos = $prodInfos->getProductsPresentationInfos(Collection::fromIterable($modelsRaw));
 
-		return $this->render('pages/shop/products.html.twig', ['models' => $models]);
+		return $this->render('pages/shop/products.html.twig', ['models' => $modelsInfos]);
 	}
 	/**
 	 * @Route(
 	 *     "/product/{slug}",
 	 *      name="product")
 	 */
-	public function product($slug) {
-		$modelRaw = $this->getDoctrine()
+	public function product(ProductInfos $prodInfos, $slug) {
+		$model  = $this->getDoctrine()
 			->getRepository(Model::class)
 			->findOneBySlug($slug);
-		$materials = $this->getDoctrine()
-			->getRepository(Material::class)
-			->findAll();
 
-		$helper = $this->container->get('vich_uploader.templating.helper.uploader_helper');
-		$model = $modelRaw->computeModelInfos($helper);
+		$modelInfos = $prodInfos->getProductPresentationInfos($model);
+		$attributesByCategory = $prodInfos->getPossibleAttributeForProduct($model);
 
 		return $this->render('pages/shop/product_page.html.twig', [
-			'model' => $model,
-			'materials' => $materials,
+			'model' => $modelInfos,
+			'attributesByCategory' => $attributesByCategory,
 		]);
 	}
 }

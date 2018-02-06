@@ -206,7 +206,7 @@ class Model extends \App\GenericClass\BaseEntity
 	}
 	public function setAttributes(\ArrayAccess $attributes): self {
 		$this->attributes = self::ensureArrayCollection($attributes);
-		$this->attributes->map(function($attribute){
+		$this->attributes->map(function ($attribute) {
 			return $attribute->setModel($this);
 		});
 
@@ -225,7 +225,7 @@ class Model extends \App\GenericClass\BaseEntity
 
 	// ## Other
 	public function __construct() {
-		$this->updatedAt = new \DateTime();
+		$this->updatedAt  = new \DateTime();
 		$this->attributes = new ArrayCollection();
 	}
 

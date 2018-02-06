@@ -21,17 +21,17 @@ class VariableAttribute extends \App\GenericClass\BaseEntity
 	/**
 	 * @ORM\Column(type="float")
 	 */
-	private $price;
+	private $price = 0;
 
 	/**
 	 * @ORM\Column(type="boolean")
 	 */
-	private $available;
+	private $available = true;
 
 	/**
 	 * @ORM\Column(type="string")
 	 */
-	private $name;
+	private $name = '';
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="App\Entity\VariableAttributeCategory", inversedBy="attributes", cascade={"persist"})
@@ -42,7 +42,7 @@ class VariableAttribute extends \App\GenericClass\BaseEntity
 	// ## Get / Set
 
 	// ID
-	public function getId(): int {
+	public function getId(): ?int {
 		return $this->id;
 	}
 

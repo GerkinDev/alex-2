@@ -23,7 +23,7 @@ class VariableAttributeCategory extends \App\GenericClass\BaseEntity
 	/**
 	* @ORM\Column(type="string")
 	*/
-	private $name;
+	private $name = '';
 
 	/**
 	* @ORM\OneToMany(targetEntity="App\Entity\ProductAttribute", mappedBy="category", cascade={"persist"})
@@ -38,7 +38,7 @@ class VariableAttributeCategory extends \App\GenericClass\BaseEntity
 	// ## Get / Set
 
 	// ID
-	public function getId(): int {
+	public function getId(): ?int {
 		return $this->id;
 	}
 
@@ -70,7 +70,7 @@ class VariableAttributeCategory extends \App\GenericClass\BaseEntity
 	}
 	public function setProductAttributes(\ArrayAccess $productAttributes): self {
 		$this->productAttributes = self::ensureArrayCollection($productAttributes);
-		$this->productAttributes->map(function($productAttribute){
+		$this->productAttributes->map(function ($productAttribute) {
 			return $productAttribute->setCategory($this);
 		});
 
@@ -95,7 +95,7 @@ class VariableAttributeCategory extends \App\GenericClass\BaseEntity
 	}
 	public function setAttributes(\ArrayAccess $attributes): self {
 		$this->attributes = self::ensureArrayCollection($attributes);
-		$this->attributes->map(function($attribute){
+		$this->attributes->map(function ($attribute) {
 			return $attribute->setCategory($this);
 		});
 
@@ -105,6 +105,7 @@ class VariableAttributeCategory extends \App\GenericClass\BaseEntity
 	// ## Other
 	public function __construct() {
 		$this->attributes = new ArrayCollection();
+		$this->productAttributes = new ArrayCollection();
 	}
 
 	public function __toString() {

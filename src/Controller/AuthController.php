@@ -94,12 +94,12 @@ class AuthController extends Controller
 			return $this->redirectToRoute('index');
 		}
 
-		$query = $request->request;
-		$fname = $query->get('fname');
-		$lname = $query->get('lname');
-		$password = $query->get('password');
+		$query           = $request->request;
+		$fname           = $query->get('fname');
+		$lname           = $query->get('lname');
+		$password        = $query->get('password');
 		$repeat_password = $query->get('repeat_password');
-		$email = $query->get('email');
+		$email           = $query->get('email');
 
 		$session = new Session();
 		try {
@@ -172,7 +172,7 @@ class AuthController extends Controller
 		if (!is_numeric($id)) {
 			throw $this->createNotFoundException('Invalid token provided');
 		}
-		$id = intval($id);
+		$id   = intval($id);
 		$user = $this->getDoctrine()
 			->getRepository(User::class)
 			->find($id);
@@ -209,7 +209,7 @@ class AuthController extends Controller
 		if ($authChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
 			return $this->redirectToRoute('index');
 		}
-		$session = new Session();
+		$session  = new Session();
 		$username = $request->request->get('_username');
 
 		if ($username === '') {
@@ -261,9 +261,9 @@ class AuthController extends Controller
 		// Check if form is posted
 		$reqContent = $request->request;
 		if ($request->getMethod() === 'POST') {
-			$newPassword = $reqContent->get('password');
+			$newPassword    = $reqContent->get('password');
 			$repeatPassword = $reqContent->get('repeat_password');
-			$token = $reqContent->get('token');
+			$token          = $reqContent->get('token');
 
 			$session = new Session();
 

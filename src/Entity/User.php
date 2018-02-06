@@ -76,9 +76,9 @@ class User extends \App\GenericClass\BaseEntity implements UserInterface, \Seria
 		$this->isActive = false;
 		$this->username = $username;
 		$this->password = $password;
-		$this->salt = $salt;
-		$this->role = $role;
-		$this->salt = md5(uniqid('', true));
+		$this->salt     = $salt;
+		$this->role     = $role;
+		$this->salt     = md5(uniqid('', true));
 	}
 
 	// Id

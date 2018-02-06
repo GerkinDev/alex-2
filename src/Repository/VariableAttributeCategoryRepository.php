@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\VariableAttributeCategory;
+use App\Entity\VariableAttribute;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -12,16 +13,10 @@ class VariableAttributeCategoryRepository extends ServiceEntityRepository
 		parent::__construct($registry, VariableAttributeCategory::class);
 	}
 
-	/*
-    public function findBySomething($value)
-    {
-        return $this->createQueryBuilder('a')
-            ->where('a.something = :value')->setParameter('value', $value)
-            ->orderBy('a.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+	public function findCheapest(VariableAttributeCategory $category) {
+		$repository = $this
+		->getEntityManager()
+		->getRepository(VariableAttribute::class);
+		return $repository->findCheapest($category);
+	}
 }

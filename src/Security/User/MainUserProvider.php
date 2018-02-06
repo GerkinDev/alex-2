@@ -17,8 +17,8 @@ class MainUserProvider implements UserProviderInterface
 		if ($maybeUser) {
 			$username = $maybeUser->getUsername();
 			$password = $maybeUser->getPassword();
-			$salt = $maybeUser->getSalt();
-			$roles = $maybeUser->getRoles();
+			$salt     = $maybeUser->getSalt();
+			$roles    = $maybeUser->getRoles();
 			return new User($username, $password, $salt, $roles);
 		}
 

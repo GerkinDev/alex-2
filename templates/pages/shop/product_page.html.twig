@@ -1,51 +1,45 @@
 {% extends 'pages/base.html.twig' %}
 
 {% block body %}
-<div class="templatemo-content-wrapper">
-	<div class="templatemo-content">
-		<section id="product-section" class="inactive active" style="display: block;">
-			<div data-product-id="{{ model.entity.id }}" class="product my-2 mx-3">
-				<div class="black-bg btn-menu">
-					<img src="{{model.image}}" alt="{{ model.entity.title }}"/>
-					<h3>{{ model.entity.title }}</h3>
-					<p class="description">{{'' | default('No description provided')}}</p>
-					<p class="meta">Starting at <span>{{ model.price * 100 }}€</span></p>
-				</div>
-				<form method="post" action="{{path('addToCart', {slug: model.entity.slug})}}">
-					<div class="materials-choices">
-						{% for partName, mass in model.entity.masses(true) %}
-						<div class="mx-0 form-row align-items-stretch" data-part-mass="{{ mass }}">
-							<label  class="sr-only" for="material-{{ partName }}">{{partName}}</label>
-							<div class="input-group">
-								<div class="input-group-prepend">
-									<div class="input-group-text">{{ partName }}</div>
-								</div>
-								{{ include(
-								'components/material-select.html.twig',
-								{ partName: partName, materials: materials },
-								with_context = false
-								) }}
-								<div class="input-group-append">
-									<div class="input-group-text">{{mass*1000}}g</div>
-								</div>
-							</div>
+<script>
+window.attributesByCategory = {{ attributesByCategory | json_encode | raw }};
+</script>
+<section id="product-section" class="inactive active" style="display: block;">
+	<div data-product-id="{{ model.entity.id }}" class="product my-2 mx-3">
+		<div class="black-bg btn-menu">
+			<img src="{{model.image}}" alt="{{ model.entity.title }}"/>
+			<h3>{{ model.entity.title }}</h3>
+			<p class="description">{{'' | default('No description provided')}}</p>
+			<p class="meta">Starting at <span>{{ model.price * 100 }}€</span></p>
+		</div>
+		<form method="post" action="{{path('addToCart', {slug: model.entity.slug})}}">
+			<div class="materials-choices">
+				{% for attribute in model.entity.attributes %}
+				<div class="mx-0 form-row align-items-stretch" data-factor="{{ attribute.factor }}" data-category="{{ attribute.category.id }}">
+					<label  class="sr-only" for="attribute-{{ attribute.id }}">{{attribute.name}}</label>
+					<div class="input-group">
+						<div class="input-group-prepend">
+							<div class="input-group-text">{{ attribute.name }}</div>
 						</div>
-						{% endfor %}
+						<div class="input-group-append">
+							<div class="input-group-text">&times;{{attribute.factor}}</div>
+						</div>
 					</div>
-					<div class="d-flex flex-row mx-0 flex-nowrap ">
-						<button type="submit" class="col btn btn-primary">Add to cart</button>
-						<output  class="col alert alert-info unit-price"></output>
-					</div>
-				</form>
-			</div>
-			<div class="row margin-top-20">
-				<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6  pull-right">
-					{{ include('components/back-to-menu-btn.html.twig') }}
 				</div>
+				{% endfor %}
 			</div>
-		</section><!-- /.product-section -->
-	</div><!-- /.templatemo-content -->
-</div><!-- /.templatemo-content-wrapper -->
+			<div class="d-flex flex-row mx-0 flex-nowrap ">
+				<button type="submit" class="col btn btn-primary">Add to cart</button>
+				<output  class="col alert alert-info unit-price"></output>
+			</div>
+		</form>
+	</div>
+	<div class="row margin-top-20">
+		<div class="col-sm-6 col-md-6 col-lg-6 col-xl-6  pull-right">
+			{{ include('components/back-to-menu-btn.html.twig') }}
+		</div>
+	</div>
+</section><!-- /.product-section -->
 {% endblock %}
 
 

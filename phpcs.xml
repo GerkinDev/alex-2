@@ -25,4 +25,5 @@
 		</properties>
 	</rule>
 	<rule ref="Squiz.Strings.DoubleQuoteUsage.ContainsVar"/>
+	<rule ref="Generic.Formatting.MultipleStatementAlignment"/>
 </ruleset>
