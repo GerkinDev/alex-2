@@ -24,34 +24,36 @@ class Mailer {
 
 	public function sendMailNewUser(User $user)
 	{
-		$args = [
-			'user' => $user,
+		return $this->sendMail(
+			'Welcome onboard, '.$user->getFirstName().'!',
+			$user->getEmail(),
+			'registration',
+			[ 'user' => $user,
 			'validate_url' => $this->router->generate('validate_account', [
 				'token' => rawurlencode($this->tokenHandler->encryptRouteToken($user->getId(), 'validateAccount'))
-			], UrlGeneratorInterface::ABSOLUTE_URL),
-		];
-		$message = (new \Swift_Message('Welcome onboard, '.$user->getFirstName().'! - '))
-			->setFrom(self::MAILBOT_ADDRESS)
-			->setTo($user->getEmail())
-			->setBody($this->templating->render('emails/registration.html.twig', $args ), 'text/html')
-			->addPart($this->templating->render( 'emails/registration.txt.twig', $args ), 'text/plain');
-
-		$this->mailer->send($message);
+			], UrlGeneratorInterface::ABSOLUTE_URL)]
+		);
 	}
 
 	public function sendMailUserResetPassword(User $user){
-		$args = [
-			'user' => $user,
+		return $this->sendMail(
+			'Password lost '.$user->getFirstName().'?',
+			$user->getEmail(),
+			'password_lost',
+			[ 'user' => $user,
 			'reset_url' => $this->router->generate('reset_password', [
 				'token' => rawurlencode($user->getPasswordResetToken()),
-			], UrlGeneratorInterface::ABSOLUTE_URL),
-		];
-		$message = (new \Swift_Message('Password lost '.$user->getFirstName().'? - '))
-			->setFrom(self::MAILBOT_ADDRESS)
-			->setTo($user->getEmail())
-			->setBody($this->templating->render('emails/password_lost.html.twig', $args ), 'text/html')
-			->addPart($this->templating->render( 'emails/password_lost.txt.twig', $args ), 'text/plain');
+			], UrlGeneratorInterface::ABSOLUTE_URL)]
+		);
+	}
 
-		$this->mailer->send($message);
+	private function sendMail(string $subject, string $to, string $template, array $args){
+		$message = (new \Swift_Message($subject.' - '.$this->getParameter('name')))
+		->setFrom(self::MAILBOT_ADDRESS)
+		->setTo($to)
+		->setBody($this->templating->render( "emails/$template.html.twig", $args ), 'text/html')
+		->addPart($this->templating->render( "emails/$template.txt.twig", $args ), 'text/plain');
+
+		return $this->mailer->send($message);
 	}
 }

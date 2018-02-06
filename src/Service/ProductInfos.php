@@ -54,9 +54,10 @@ class ProductInfos {
 		}, new Collection());
 
 		$helper = $this->uploaderHelper;
-		return $productsCol->map(function($product) use (&$cheapestOfCategories){
+		$productsCol = $productsCol->map(function($product) use (&$cheapestOfCategories){
 			return $this->getModelInfos($product, $cheapestOfCategories);
 		});
+		return $productsCol;
 	}
 
 	public function getPossibleAttributeForProduct(Model $product){
