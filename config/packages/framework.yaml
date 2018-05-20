@@ -28,3 +28,6 @@ framework:
         json_manifest_path: '%kernel.project_dir%/public/build/manifest.json'
 
     validation: { enable_annotations: true }
+
+    templating:
+        engines: ['twig']

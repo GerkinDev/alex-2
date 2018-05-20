@@ -14,8 +14,10 @@ class Mailer {
 	private $templating;
 	private $tokenHandler;
 	private $router;
+    private $appName;
 
-	public function __construct(RouterInterface $router, \Swift_Mailer $mailer, \Twig_Environment $templating, UriTokenHandler $tokenHandler){
+	public function __construct(string $appName, RouterInterface $router, \Swift_Mailer $mailer, \Twig_Environment $templating, UriTokenHandler $tokenHandler){
+		$this->appName = $appName;
 		$this->mailer = $mailer;
 		$this->templating = $templating;
 		$this->tokenHandler = $tokenHandler;
@@ -48,7 +50,7 @@ class Mailer {
 	}
 
 	private function sendMail(string $subject, string $to, string $template, array $args){
-		$message = (new \Swift_Message($subject.' - '.$this->getParameter('name')))
+		$message = (new \Swift_Message($subject.' - '.$this->appName))
 		->setFrom(self::MAILBOT_ADDRESS)
 		->setTo($to)
 		->setBody($this->templating->render( "emails/$template.html.twig", $args ), 'text/html')
