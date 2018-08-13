@@ -18,11 +18,11 @@ contact:
     controller:   Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
     defaults:
         template: pages/content/contact.html.twig
-company-intro:
-    path: /company-intro
+print-your-own:
+    path: /print-your-own
     controller:   Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
     defaults:
-        template: pages/content/company-intro.html.twig
+        template: pages/content/print-your-own.html.twig
 logout:
     path: /logout
 

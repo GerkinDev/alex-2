@@ -24,3 +24,6 @@ public/build/
 ###< symfony/phpunit-bridge ###
 
 \.vscode/
+
+src/Migrations/Version20180813222307\.php
+src/Migrations/Version20180813222140\.php
