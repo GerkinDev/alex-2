@@ -1,6 +1,6 @@
 <template>
 	<b-alert class="fade" :class="{show}"
-		:show="typeof dismissCountDown === 'undefined' || dismissCountDown"
+		:show="dismissCountDown === null || dismissCountDown"
 		dismissible
 		:variant="type"
 		@dismissed="alertDismissed"
@@ -18,70 +18,61 @@
 
 
 <script lang="ts">
-import Vue from 'vue'
+import { Vue, Component, Prop } from 'vue-property-decorator';
 
-export interface IFlashItem{
-	message: string,
-	type: TYPE,
-}
-export enum TYPE{
-	error = 'danger',
-	info = 'info',
-}
+import { IFlashItem, FlashType } from '../../scripts/components/flashes/types';
+import { type } from 'os';
 
+@Component({})
+export default class FlashComponent extends Vue {
+	@Prop({
+		type: String,
+		required: true,
+	})
+	public type!: string;
 
-interface IFlashMessage extends Vue{
-	expiration?: number;
-	dismissCountDown?: number;
-	show: boolean;
-	props: string[];
-	originalMessage: IFlashMessage;
+	@Prop({
+		type: String,
+		required: true,
+	})
+	public message!: string;
 
-	data (): object,
-	countDownChanged (dismissCountDown: number): void;
-}
-export default {
-	props: {
-		type: {
-			type: String,
-			required: true,
-		},
-		message: {
-			type: String,
-			required: true,
-		},
-		expiration: Number,
-		originalMessage: Object,
-	},
+	@Prop({
+		type: Number,
+		required: false,
+	})
+	public expiration?: number;
 
-	data (this: IFlashMessage) {
-		return {
-			dismissCountDown: this.expiration ? this.expiration + 1: undefined,
-			show: false,
-		}
-	},
-	mounted(this: any){
+	public dismissCountDown: number | null = null;
+	public show = false;
+
+	constructor(){
+		super();
+		this.dismissCountDown = this.expiration ? this.expiration + 1: null;
+	}
+
+	mounted(){
 		setTimeout(() => {
 			this.show = true;
 		}, 100);
-	},
-	methods: {
-		countDownChanged (this: IFlashMessage, dismissCountDown: number) {
-			this.dismissCountDown = dismissCountDown;
-			switch(this.dismissCountDown){
-				case 1:
-				this.show = false;
-				break;
+	}
+	
+	countDownChanged (dismissCountDown: number) {
+		this.dismissCountDown = dismissCountDown;
+		switch(this.dismissCountDown){
+			case 1:
+			this.show = false;
+			break;
 
-				case 0:
-				this.$emit('dismissed', this.originalMessage);
-				break;
-			}
-		},
-		alertDismissed(this: IFlashMessage){
-			this.dismissCountDown = 0;
-			this.$emit('dismissed', this.originalMessage);
+			case 0:
+			this.$emit('dismissed', {message: this.message, type: this.type});
+			break;
 		}
+	}
+
+	alertDismissed(){
+		this.dismissCountDown = 0;
+		this.$emit('dismissed', {message: this.message, type: this.type});
 	}
 }
 </script>
