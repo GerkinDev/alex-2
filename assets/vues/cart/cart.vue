@@ -31,8 +31,9 @@
 import Vue from 'vue'
 import { formatCurrency } from '../../scripts/components/currencyFormatter';
 
-export interface CartItem{
+import CartComponent from './cart-line.vue';
 
+export interface CartItem{
 }
 export default class Cart extends Vue{
 	constructor(public products: Array<CartItem> = []){
@@ -42,6 +43,7 @@ export default class Cart extends Vue{
 				products,
 			},
 			components: {
+				cart: CartComponent
 			},
 		});
 	}

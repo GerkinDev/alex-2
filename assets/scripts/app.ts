@@ -1,7 +1,13 @@
 require('../scss/main.scss');
 
 // Init & configure Vue.js
-import Vue from 'vue';
+import Vue from 'vue'
+
+const { ModelObj, ModelStl } = require( 'vue-3d-model' );
+import FlashesComponent from '../vues/flash/flashes.vue';
+import ModelUploadFormComponent from '../vues/model-upload-form.vue';
+
+
 const BootstrapVue = require('bootstrap-vue').default;
 Vue.use(BootstrapVue);
 
@@ -34,14 +40,27 @@ $(document).ready(() => {
 		}
 	});
 
+
+    new Vue({
+        el: '#vue-app',
+        data: {
+            messageObjects: [],
+        },
+        components: {
+            flashes: FlashesComponent,
+            modelObj: ModelObj,
+            modelStl: ModelStl,
+            modelUploadForm: ModelUploadFormComponent,
+        },
+    });
 	switch(route){
 		case 'cart': {
-			initCartVue();
-			emptyCart();
-			handleDeleteButtons();
+			//initCartVue();
+			//emptyCart();
+			//handleDeleteButtons();
 		}
 		case 'product': {
-			cartCalculator();
+			//cartCalculator();
 		} break;
 	}
 });

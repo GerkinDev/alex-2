@@ -22,49 +22,51 @@
 		<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous" defer></script>
 	</head>
 	<body data-route="{{ app.request.attributes.get('_route') }}" style="background-image : url(/assets/images/{% block background_image %}{% endblock %})">
-		<header class="templatemo-logo black-bg" id="header">
-			<h1 class="templatemo-site-title" style="margin-left:auto;margin-right:auto">
-				<a href="/">{{ app_name }}</a>
-			</h1>
-			<nav>
-				{{ render(controller( 'App\\Controller\\CartController::cartSum' )) }}
-				{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-				{% if is_granted('ROLE_ADMIN') %}
-				<a href="{{ path('easyadmin') }}">Admin</a>
-				{% endif %}
-				<a href="{{ path('logout') }}">Logout</a>
-				{% else %}
-				<a href="/login">Log in</a>
-				{% endif %}
-			</nav>
-		</header>
-		{% set flashMessages = app.session.flashbag.get('info') %}
-		{% if flashMessages is not empty %}
-		{% for flashMessage in flashMessages %}
-		<div class="alert alert-info alert-dismissible fade show" role="alert" style="opacity: 1">
-			{{ flashMessage }}
-			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-				<span aria-hidden="true">&times;</span>
-			</button>
-		</div>
-		{% endfor %}
-		{% endif %}
-
-		<section id="body" class="container pb-5">
-			<div class="templatemo-content-wrapper">
-				<div class="templatemo-content">
-					{% block body %}{% endblock %}
-				</div>
+		<div id="vue-app">
+			<header class="templatemo-logo black-bg" id="header">
+				<h1 class="templatemo-site-title" style="margin-left:auto;margin-right:auto">
+					<a href="/">{{ app_name }}</a>
+				</h1>
+				<nav>
+					{{ render(controller( 'App\\Controller\\CartController::cartSum' )) }}
+					{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+					{% if is_granted('ROLE_ADMIN') %}
+					<a href="{{ path('easyadmin') }}">Admin</a>
+					{% endif %}
+					<a href="{{ path('logout') }}">Logout</a>
+					{% else %}
+					<a href="/login">Log in</a>
+					{% endif %}
+				</nav>
+			</header>
+			{% set flashMessages = app.session.flashbag.get('info') %}
+			{% if flashMessages is not empty %}
+			{% for flashMessage in flashMessages %}
+			<div class="alert alert-info alert-dismissible fade show" role="alert" style="opacity: 1">
+				{{ flashMessage }}
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
 			</div>
-		</section>
+			{% endfor %}
+			{% endif %}
 
-		<footer class="row">
-			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 footer">
-				<p class="footer-text mb-0">Made with <i class="fa fa-heart"></i> &amp; Symfony4, by <a href="https://ithoughts.io/">iThoughts</a> &amp; Azkali. Copyright &copy; 2018</p>
-			</div><!-- /.footer -->
-		</footer>
+			<section id="body" class="container pb-5">
+				<div class="templatemo-content-wrapper">
+					<div class="templatemo-content">
+						{% block body %}{% endblock %}
+					</div>
+				</div>
+			</section>
 
-		<div id="flashes"></div>
+			<footer class="row">
+				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 footer">
+					<p class="footer-text mb-0">Made with <i class="fa fa-heart"></i> &amp; Symfony4, by <a href="https://ithoughts.io/">iThoughts</a> &amp; Azkali. Copyright &copy; 2018</p>
+				</div><!-- /.footer -->
+			</footer>
+
+			<flashes id="flashes" :message-objects="messageObjects"></flashes>
+		</div>
 
 		<script>
 		window.currencyFormat = '{{ 0 | localizedcurrency('EUR') }}';

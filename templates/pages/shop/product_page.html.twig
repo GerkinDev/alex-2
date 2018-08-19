@@ -1,20 +1,15 @@
 {% extends 'pages/base.html.twig' %}
 
-{% block javascripts %}
-<script>
-	new Vue({
-		el: '#app'
-	})
-</script>
-{% endblock %}
-
 {% block body %}
 <section id="product-section" class="inactive active" style="display: block;">
 	<div data-product-id="{{ model.entity.id }}" class="product my-2 mx-3">
 		<div class="black-bg btn-menu">
-			<div id="app">
-				<model-obj src=""></model-obj>
-			</div>			
+		
+
+			<div id="object-view">
+				{# <model-stl :src="modelUrl"></model-stl> #}
+				<model-stl :content="inlineContent"></model-stl>
+			</div>
 			<img src="{{model.image}}" alt="{{ model.entity.title }}"/>
 			<h3>{{ model.entity.title }}</h3>
 			<p class="description">{{'' | default('No description provided')}}</p>

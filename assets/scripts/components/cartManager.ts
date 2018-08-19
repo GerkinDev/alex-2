@@ -1,8 +1,11 @@
 import { computeRouteUrl } from './routes';
-import { flashes, FlashType } from './vue';
+import { FlashType } from './vue';
 
 import Cart from '../../vues/cart/cart.vue'
 
+const flashes = new class{
+	addMessage(...args: any[]){}
+}
 export const initCartVue = () => {
 	const cart = new Cart([{
 		entity: {

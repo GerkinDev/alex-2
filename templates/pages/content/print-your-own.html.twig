@@ -1,13 +1,5 @@
 {% extends 'pages/base.html.twig' %}
 
-{% block javascripts %}
-<script>
-	new Vue({
-		el: '#app'
-	})
-</script>
-{% endblock %}
-
 {% block body %}
 
 <section id="print-your-own-section" class="inactive active" style="display: block;">
@@ -16,9 +8,8 @@
 			<h2 class="text-center">Print your own model</h2>
 			<div class="col-md-12 col-lg-12">
 				<p>You are able to previsualize your model before printing it ! We reccommand you to check you twice that your model is mainfold and therefore has no flows before ordering. After your order you will not be able to send another model.</p>
-				<div id="object-view">
-					<model-stl src="/uploads/models/cube.stl"></model-stl>
-				</div>
+
+				<model-upload-form></model-upload-form>
 			</div>
 		</div>
 	</div>

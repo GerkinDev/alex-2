@@ -1,11 +1,4 @@
 <template>
-	<section id="flashes">
-		<flash
-			v-for="(messageObject, index) in messageObjects"
-			:key="index"
-			v-bind="messageObject"
-			@dismissed="removeAlert"></flash>
-	</section>
 </template>
 
 <script lang="ts">
